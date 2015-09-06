@@ -1,0 +1,24 @@
+#hbapp {
+	position: absolute;
+	width: 1024px;
+	height: 768px;
+	background-color: #ababab;
+}
+
+#players {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 234px;
+	height: 768px;
+	background-color: #979797;
+}
+
+#messages {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 234px;
+	height: 768px;
+	background-color: #979797;
+}
