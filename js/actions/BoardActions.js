@@ -1,13 +1,8 @@
-import alt from '../alt.js';
-import HBConstants from '../constants/HBConstants.js';
+export const TILE_CLICKED = 'TILE_CLICKED';
 
-class BoardActions {
-  clickTile (tile) {
-    return {
-      actionType: HBConstants.CLICK_TILE,
-      tile: tile
-    };
-  }
+export function tileClicked(tileId) {
+  return {
+    type: TILE_CLICKED,
+    tileId
+  };
 }
-
-export default alt.createActions(BoardActions);

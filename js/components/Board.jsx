@@ -1,27 +1,35 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import Tile from './Tile.jsx';
-import _ from 'lodash';
 
 let ReactPropTypes = React.PropTypes;
 
-module.exports = React.createClass({
-  propTypes: {
-    board: ReactPropTypes.object.isRequired
-  },
+class Board extends Component {
+  constructor (props, context) {
+    super(props, context);
+  }
 
-  /**
-   * @return {object}
-   */
-  render: function() {
-    let tiles = _.map(
-      this.props.board.tiles,
-      tile => <Tile tile={tile} />
-    );
+  render () {
+    const { board, actions } = this.props;
 
     return (
-      <section id="board">
-        <div id="hex-board">{tiles}</div>
-      </section>
+      <div id="middle">
+        <div id="board">
+          {board.tiles.map(
+            tile => <Tile
+              key={tile.id}
+              tile={tile}
+              getPositionById={board.getPositionById.bind(board)}
+              {...actions} />
+          )}
+        </div>
+      </div>
     );
   }
-});
+}
+
+Board.propTypes = {
+  board: ReactPropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired
+};
+
+export default Board;

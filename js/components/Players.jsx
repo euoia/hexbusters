@@ -7,7 +7,8 @@ let ReactPropTypes = React.PropTypes;
 module.exports = React.createClass({
 
   propTypes: {
-    players: ReactPropTypes.array.isRequired
+    players: ReactPropTypes.array.isRequired,
+    isCurrentPlayer: ReactPropTypes.func.isRequired
   },
 
   /**
@@ -16,7 +17,12 @@ module.exports = React.createClass({
   render: function() {
     let players = _.map(
       this.props.players,
-      player => <Player player={player} />
+      (player, idx) =>
+        <Player
+          current={this.props.isCurrentPlayer(player)}
+          key={idx}
+          player={player}
+        />
     );
 
     return (

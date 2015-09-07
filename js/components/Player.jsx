@@ -11,11 +11,10 @@ module.exports = React.createClass({
    * @return {object}
    */
   render: function() {
-    let player = this.props.player;
-
     return (
       <div className="player">
-        {player.name}
+        {this.props.current ? '> ' : ''}
+        {this.props.player.name}
       </div>
     );
   }

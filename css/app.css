@@ -22,3 +22,19 @@
 	height: 768px;
 	background-color: #979797;
 }
+
+#middle {
+	position: absolute;
+	width: 556px;
+	height: 768px;
+	left: 234px;
+	top: 0px;
+	text-align: center;
+}
+
+#board {
+	position: relative;
+	width: 342px;
+	height: 768px;
+	margin: 100px auto;
+}

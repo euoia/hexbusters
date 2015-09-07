@@ -8,36 +8,29 @@
   },
   "main": "index.html",
   "scripts": {
-    "start": "watchify -o js/bundle.js -v -d js/app.js",
-    "build": "browserify . | uglifyjs -cm > js/bundle.min.js"
+    "start": "node server.js",
+    "build": "webpack"
   },
   "author": "James Pickard <james.pickard@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "alt": "^0.17.3",
-    "classnames": "^2.1.3",
-    "envify": "^0.2.0",
-    "flux": "^2.1.1",
-    "keymirror": "^0.1.1",
+    "hex-grid.js": "^1.3.0",
     "lodash": "^3.10.1",
     "react": "^0.13.3",
-    "statics-stylesheets": "0.0.1",
-    "stylesheets": "0.0.5"
+    "react-redux": "^2.1.1",
+    "redux": "^2.0.0",
+    "redux-thunk": "^0.1.0"
   },
   "devDependencies": {
-    "babelify": "^6.3.0",
-    "browserify": "^11.0.1",
-    "envify": "^0.2.0",
-    "jest-cli": "^0.5.1",
-    "jsxc": "^0.10.0",
-    "reactify": "^1.1.1",
-    "watchify": "^3.4.0"
-  },
-  "browserify": {
-    "transform": [
-      "babelify",
-      "reactify",
-      "envify"
-    ]
+    "babel-core": "^5.8.23",
+    "babel-loader": "^5.3.2",
+    "babel-plugin-react-transform": "^1.0.3",
+    "eslint": "^1.3.1",
+    "eslint-plugin-react": "^3.3.1",
+    "react-hot-loader": "^1.3.0",
+    "react-transform-webpack-hmr": "^0.1.4",
+    "redux-devtools": "^2.1.0",
+    "webpack": "^1.12.1",
+    "webpack-dev-server": "^1.10.1"
   }
 }

@@ -1,14 +1,9 @@
-import alt from '../alt.js';
-import HBConstants from '../constants/HBConstants.js';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
 
-class MessageActions {
-  addMessage (playerName, message) {
-    return {
-      actionType: HBConstants.ADD_MESSAGE,
-      playerName: playerName,
-      message: message
-    };
-  }
+export function playersJoin(playerName, message) {
+  return {
+    type: ADD_MESSAGE,
+    playerName,
+    message
+  };
 }
-
-export default alt.createActions(MessageActions);

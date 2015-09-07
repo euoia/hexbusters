@@ -1,13 +1,8 @@
-import alt from '../alt.js';
-import HBConstants from '../constants/HBConstants.js';
+export const TILE_CHOSEN = 'TILE_CHOSEN';
 
-class PlayerActions {
-  playerJoin (player) {
-    return {
-      actionType: HBConstants.PLAYER_JOIN,
-      player: player
-    };
-  }
+export function tileChosen(tile) {
+  return {
+    type: TILE_CHOSEN,
+    tile
+  };
 }
-
-export default alt.createActions(PlayerActions);
