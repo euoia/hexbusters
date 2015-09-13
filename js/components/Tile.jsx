@@ -30,7 +30,9 @@ class Tile extends Component {
         className={tile.owner}
         onClick={chooseTile.bind(null, tile.id)}
         style={style}
-      />
+      >
+        {tilePos.x} {tilePos.y}
+      </div>
     );
   }
 }

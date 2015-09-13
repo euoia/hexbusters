@@ -9,11 +9,14 @@ class Hexbusters extends Component {
   render () {
     const {
       board,
+      chooseTile,
+      getWinner,
       isCurrentPlayer,
       messages,
-      players,
-      chooseTile
+      players
     } = this.props;
+
+    console.log('getWinner', getWinner());
 
     return (
       <div>
@@ -39,7 +42,8 @@ function mapStateToProps(state) {
     messages: state.game.messages,
     board: state.game.board,
     players: state.game.players,
-    isCurrentPlayer: hb(state.game).isCurrentPlayer
+    isCurrentPlayer: hb(state.game).isCurrentPlayer,
+    getWinner: hb(state.game).getWinner
   };
 }
 

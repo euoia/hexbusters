@@ -1,4 +1,5 @@
 import { tileChosen } from '../actions/PlayerActions.js';
+import _ from 'lodash';
 
 export default function hb(game) {
   const getCurrentPlayer = () => {
@@ -44,10 +45,56 @@ export default function hb(game) {
       });
   };
 
+  const getWinner = () => {
+    const getPositionById = game.board.getPositionById.bind(game.board);
+    const validStartTiles = game.board.tiles.filter(
+      tile => getPositionById(tile.id).x === 0 &&
+        tile.colour !== null
+    );
+
+    const validEndTiles = game.board.tiles.filter(
+      tile => getPositionById(tile.id).x === 4 &&
+        tile.colour !== null
+    );
+
+    let winningStartTile = validStartTiles.find(
+      tile => {
+        let paths = game.board.getShortestPathsFromTileId(
+          tile.id,
+          {
+            moveCost: (fromTile, toTile) => {
+              return fromTile.colour === toTile.colour ?
+                0 : Number.POSITIVE_INFINITY;
+            },
+            maxCost: 100
+          }
+        );
+
+        let winningStartTiles = _.intersection(
+          Object.keys(paths),
+          _.pluck(validEndTiles, 'id')
+        );
+
+        if (winningStartTiles.length > 0) {
+          return true;
+        }
+
+        return false;
+      }
+    );
+
+    if (winningStartTile) {
+      return winningStartTile.colour;
+    }
+
+    return null;
+  }
+
   return {
     getCurrentPlayer,
     isCurrentPlayer,
     isTileUnoccupied,
-    getValidActions
+    getValidActions,
+    getWinner
   }
 }

@@ -52,7 +52,7 @@ function tileChosenReduceBoard(board, tileId, currentPlayer) {
   return newState;
 }
 
-export default function game(state = initialState, action) {
+export default function gameReducer(state = initialState, action) {
   switch (action.type) {
     case PLAYERS_JOIN:
       return {
