@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import HBApp from './HBApp.js';
+import HexbustersApp from './HexbustersApp.js';
 import { combineReducers, compose, createStore, applyMiddleware } from 'redux';
 import { devTools, persistState } from 'redux-devtools';
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
@@ -31,7 +31,7 @@ export class App extends Component {
     return (
       <div>
         <Provider store={store}>
-          {() => <HBApp />}
+          {() => <HexbustersApp />}
         </Provider>
         <DebugPanel top right bottom>
           <DevTools store={store}

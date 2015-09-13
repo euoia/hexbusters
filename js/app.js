@@ -3,6 +3,7 @@ import React from 'react';
 import _ from 'lodash';
 import { HUMAN_PLAYER, AI_PLAYER } from './constants/PlayerTypes.js';
 import { playersJoin } from './actions/GameActions.js';
+import { addMessage } from './actions/MessageActions.js';
 
 function startGame () {
   // Shuffle the players, blue starts.
@@ -31,6 +32,13 @@ function startGame () {
 
   store.dispatch(
     playersJoin(players)
+  );
+
+  store.dispatch(
+      addMessage({
+        playerName: 'Bob',
+        text: 'Hello world!'
+      })
   );
 }
 

@@ -12,7 +12,7 @@ module.exports = React.createClass({
    */
   render: function() {
     return (
-      <div>{this.props.message}</div>
+      <div>{this.props.message.playerName}: {this.props.message.text}</div>
     );
   }
 });

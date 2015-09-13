@@ -79,9 +79,10 @@ export default function game(state = initialState, action) {
       //tile.colour = this.getCurrentPlayer().colour;
       //this.nextPlayer();
     case ADD_MESSAGE:
+      const { playerName, text } = action;
       return {
-        messages: [action.message, ...state.messages],
-        ...state
+        ...state,
+        messages: [{playerName, text}, ...state.messages],
       };
     default:
       return state;
