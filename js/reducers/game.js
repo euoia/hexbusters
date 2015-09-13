@@ -69,7 +69,6 @@ export default function game(state = initialState, action) {
       };
 
     case TILE_CLICKED:
-      console.log('Tile clicked', action);
       return {
         ...state,
         board: reduceBoard(state.board, action, getCurrentPlayer(state))
