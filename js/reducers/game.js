@@ -1,5 +1,6 @@
 import { PLAYERS_JOIN, TILE_CLICKED, ADD_MESSAGE } from '../constants/ActionTypes.js';
 import HexGrid from 'hex-grid.js';
+import _ from 'lodash';
 
 const initialState = {
   players: [],
@@ -25,23 +26,26 @@ const initialState = {
   messages: []
 };
 
-function reduceBoard(state, action, currentPlayer) {
+function reduceBoard(board, action, currentPlayer) {
   if (currentPlayer === undefined) {
     throw new Error('currentPlayer was undefined!');
   }
 
+  // TODO: Investigate using immutable.js.
   let newState = Object.assign(
-    { __proto__: state.__proto__ },
-    state,
+    { __proto__: board.__proto__ },
+    board,
     {
-      tiles: state.tiles.map(
-        tile => {
-          if (tile.id === action.tileId) {
-            tile.colour = currentPlayer.colour
-          }
-          return tile;
-        }
-      )
+      tiles: _.chain(board.tiles)
+        .map(tile => _.clone(tile))
+        .map(tile => {
+            if (tile.id === action.tileId) {
+              tile.colour = currentPlayer.colour
+            }
+
+            return tile;
+        })
+        .value()
     }
   );
 
@@ -65,24 +69,17 @@ export default function game(state = initialState, action) {
       };
 
     case TILE_CLICKED:
-      console.log('getPositionById', state.board);
-      let newState = {
+      console.log('Tile clicked', action);
+      return {
         ...state,
         board: reduceBoard(state.board, action, getCurrentPlayer(state))
       };
-      console.log('getPositionById', newState.board);
-      return newState;
 
-    //case TILE_CHOSEN:
-      // TODO: How to implement this?
-      //let tile = this.board.getTileById(action.tile.id);
-      //tile.colour = this.getCurrentPlayer().colour;
-      //this.nextPlayer();
     case ADD_MESSAGE:
       const { playerName, text } = action;
       return {
         ...state,
-        messages: [{playerName, text}, ...state.messages],
+        messages: [{playerName, text}, ...state.messages]
       };
     default:
       return state;
