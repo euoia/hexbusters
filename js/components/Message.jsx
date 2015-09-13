@@ -1,18 +1,13 @@
-import React from 'react';
-let ReactPropTypes = React.PropTypes;
+import React, { Component, PropTypes } from 'react';
 
-module.exports = React.createClass({
-
-  propTypes: {
-   message: ReactPropTypes.string.isRequired
-  },
-
-  /**
-   * @return {object}
-   */
-  render: function() {
+export default class Message extends Component {
+  render () {
     return (
       <div>{this.props.message.playerName}: {this.props.message.text}</div>
     );
   }
-});
+}
+
+Message.propTypes = {
+  message: PropTypes.object.isRequired
+}

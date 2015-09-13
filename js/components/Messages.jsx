@@ -1,27 +1,23 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import Message from './Message.jsx';
-import _ from 'lodash';
 
-let ReactPropTypes = React.PropTypes;
-
-module.exports = React.createClass({
-  propTypes: {
-    messages: ReactPropTypes.array.isRequired
-  },
-
-  /**
-   * @return {object}
-   */
-  render: function() {
-    let messages = _.map(
-      this.props.messages,
-      (message, idx) => <Message key={idx} message={message} />
-    );
+export default class Messages extends Component {
+  render () {
+    const { messages } = this.props;
 
     return (
       <div id="messages">
-        {messages}
+        {
+          messages.map(
+            (message, idx) =>
+              <Message key={idx} message={message} />
+          )
+        }
       </div>
     );
   }
-});
+}
+
+Messages.propTypes = {
+  messages: PropTypes.array.isRequired
+};

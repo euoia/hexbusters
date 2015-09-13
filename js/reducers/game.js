@@ -1,6 +1,8 @@
-import { PLAYERS_JOIN, TILE_CLICKED, ADD_MESSAGE } from '../constants/ActionTypes.js';
+import { PLAYERS_JOIN, TILE_CHOSEN, ADD_MESSAGE } from '../constants/ActionTypes.js';
 import HexGrid from 'hex-grid.js';
 import _ from 'lodash';
+import { getCurrentPlayer, isTileUnoccupied } from '../hexbusters/gameHelpers.js';
+import check from 'check-types';
 
 const initialState = {
   players: [],
@@ -26,10 +28,8 @@ const initialState = {
   messages: []
 };
 
-function reduceBoard(board, action, currentPlayer) {
-  if (currentPlayer === undefined) {
-    throw new Error('currentPlayer was undefined!');
-  }
+function tileChosenReduceBoard(board, tileId, currentPlayer) {
+  check.assert.assigned(currentPlayer, 'currentPlayer was undefined.');
 
   // TODO: Investigate using immutable.js.
   let newState = Object.assign(
@@ -39,7 +39,7 @@ function reduceBoard(board, action, currentPlayer) {
       tiles: _.chain(board.tiles)
         .map(tile => _.clone(tile))
         .map(tile => {
-            if (tile.id === action.tileId) {
+            if (tile.id === tileId) {
               tile.colour = currentPlayer.colour
             }
 
@@ -52,14 +52,6 @@ function reduceBoard(board, action, currentPlayer) {
   return newState;
 }
 
-function getCurrentPlayer (state) {
-  return state.players[state.currentPlayerIdx % state.players.length];
-}
-
-export function isCurrentPlayer(state, player) {
-  return getCurrentPlayer(state).name === player.name;
-}
-
 export default function game(state = initialState, action) {
   switch (action.type) {
     case PLAYERS_JOIN:
@@ -68,10 +60,16 @@ export default function game(state = initialState, action) {
         players: action.players
       };
 
-    case TILE_CLICKED:
+    case TILE_CHOSEN:
+      if (isTileUnoccupied(state.board.getTileById(action.tileId)) === false) {
+        console.log('Tried to choose an occupied tile!');
+        return state;
+      }
+
       return {
         ...state,
-        board: reduceBoard(state.board, action, getCurrentPlayer(state))
+        board: tileChosenReduceBoard(state.board, action.tileId, getCurrentPlayer(state)),
+        currentPlayerIdx: state.currentPlayerIdx + 1
       };
 
     case ADD_MESSAGE:

@@ -1,16 +1,7 @@
-import React from 'react';
-let ReactPropTypes = React.PropTypes;
+import React, { Component, PropTypes } from 'react';
 
-module.exports = React.createClass({
-
-  propTypes: {
-   player: ReactPropTypes.object.isRequired
-  },
-
-  /**
-   * @return {object}
-   */
-  render: function() {
+export default class Player extends Component {
+  render () {
     return (
       <div className="player">
         {this.props.current ? '> ' : ''}
@@ -18,4 +9,8 @@ module.exports = React.createClass({
       </div>
     );
   }
-});
+}
+
+Player.propTypes = {
+  player: PropTypes.object.isRequired
+};

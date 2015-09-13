@@ -6,7 +6,7 @@ class Tile extends Component {
   }
 
   render () {
-    const {tile, tileClicked, getPositionById} = this.props;
+    const {tile, chooseTile, getPositionById} = this.props;
 
     let tilePos = getPositionById(tile.id);
 
@@ -28,17 +28,17 @@ class Tile extends Component {
     return (
       <div
         className={tile.owner}
+        onClick={chooseTile.bind(null, tile.id)}
         style={style}
-        onClick={tileClicked.bind(this, tile.id)}
       />
     );
   }
 }
 
 Tile.propTypes = {
-  tile: PropTypes.object.isRequired,
-  tileClicked: PropTypes.func.isRequired,
-  getPositionById: PropTypes.func.isRequired
+  chooseTile: PropTypes.func.isRequired,
+  getPositionById: PropTypes.func.isRequired,
+  tile: PropTypes.object.isRequired
 };
 
 export default Tile;

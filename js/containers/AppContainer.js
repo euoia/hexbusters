@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import HexbustersApp from './HexbustersApp.js';
+import * as reducers from '../reducers';
+import React, { Component, PropTypes } from 'react';
+import thunk from 'redux-thunk';
+import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
+import { Provider } from 'react-redux';
 import { combineReducers, compose, createStore, applyMiddleware } from 'redux';
 import { devTools, persistState } from 'redux-devtools';
-import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
-import thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
-
-import * as reducers from '../reducers';
+import Hexbusters from './Hexbusters.js';
 
 const finalCreateStore = compose(
   // Enables your middleware:
@@ -26,19 +25,21 @@ if (module.hot) {
   );
 }
 
-export class App extends Component {
+export class AppContainer extends Component {
   render() {
     return (
       <div>
         <Provider store={store}>
-          {() => <HexbustersApp />}
+          {() => <Hexbusters chooseTile={this.props.chooseTile} />}
         </Provider>
-        <DebugPanel top right bottom>
-          <DevTools store={store}
-                    monitor={LogMonitor}
-                    visibleOnLoad={true} />
+        <DebugPanel bottom right top >
+          <DevTools monitor={LogMonitor} store={store} visibleOnLoad={true} />
         </DebugPanel>
       </div>
     );
   }
 }
+
+AppContainer.propTypes = {
+  chooseTile: PropTypes.func.isRequired
+};

@@ -1,32 +1,26 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import Player from './Player.jsx';
-import _ from 'lodash';
 
-let ReactPropTypes = React.PropTypes;
-
-module.exports = React.createClass({
-
-  propTypes: {
-    players: ReactPropTypes.array.isRequired,
-    isCurrentPlayer: ReactPropTypes.func.isRequired
-  },
-
-  /**
-   * @return {object}
-   */
-  render: function() {
-    let players = _.map(
-      this.props.players,
-      (player, idx) =>
-        <Player
-          current={this.props.isCurrentPlayer(player)}
-          key={idx}
-          player={player}
-        />
-    );
+export default class Players extends Component {
+  render () {
+    const { players } = this.props;
 
     return (
-      <div id="players">{players}</div>
+      <div id="players">{
+        players.map(
+          (player, idx) =>
+            <Player
+              current={this.props.isCurrentPlayer(player)}
+              key={idx}
+              player={player}
+            />
+        )
+      }</div>
     );
   }
-});
+}
+
+Players.propTypes = {
+  isCurrentPlayer: PropTypes.func.isRequired,
+  players: PropTypes.array.isRequired
+};

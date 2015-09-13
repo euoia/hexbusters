@@ -1,28 +1,25 @@
-import * as BoardActions from '../actions/BoardActions.js';
 import React, { Component, PropTypes } from 'react';
 import Board from '../components/Board.jsx';
 import Messages from '../components/Messages.jsx';
 import Players from '../components/Players.jsx';
 import { connect } from 'react-redux';
-import { isCurrentPlayer } from '../reducers/game.js';
-import { bindActionCreators } from 'redux';
+import { isCurrentPlayer } from '../hexbusters/gameHelpers.js';
 
 class HBApp extends Component {
   render () {
-    const { board, dispatch, messages, players } = this.props;
-    const actions = bindActionCreators(BoardActions, dispatch);
+    const {
+      board,
+      isCurrentPlayer,
+      messages,
+      players,
+      chooseTile
+    } = this.props;
 
     return (
       <div>
-        <Players
-          players={players} isCurrentPlayer={this.props.isCurrentPlayer}
-        />
-        <Board
-          board={board} actions={actions}
-        />
-        <Messages
-          messages={messages}
-        />
+        <Players isCurrentPlayer={isCurrentPlayer} players={players} />
+        <Board  board={board} chooseTile={chooseTile} />
+        <Messages messages={messages} />
       </div>
     );
   }
@@ -30,10 +27,11 @@ class HBApp extends Component {
 
 HBApp.propTypes = {
   board: PropTypes.object.isRequired,
-  messages: PropTypes.array.isRequired,
-  players: PropTypes.array.isRequired,
+  chooseTile: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
-  isCurrentPlayer: PropTypes.func.isRequired
+  isCurrentPlayer: PropTypes.func.isRequired,
+  messages: PropTypes.array.isRequired,
+  players: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {
