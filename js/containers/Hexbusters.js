@@ -3,9 +3,9 @@ import Board from '../components/Board.jsx';
 import Messages from '../components/Messages.jsx';
 import Players from '../components/Players.jsx';
 import { connect } from 'react-redux';
-import { isCurrentPlayer } from '../hexbusters/gameHelpers.js';
+import hb from '../hexbusters/hb.js';
 
-class HBApp extends Component {
+class Hexbusters extends Component {
   render () {
     const {
       board,
@@ -25,7 +25,7 @@ class HBApp extends Component {
   }
 }
 
-HBApp.propTypes = {
+Hexbusters.propTypes = {
   board: PropTypes.object.isRequired,
   chooseTile: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
@@ -39,7 +39,8 @@ function mapStateToProps(state) {
     messages: state.game.messages,
     board: state.game.board,
     players: state.game.players,
-    isCurrentPlayer: isCurrentPlayer.bind(null, state.game)
+    isCurrentPlayer: hb(state.game).isCurrentPlayer
   };
 }
-export default connect(mapStateToProps)(HBApp);
+
+export default connect(mapStateToProps)(Hexbusters);

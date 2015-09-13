@@ -1,7 +1,7 @@
 import { PLAYERS_JOIN, TILE_CHOSEN, ADD_MESSAGE } from '../constants/ActionTypes.js';
 import HexGrid from 'hex-grid.js';
 import _ from 'lodash';
-import { getCurrentPlayer, isTileUnoccupied } from '../hexbusters/gameHelpers.js';
+import hb from '../hexbusters/hb.js';
 import check from 'check-types';
 
 const initialState = {
@@ -61,14 +61,14 @@ export default function game(state = initialState, action) {
       };
 
     case TILE_CHOSEN:
-      if (isTileUnoccupied(state.board.getTileById(action.tileId)) === false) {
+      if (hb(state).isTileUnoccupied(state.board.getTileById(action.tileId)) === false) {
         console.log('Tried to choose an occupied tile!');
         return state;
       }
 
       return {
         ...state,
-        board: tileChosenReduceBoard(state.board, action.tileId, getCurrentPlayer(state)),
+        board: tileChosenReduceBoard(state.board, action.tileId, hb(state).getCurrentPlayer()),
         currentPlayerIdx: state.currentPlayerIdx + 1
       };
 
