@@ -8,7 +8,7 @@ import hb from '../hexbusters/hb.js';
 class Hexbusters extends Component {
   render () {
     const {
-      board,
+      tileColours,
       chooseTile,
       getWinner,
       isCurrentPlayer,
@@ -21,7 +21,7 @@ class Hexbusters extends Component {
     return (
       <div>
         <Players isCurrentPlayer={isCurrentPlayer} players={players} />
-        <Board  board={board} chooseTile={chooseTile} />
+        <Board  chooseTile={chooseTile} tileColours={tileColours} />
         <Messages messages={messages} />
       </div>
     );
@@ -29,18 +29,18 @@ class Hexbusters extends Component {
 }
 
 Hexbusters.propTypes = {
-  board: PropTypes.object.isRequired,
   chooseTile: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
   isCurrentPlayer: PropTypes.func.isRequired,
   messages: PropTypes.array.isRequired,
-  players: PropTypes.array.isRequired
+  players: PropTypes.array.isRequired,
+  tileColours: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     messages: state.game.messages,
-    board: state.game.board,
+    tileColours: state.game.tileColours,
     players: state.game.players,
     isCurrentPlayer: hb(state.game).isCurrentPlayer,
     getWinner: hb(state.game).getWinner

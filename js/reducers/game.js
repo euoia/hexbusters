@@ -1,55 +1,28 @@
 import { PLAYERS_JOIN, TILE_CHOSEN, ADD_MESSAGE } from '../constants/ActionTypes.js';
 import HexGrid from 'hex-grid.js';
-import _ from 'lodash';
 import hb from '../hexbusters/hb.js';
 import check from 'check-types';
+import GridSettings from '../constants/GridSettings.js';
+import _ from 'lodash';
 
 const initialState = {
   players: [],
   currentPlayerIdx: 0,
-  board: new HexGrid({
-      width: 5,
-      height: 5,
-      orientation: 'flat-topped',
-      layout: 'odd-q',
-      tileFactory: {
-        nextId: 0,
-        newTile: function () {
-          let tile = {
-            colour: null,
-            id: this.nextId.toString(10)
-          };
-
-          this.nextId += 1;
-          return tile;
-        }
-      }
-  }),
-  messages: []
+  messages: [],
+  tileColours: _.chain(HexGrid.getTileIds(GridSettings))
+    .indexBy()
+    .mapValues(() => null)
+    .value()
 };
 
-function tileChosenReduceBoard(board, tileId, currentPlayer) {
+function tileChosenReduceTiles(tileColours, tileId, currentPlayer) {
   check.assert.assigned(currentPlayer, 'currentPlayer was undefined.');
-
-  // TODO: Investigate using immutable.js.
-  let newState = Object.assign(
-    { __proto__: board.__proto__ },
-    board,
-    {
-      tiles: _.chain(board.tiles)
-        .map(tile => _.clone(tile))
-        .map(tile => {
-            if (tile.id === tileId) {
-              tile.colour = currentPlayer.colour
-            }
-
-            return tile;
-        })
-        .value()
+  return _.mapValues(
+    tileColours,
+    (colour, tileColourId) => {
+      return tileColourId === tileId ? currentPlayer.colour : colour
     }
   );
-
-  return newState;
 }
 
 export default function gameReducer(state = initialState, action) {
@@ -61,16 +34,22 @@ export default function gameReducer(state = initialState, action) {
       };
 
     case TILE_CHOSEN:
-      if (hb(state).isTileUnoccupied(state.board.getTileById(action.tileId)) === false) {
+      if (hb(state).isTileUnoccupied(action.tileId) === false) {
         console.log('Tried to choose an occupied tile!');
         return state;
       }
 
-      return {
+      let ns = {
         ...state,
-        board: tileChosenReduceBoard(state.board, action.tileId, hb(state).getCurrentPlayer()),
+        tileColours: tileChosenReduceTiles(
+          state.tileColours,
+          action.tileId,
+          hb(state).getCurrentPlayer()
+        ),
         currentPlayerIdx: state.currentPlayerIdx + 1
       };
+
+      return ns;
 
     case ADD_MESSAGE:
       const { playerName, text } = action;

@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react';
+import HexGrid from 'hex-grid.js';
+import GridSettings from '../constants/GridSettings.js';
 
 class Tile extends Component {
   constructor (props, context) {
@@ -6,14 +8,11 @@ class Tile extends Component {
   }
 
   render () {
-    const {tile, chooseTile, getPositionById} = this.props;
+    const {colour, chooseTile, tileId} = this.props;
 
-    let tilePos = getPositionById(tile.id);
+    let tilePos = HexGrid.getTilePositionById(GridSettings, tileId);
 
-    let colour = tile.colour;
-    if (colour === null) {
-      colour = 'neutral';
-    }
+    const colourName = (colour === null) ? 'neutral' : colour;
 
     let style = {
       position: 'absolute',
@@ -21,14 +20,14 @@ class Tile extends Component {
       top: `${tilePos.y * 74}px`,
       width: `90px`,
       height: `78px`,
-      backgroundImage: `url(./assets/img/hex-${colour}@2x.png)`,
+      backgroundImage: `url(./assets/img/hex-${colourName}@2x.png)`,
       WebkitClipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
     };
 
+
     return (
       <div
-        className={tile.owner}
-        onClick={chooseTile.bind(null, tile.id)}
+        onClick={chooseTile.bind(null, tileId)}
         style={style}
       >
         {tilePos.x} {tilePos.y}
@@ -39,8 +38,7 @@ class Tile extends Component {
 
 Tile.propTypes = {
   chooseTile: PropTypes.func.isRequired,
-  getPositionById: PropTypes.func.isRequired,
-  tile: PropTypes.object.isRequired
+  colour: PropTypes.string
 };
 
 export default Tile;

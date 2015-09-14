@@ -48,7 +48,7 @@ export default class AIPlayer extends BasePlayer {
       return -100 + depth;
     }
 
-    if (depth > 2) {
+    if (depth > 3) {
       // We've gone too deep!
       return 0;
     }
@@ -86,9 +86,9 @@ export default class AIPlayer extends BasePlayer {
 
     this.stateCount = 0;
     let startTime = Date.now();
-    let actionValues = validActions.map((action) => {
+    let actionValues = _.mapValues(validActions, (action) => {
       let value;
-      if (validActions.length < 20) {
+      if (validActions.length < 23) {
         let newGameState = gameReducer(gameState, action);
         value = this.evaluateState(newGameState);
         console.log('Evaluated value is', value);
@@ -116,7 +116,7 @@ export default class AIPlayer extends BasePlayer {
       _.where(actionValues, {value: bestActionValue})
     );
 
-    console.log(`[AIPlayer] I think the best action is: ${JSON.stringify(bestAction)}`);
+    console.log(`[AIPlayer] I think the best action is: ${JSON.stringify(randomBestAction)}`);
     return randomBestAction.action;
   }
 }

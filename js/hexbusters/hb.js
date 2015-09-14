@@ -1,5 +1,7 @@
 import { tileChosen } from '../actions/PlayerActions.js';
 import _ from 'lodash';
+import { getTileCoordinatesById, getShortestPathsFromTileId } from 'hex-grid.js';
+import GridSettings from '../constants/GridSettings.js';
 
 export default function hb(game) {
   const getCurrentPlayer = () => {
@@ -23,46 +25,52 @@ export default function hb(game) {
     return currentPlayer.name === player.name;
   };
 
-  const isTileUnoccupied = (tile) => {
-    return tile.colour === null;
+  const isTileUnoccupied = (tileId) => {
+    return game.tileColours[tileId] === null;
   };
 
   const getUnoccupiedTiles = () => {
-    return game.board.tiles.filter(
-      tile => isTileUnoccupied(tile)
-    ).map(
-      tile => tile.id
+    return _.pick(
+      game.tileColours,
+      colour => colour === null
     );
   }
 
   const getValidActions = () => {
-    return getUnoccupiedTiles(game)
-      .map(tileId => {
+    return _.map(
+      getUnoccupiedTiles(),
+      (colour, tileId) => {
         return tileChosen({
-          tileId,
+          tileId: tileId,
           colour: getCurrentPlayer(game).colour
         })
       });
   };
 
   const getWinner = () => {
-    const getPositionById = game.board.getPositionById.bind(game.board);
-    const validStartTiles = game.board.tiles.filter(
-      tile => getPositionById(tile.id).x === 0 &&
+    const validStartTiles = _.where(
+      game.tiles,
+      tile => getTileCoordinatesById(tile.id).x === 0 &&
         tile.colour !== null
     );
 
-    const validEndTiles = game.board.tiles.filter(
-      tile => getPositionById(tile.id).x === 4 &&
+    const validEndTiles = _.where(
+      game.tiles,
+      tile => getTileCoordinatesById(tile.id).x === 4 &&
         tile.colour !== null
     );
 
-    let winningStartTile = validStartTiles.find(
+    let winningStartTile = _.find(
+      validStartTiles,
       tile => {
-        let paths = game.board.getShortestPathsFromTileId(
+        let paths = getShortestPathsFromTileId(
+          GridSettings,
           tile.id,
           {
-            moveCost: (fromTile, toTile) => {
+            moveCost: (fromTileId, toTileId) => {
+              let fromTile = _.where(game.tiles, {id: fromTileId});
+              let toTile = _.where(game.tiles, {id: toTileId});
+
               return fromTile.colour === toTile.colour ?
                 0 : Number.POSITIVE_INFINITY;
             },

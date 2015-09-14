@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Tile from './Tile.jsx';
+import _ from 'lodash';
 
 export default class Board extends Component {
   constructor (props, context) {
@@ -7,18 +8,19 @@ export default class Board extends Component {
   }
 
   render () {
-    const { board, chooseTile } = this.props;
+    const { tileColours, chooseTile } = this.props;
 
     return (
       <div id="middle">
         <div id="board">
-          {board.tiles.map(
-            tile =>
+          {_.mapValues(
+            tileColours,
+            (colour, tileId) =>
               <Tile
                 chooseTile={chooseTile}
-                getPositionById={board.getPositionById.bind(board)}
-                key={tile.id}
-                tile={tile}
+                colour={colour}
+                key={tileId}
+                tileId={tileId}
               />
           )}
         </div>
@@ -28,6 +30,6 @@ export default class Board extends Component {
 }
 
 Board.propTypes = {
-  board: PropTypes.object.isRequired,
-  chooseTile: PropTypes.func.isRequired
+  chooseTile: PropTypes.func.isRequired,
+  tileColours: PropTypes.object.isRequired
 };
