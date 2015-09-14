@@ -2,6 +2,7 @@ import { tileChosen } from '../actions/PlayerActions.js';
 import _ from 'lodash';
 import { getTileCoordinatesById, getShortestPathsFromTileId } from 'hex-grid.js';
 import GridSettings from '../constants/GridSettings.js';
+import { COLOUR_NEUTRAL } from '../constants/Colours.js';
 
 export default function hb(game) {
   const getCurrentPlayer = () => {
@@ -26,13 +27,13 @@ export default function hb(game) {
   };
 
   const isTileUnoccupied = (tileId) => {
-    return game.tileColours[tileId] === null;
+    return game.tileColours[tileId] === COLOUR_NEUTRAL;
   };
 
   const getUnoccupiedTiles = () => {
     return _.pick(
       game.tileColours,
-      colour => colour === null
+      colour => colour === COLOUR_NEUTRAL
     );
   }
 
@@ -51,13 +52,13 @@ export default function hb(game) {
     const validStartTiles = _.where(
       game.tiles,
       tile => getTileCoordinatesById(tile.id).x === 0 &&
-        tile.colour !== null
+        tile.colour !== COLOUR_NEUTRAL
     );
 
     const validEndTiles = _.where(
       game.tiles,
       tile => getTileCoordinatesById(tile.id).x === 4 &&
-        tile.colour !== null
+        tile.colour !== COLOUR_NEUTRAL
     );
 
     let winningStartTile = _.find(

@@ -1,4 +1,5 @@
 import { PLAYERS_JOIN, TILE_CHOSEN, ADD_MESSAGE } from '../constants/ActionTypes.js';
+import { COLOUR_NEUTRAL } from '../constants/Colours.js';
 import HexGrid from 'hex-grid.js';
 import hb from '../hexbusters/hb.js';
 import check from 'check-types';
@@ -11,7 +12,7 @@ const initialState = {
   messages: [],
   tileColours: _.chain(HexGrid.getTileIds(GridSettings))
     .indexBy()
-    .mapValues(() => null)
+    .mapValues(() => COLOUR_NEUTRAL)
     .value()
 };
 

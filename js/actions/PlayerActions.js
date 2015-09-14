@@ -3,7 +3,7 @@ import check from 'check-types';
 
 export function tileChosen(action) {
   check.assert.string(action.tileId, 'tileId must a string');
-  check.assert.string(action.colour, 'colour must be a string');
+  check.assert.assigned(action.colour, 'colour must be a assigned');
   const { tileId, colour } = action;
 
   return {

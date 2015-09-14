@@ -1,8 +1,9 @@
 import check from 'check-types';
 import _ from 'lodash';
 import { tileChosen } from '../actions/PlayerActions.js';
+import { COLOUR_RED, COLOUR_BLUE } from '../constants/Colours.js';
 
-const validColours = ['red', 'blue'];
+const validColours = [COLOUR_RED, COLOUR_BLUE];
 
 export default class BasePlayer {
   constructor (options) {
@@ -12,7 +13,7 @@ export default class BasePlayer {
     check.assert.object(options.store);
     this.store = options.store;
 
-    check.assert.string(options.colour);
+    check.assert.assigned(options.colour);
     check.assert(_.includes(validColours, options.colour));
     this.colour = options.colour;
   }

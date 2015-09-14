@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import HexGrid from 'hex-grid.js';
 import GridSettings from '../constants/GridSettings.js';
+import { COLOUR_RED, COLOUR_BLUE, COLOUR_NEUTRAL } from '../constants/Colours.js';
 
 class Tile extends Component {
   constructor (props, context) {
@@ -10,9 +11,22 @@ class Tile extends Component {
   render () {
     const {colour, chooseTile, tileId} = this.props;
 
-    let tilePos = HexGrid.getTilePositionById(GridSettings, tileId);
+    const tilePos = HexGrid.getTilePositionById(GridSettings, tileId);
 
-    const colourName = (colour === null) ? 'neutral' : colour;
+    let colourName;
+    switch (colour) {
+      case COLOUR_RED:
+        colourName = 'red';
+        break;
+      case COLOUR_BLUE:
+        colourName = 'blue';
+        break;
+      case COLOUR_NEUTRAL:
+        colourName = 'neutral'
+        break;
+      default:
+        throw new Error(`Unhandled colour: ${colour}`);
+    }
 
     let style = {
       position: 'absolute',
@@ -38,7 +52,7 @@ class Tile extends Component {
 
 Tile.propTypes = {
   chooseTile: PropTypes.func.isRequired,
-  colour: PropTypes.string
+  colour: PropTypes.isRequired
 };
 
 export default Tile;

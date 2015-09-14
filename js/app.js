@@ -3,11 +3,12 @@ import HumanPlayer from './hexbusters/HumanPlayer.js';
 import React from 'react';
 import _ from 'lodash';
 import { AppContainer, store } from './containers/AppContainer.js';
+import { COLOUR_BLUE, COLOUR_RED } from './constants/Colours.js';
 import { addMessage } from './actions/MessageActions.js';
 import { playersJoin } from './actions/GameActions.js';
 
 // Shuffle the colours since blue always goes first.
-const colours = _.shuffle(['blue', 'red']);
+const colours = _.shuffle([COLOUR_BLUE, COLOUR_RED]);
 
 const humanPlayer = new HumanPlayer({
   name: 'Bob',
