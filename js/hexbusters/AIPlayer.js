@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { AI_PLAYER } from '../constants/PlayerTypes.js';
 import hb from './hb.js';
 import gameReducer from '../reducers/game.js';
+import { COLOUR_NEUTRAL } from '../constants/Colours.js';
 
 export default class AIPlayer extends BasePlayer {
   constructor (options) {
@@ -43,12 +44,12 @@ export default class AIPlayer extends BasePlayer {
         return 100 - depth;
     }
 
-    if (winner !== null) {
+    if (winner !== COLOUR_NEUTRAL) {
       // Other player wins, worst outcome.
       return -100 + depth;
     }
 
-    if (depth > 3) {
+    if (depth > 2) {
       // We've gone too deep!
       return 0;
     }
@@ -88,7 +89,7 @@ export default class AIPlayer extends BasePlayer {
     let startTime = Date.now();
     let actionValues = _.mapValues(validActions, (action) => {
       let value;
-      if (validActions.length < 23) {
+      if (validActions.length < 22) {
         let newGameState = gameReducer(gameState, action);
         value = this.evaluateState(newGameState);
         console.log('Evaluated value is', value);

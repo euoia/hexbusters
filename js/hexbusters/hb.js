@@ -49,30 +49,29 @@ export default function hb(game) {
   };
 
   const getWinner = () => {
-    const validStartTiles = _.where(
-      game.tiles,
-      tile => getTileCoordinatesById(tile.id).x === 0 &&
-        tile.colour !== COLOUR_NEUTRAL
+    const validStartTiles = _.pick(
+      game.tileColours,
+      (colour, tileId) =>
+        getTileCoordinatesById(tileId).x === 0 &&
+        colour !== COLOUR_NEUTRAL
     );
 
-    const validEndTiles = _.where(
-      game.tiles,
-      tile => getTileCoordinatesById(tile.id).x === 4 &&
-        tile.colour !== COLOUR_NEUTRAL
+    const validEndTiles = _.pick(
+      game.tileColours,
+      (colour, tileId) =>
+        getTileCoordinatesById(tileId).x === 4 &&
+        colour !== COLOUR_NEUTRAL
     );
 
-    let winningStartTile = _.find(
+    let winningColour = _.find(
       validStartTiles,
-      tile => {
+      (colour, tileId) => {
         let paths = getShortestPathsFromTileId(
           GridSettings,
-          tile.id,
+          tileId,
           {
             moveCost: (fromTileId, toTileId) => {
-              let fromTile = _.where(game.tiles, {id: fromTileId});
-              let toTile = _.where(game.tiles, {id: toTileId});
-
-              return fromTile.colour === toTile.colour ?
+              return game.tileColours[fromTileId] === game.tileColours[toTileId] ?
                 0 : Number.POSITIVE_INFINITY;
             },
             maxCost: 100
@@ -81,7 +80,7 @@ export default function hb(game) {
 
         let winningStartTiles = _.intersection(
           Object.keys(paths),
-          _.pluck(validEndTiles, 'id')
+          Object.keys(validEndTiles)
         );
 
         if (winningStartTiles.length > 0) {
@@ -92,11 +91,11 @@ export default function hb(game) {
       }
     );
 
-    if (winningStartTile) {
-      return winningStartTile.colour;
+    if (winningColour) {
+      return winningColour;
     }
 
-    return null;
+    return COLOUR_NEUTRAL;
   }
 
   return {
