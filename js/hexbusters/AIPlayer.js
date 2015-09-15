@@ -70,7 +70,7 @@ export default class AIPlayer extends BasePlayer {
     );
 
     if (game.isCurrentPlayer(this) === false) {
-      return actionValues.minBy(action => action.value);
+      return actionValues.minBy(action => action.value).getAction('action');
     }
 
     return actionValues.maxBy(action => action.value).get('action');
