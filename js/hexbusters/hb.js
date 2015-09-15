@@ -27,19 +27,17 @@ export default function hb(game) {
   };
 
   const isTileUnoccupied = (tileId) => {
-    return game.tileColours[tileId] === COLOUR_NEUTRAL;
+    return game.tileColours.get(tileId) === COLOUR_NEUTRAL;
   };
 
   const getUnoccupiedTiles = () => {
-    return _.pick(
-      game.tileColours,
+    return game.tileColours.filter(
       colour => colour === COLOUR_NEUTRAL
     );
   }
 
   const getValidActions = () => {
-    return _.map(
-      getUnoccupiedTiles(),
+    return getUnoccupiedTiles().map(
       (colour, tileId) => {
         return tileChosen({
           tileId: tileId,
@@ -49,22 +47,19 @@ export default function hb(game) {
   };
 
   const getWinner = () => {
-    const validStartTiles = _.pick(
-      game.tileColours,
+    const validStartTiles = game.tileColours.filter(
       (colour, tileId) =>
         getTileCoordinatesById(tileId).x === 0 &&
         colour !== COLOUR_NEUTRAL
     );
 
-    const validEndTiles = _.pick(
-      game.tileColours,
+    const validEndTiles = game.tileColours.filter(
       (colour, tileId) =>
         getTileCoordinatesById(tileId).x === 4 &&
         colour !== COLOUR_NEUTRAL
     );
 
-    let winningColour = _.find(
-      validStartTiles,
+    let winningColour = validStartTiles.find(
       (colour, tileId) => {
         let paths = getShortestPathsFromTileId(
           GridSettings,

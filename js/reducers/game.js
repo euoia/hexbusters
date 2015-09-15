@@ -5,25 +5,23 @@ import hb from '../hexbusters/hb.js';
 import check from 'check-types';
 import GridSettings from '../constants/GridSettings.js';
 import _ from 'lodash';
+import Immutable from 'immutable';
 
 const initialState = {
   players: [],
   currentPlayerIdx: 0,
   messages: [],
-  tileColours: _.chain(HexGrid.getTileIds(GridSettings))
+  tileColours: Immutable.Map(
+    _.chain(HexGrid.getTileIds(GridSettings))
     .indexBy()
     .mapValues(() => COLOUR_NEUTRAL)
     .value()
+  )
 };
 
 function tileChosenReduceTiles(tileColours, tileId, currentPlayer) {
   check.assert.assigned(currentPlayer, 'currentPlayer was undefined.');
-  return _.mapValues(
-    tileColours,
-    (colour, tileColourId) => {
-      return tileColourId === tileId ? currentPlayer.colour : colour
-    }
-  );
+  return tileColours.set(tileId, currentPlayer.colour);
 }
 
 export default function gameReducer(state = initialState, action) {

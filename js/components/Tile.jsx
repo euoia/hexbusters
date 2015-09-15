@@ -52,7 +52,7 @@ class Tile extends Component {
 
 Tile.propTypes = {
   chooseTile: PropTypes.func.isRequired,
-  colour: PropTypes.isRequired
+  colour: PropTypes.any.isRequired
 };
 
 export default Tile;

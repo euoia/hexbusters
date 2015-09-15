@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import Tile from './Tile.jsx';
-import _ from 'lodash';
 
 export default class Board extends Component {
   constructor (props, context) {
@@ -13,16 +12,17 @@ export default class Board extends Component {
     return (
       <div id="middle">
         <div id="board">
-          {_.mapValues(
-            tileColours,
-            (colour, tileId) =>
-              <Tile
-                chooseTile={chooseTile}
-                colour={colour}
-                key={tileId}
-                tileId={tileId}
-              />
-          )}
+          {
+            tileColours.map(
+              (colour, tileId) =>
+                <Tile
+                  chooseTile={chooseTile}
+                  colour={colour}
+                  key={tileId}
+                  tileId={tileId}
+                />
+            )
+          }
         </div>
       </div>
     );

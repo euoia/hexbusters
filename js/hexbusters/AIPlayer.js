@@ -55,67 +55,64 @@ export default class AIPlayer extends BasePlayer {
     }
 
     // Value of the state is the average of the possible action values.
-    const validActions = game.getValidActions();
+    let actionValues = game.getValidActions().map(
+      action => {
+        const value = this.evaluateState(
+          gameReducer(gameState, action),
+          depth + 1
+        );
 
-    let startingValue, cmpFn;
+        return {
+          action: action,
+          value: value
+        };
+      }
+    );
+
     if (game.isCurrentPlayer(this) === false) {
-      startingValue = 100;
-      cmpFn = _.min;
-    } else {
-      startingValue = -100;
-      cmpFn = _.max;
+      return actionValues.minBy(action => action.value);
     }
 
-    let bestValue = startingValue;
-    for (
-      let actionIdx = 0, numActions = validActions.length;
-      actionIdx < numActions;
-      actionIdx += 1
-    ) {
-      let newGameState = gameReducer(gameState, validActions[actionIdx]);
-      let value = this.evaluateState(newGameState, depth + 1);
-      bestValue = cmpFn([bestValue, value]);
-    }
-
-    return bestValue;
+    return actionValues.maxBy(action => action.value).get('action');
   }
 
   getBestAction (gameState) {
     const game = hb(gameState);
     const validActions = game.getValidActions();
-    console.log(`[AIPlayer] considering ${validActions.length} actions.`);
+    console.log(`[AIPlayer] considering ${validActions.count()} actions.`);
 
     this.stateCount = 0;
     let startTime = Date.now();
-    let actionValues = _.mapValues(validActions, (action) => {
-      let value;
-      if (validActions.length < 22) {
-        let newGameState = gameReducer(gameState, action);
-        value = this.evaluateState(newGameState);
-        console.log('Evaluated value is', value);
-      } else {
-        value = 0;
-        console.log('Estimated value is', value);
-      }
+    let actionValues = validActions.map(
+      action => {
+        let value;
+        if (validActions.count() < 22) {
+          let newGameState = gameReducer(gameState, action);
+          value = this.evaluateState(newGameState);
+          console.log('Evaluated value is', value);
+        } else {
+          value = 0;
+          console.log('Estimated value is', value);
+        }
 
-      return {
-        action: action,
-        value: value
-      };
-    });
+        return {
+          action: action,
+          value: value
+        };
+      }
+    );
 
     let timeTaken = Date.now() - startTime;
     console.log(`[AIPlayer] Evaluated ${this.stateCount} states in ${timeTaken}ms.`);
 
-    let bestAction = _.chain(actionValues)
-      .sortByOrder('value', false)
-      .first()
-      .value();
+    let bestAction = actionValues.maxBy(action => action.value);
 
     let bestActionValue = bestAction.value;
-    let randomBestAction = _.sample(
-      _.where(actionValues, {value: bestActionValue})
-    );
+    let randomBestAction = _.chain(actionValues.toJS())
+      .filter(action => action.value === bestActionValue)
+      .shuffle()
+      .first()
+      .value();
 
     console.log(`[AIPlayer] I think the best action is: ${JSON.stringify(randomBestAction)}`);
     return randomBestAction.action;
