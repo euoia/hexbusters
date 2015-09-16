@@ -7,7 +7,7 @@ const boardState = {
 };
 
 const timeLimitMs = 5000;
-console.log(`Running Minimax board evaluation for ${timeLimitMs}...`);
+console.log(`Running Minimax board evaluation for ${timeLimitMs}ms...`);
 
 const startTime = new Date();
 const { statesEvaluated } = Minimax.evaluateState(
