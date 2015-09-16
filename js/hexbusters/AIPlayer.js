@@ -31,6 +31,10 @@ export default class AIPlayer extends BasePlayer {
 
   /**
    * Minimax state evaluation.
+   *
+   * @param {Object} gameState The state of the game.
+   * @param {Number} depth The evaluation tree depth.
+   * @returns {Number} The value of gameState.
    */
   evaluateState (gameState, depth = 0) {
     const game = hb(gameState);
@@ -70,19 +74,19 @@ export default class AIPlayer extends BasePlayer {
     );
 
     if (game.isCurrentPlayer(this) === false) {
-      return actionValues.minBy(action => action.value).getAction('action');
+      return actionValues.minBy(action => action.value).value;
     }
 
-    return actionValues.maxBy(action => action.value).get('action');
+    return actionValues.maxBy(action => action.value).value;
   }
 
   getBestAction (gameState) {
     const game = hb(gameState);
     const validActions = game.getValidActions();
     console.log(`[AIPlayer] considering ${validActions.count()} actions.`);
-
     this.stateCount = 0;
     let startTime = Date.now();
+
     let actionValues = validActions.map(
       action => {
         let value;
