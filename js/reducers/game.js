@@ -1,30 +1,14 @@
 import { PLAYERS_JOIN, TILE_CHOSEN, ADD_MESSAGE } from '../constants/ActionTypes.js';
-import { COLOUR_NEUTRAL } from '../constants/Colours.js';
-import HexGrid from 'hex-grid.js';
 import hb from '../hexbusters/hb.js';
 import check from 'check-types';
-import GridSettings from '../constants/GridSettings.js';
-import _ from 'lodash';
-import Immutable from 'immutable';
-
-const initialState = {
-  players: [],
-  currentPlayerIdx: 0,
-  messages: [],
-  tileColours: Immutable.Map(
-    _.chain(HexGrid.getTileIds(GridSettings))
-    .indexBy()
-    .mapValues(() => COLOUR_NEUTRAL)
-    .value()
-  )
-};
+import InitialState from '../constants/InitialState.js';
 
 function tileChosenReduceTiles(tileColours, tileId, currentPlayer) {
   check.assert.assigned(currentPlayer, 'currentPlayer was undefined.');
   return tileColours.set(tileId, currentPlayer.colour);
 }
 
-export default function gameReducer(state = initialState, action) {
+export default function gameReducer(state = InitialState, action) {
   switch (action.type) {
     case PLAYERS_JOIN:
       return {

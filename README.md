@@ -13,3 +13,7 @@ Node.js v4.0.0 or later.
 `npm start`
 
 Go to http://localhost:3000
+
+# To run the performance tests
+
+`npn run perf`
