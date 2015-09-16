@@ -19,12 +19,26 @@ export default class AIPlayer extends BasePlayer {
       if (game.isCurrentPlayer(this)) {
         const makeChoice = () => {
           this.store.dispatch(
-            Minimax.getBestAction(this.store.getState().game)
+            this.getBestAction(this.store.getState().game)
           )
         };
 
         _.debounce(makeChoice, 1000)();
       }
     });
+  }
+
+  getBestAction (gameState, timeLimitMs = 5000) {
+    const startTime = new Date();
+
+    const { action, value, statesEvaluated } = Minimax.evaluateState(
+      gameState,
+      startTime.getTime() + timeLimitMs
+    );
+
+    let timeTaken = Date.now() - startTime;
+    console.log(`[AIPlayer] Evaluated ${statesEvaluated} states in ${timeTaken}ms.`);
+    console.log(`[AIPlayer] Best action has a value of`, value, action);
+    return action;
   }
 }

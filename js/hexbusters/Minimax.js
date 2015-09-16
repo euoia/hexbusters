@@ -97,18 +97,4 @@ export default class Minimax {
       statesEvaluated: thisStatesEvaluated
     };
   }
-
-  static getBestAction (gameState, timeLimitMs = 5000) {
-    const startTime = new Date();
-
-    const { action, value, statesEvaluated } = Minimax.evaluateState(
-      gameState,
-      startTime.getTime() + timeLimitMs
-    );
-
-    let timeTaken = Date.now() - startTime;
-    console.log(`[AIPlayer] Evaluated ${statesEvaluated} states in ${timeTaken}ms.`);
-    console.log(`[AIPlayer] Best action has a value of`, value, action);
-    return action;
-  }
 }
