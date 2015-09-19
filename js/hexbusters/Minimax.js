@@ -40,7 +40,6 @@ export default class Minimax {
   ) {
     const now = new Date();
     if (now > endTime) {
-      console.log('Took too long');
       return {
         value: 0,
         statesEvaluated
