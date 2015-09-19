@@ -1,8 +1,8 @@
 import Minimax from '../../js/hexbusters/Minimax.js';
-import InitialBoardState from '../../js/constants/InitialState.js';
+import InitialState from '../../js/constants/InitialState.js';
 
-const boardState = {
-  ...InitialBoardState,
+const gameState = {
+  ...InitialState,
   players: [{colour: 'red'}, {colour: 'blue'}]
 };
 
@@ -11,7 +11,7 @@ console.log(`Running Minimax board evaluation for ${timeLimitMs}ms...`);
 
 const startTime = new Date();
 const { statesEvaluated } = Minimax.evaluateState(
-  boardState,
+  gameState,
   startTime.getTime() + timeLimitMs
 );
 

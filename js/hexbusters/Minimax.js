@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import gameReducer from '../reducers/game.js';
 import hb from './hb.js';
-import { COLOUR_NEUTRAL } from '../constants/Colours.js';
 
 export default class Minimax {
   /**
@@ -21,9 +20,20 @@ export default class Minimax {
    *
    * @param {Object} gameState The state of the game.
    * @param {Number} depth The evaluation tree depth.
-   * @returns {Number} The value of gameState.
+   * @returns {Object} An object with the kfollowing keys:
+   *   action          - The best action (or undefined if there are no valid actions).
+   *   value           - The value of the best action.
+   *   statesEvaluated - The number of states evaluated.
    */
-  static evaluateState (gameState, endTime, depth = 0, statesEvaluated = 0) {
+  static evaluateState (
+    playerColour,
+    gameState,
+    gridSettings,
+    endTime,
+    maximizingPlayer = true,
+    depth = 0,
+    statesEvaluated = 0
+  ) {
     const now = new Date();
     if (now > endTime) {
       return {
@@ -35,6 +45,26 @@ export default class Minimax {
     let thisStatesEvaluated = statesEvaluated + 1;
 
     const game = hb(gameState);
+    const winner = game.getWinner(gridSettings);
+
+    // Modify the final score by the depth so that the AI prefer to end
+    // the game sooner.
+    if (winner === playerColour) {
+        // This player wins, best outcome.
+      return {
+        value: 100 - depth,
+        statesEvaluated: thisStatesEvaluated
+      };
+    }
+
+    if (winner !== null) {
+      // Other player wins, worst outcome.
+      return {
+        value: -100 + depth,
+        statesEvaluated: thisStatesEvaluated
+      };
+    }
+
     const validActions = game.getValidActions();
     if (validActions.count() === 0) {
       // The board is full but no player has won.
@@ -44,32 +74,15 @@ export default class Minimax {
       };
     }
 
-    const winner = game.getWinner();
-
-    // Modify the final score by the depth so that the AI prefer to end
-    // the game sooner.
-    if (winner === this.colour) {
-        // This player wins, best outcome.
-      return {
-        value: 100 - depth,
-        statesEvaluated: thisStatesEvaluated
-      };
-    }
-
-    if (winner !== COLOUR_NEUTRAL) {
-      // Other player wins, worst outcome.
-      return {
-        value: -100 + depth,
-        statesEvaluated: thisStatesEvaluated
-      };
-    }
-
     // Value of the state is the average of the possible action values.
     let actionValues = validActions.map(
       action => {
         const { value, statesEvaluated } = Minimax.evaluateState(
+          playerColour,
           gameReducer(gameState, action),
+          gridSettings,
           endTime,
+          ! maximizingPlayer,
           depth + 1,
           thisStatesEvaluated
         );
@@ -82,12 +95,10 @@ export default class Minimax {
       }
     );
 
-    let bestActionValue;
-    if (game.isCurrentPlayer(this) === false) {
-      bestActionValue = actionValues.minBy(action => action.value);
-    } else {
-      bestActionValue = actionValues.maxBy(action => action.value);
-    }
+    const bestActionValue =
+      maximizingPlayer ?
+      actionValues.maxBy(action => action.value) :
+      actionValues.minBy(action => action.value);
 
     thisStatesEvaluated += _.sum(_.pluck(actionValues.toJS(), 'statesEvaluated'));
 

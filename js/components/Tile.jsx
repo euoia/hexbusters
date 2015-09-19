@@ -12,6 +12,7 @@ class Tile extends Component {
     const {colour, chooseTile, tileId} = this.props;
 
     const tilePos = HexGrid.getTilePositionById(GridSettings, tileId);
+    const tileCoordinates = HexGrid.getTileCoordinatesById(tileId);
 
     let colourName;
     switch (colour) {
@@ -44,7 +45,7 @@ class Tile extends Component {
         onClick={chooseTile.bind(null, tileId)}
         style={style}
       >
-        {tilePos.x} {tilePos.y}
+        {tileCoordinates.x} {tileCoordinates.y}
       </div>
     );
   }

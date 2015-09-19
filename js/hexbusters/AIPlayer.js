@@ -3,6 +3,7 @@ import _ from 'lodash';
 import hb from './hb.js';
 import { AI_PLAYER } from '../constants/PlayerTypes.js';
 import Minimax from './Minimax.js';
+import GridSettings from '../constants/GridSettings.js';
 
 export default class AIPlayer extends BasePlayer {
   constructor (options) {
@@ -32,7 +33,9 @@ export default class AIPlayer extends BasePlayer {
     const startTime = new Date();
 
     const { action, value, statesEvaluated } = Minimax.evaluateState(
+      this.colour,
       gameState,
+      GridSettings,
       startTime.getTime() + timeLimitMs
     );
 

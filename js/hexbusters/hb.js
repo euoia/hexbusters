@@ -1,7 +1,6 @@
 import { tileChosen } from '../actions/PlayerActions.js';
 import _ from 'lodash';
 import { getTileCoordinatesById, getShortestPathsFromTileId } from 'hex-grid.js';
-import GridSettings from '../constants/GridSettings.js';
 import { COLOUR_NEUTRAL } from '../constants/Colours.js';
 
 export default function hb(game) {
@@ -46,7 +45,7 @@ export default function hb(game) {
       });
   };
 
-  const getWinner = () => {
+  const getWinner = (gridSettings) => {
     const validStartTiles = game.tileColours.filter(
       (colour, tileId) =>
         getTileCoordinatesById(tileId).x === 0 &&
@@ -55,30 +54,31 @@ export default function hb(game) {
 
     const validEndTiles = game.tileColours.filter(
       (colour, tileId) =>
-        getTileCoordinatesById(tileId).x === 4 &&
+        getTileCoordinatesById(tileId).x === gridSettings.width - 1 &&
         colour !== COLOUR_NEUTRAL
     );
 
     let winningColour = validStartTiles.find(
       (colour, tileId) => {
         let paths = getShortestPathsFromTileId(
-          GridSettings,
+          gridSettings,
           tileId,
           {
             moveCost: (fromTileId, toTileId) => {
-              return game.tileColours[fromTileId] === game.tileColours[toTileId] ?
-                0 : Number.POSITIVE_INFINITY;
+              return game.tileColours.get(fromTileId) === game.tileColours.get(toTileId) ?
+                0 :
+                Number.POSITIVE_INFINITY;
             },
             maxCost: 100
           }
         );
 
-        let winningStartTiles = _.intersection(
+        let winningEndTiles = _.intersection(
           Object.keys(paths),
-          Object.keys(validEndTiles)
+          Object.keys(validEndTiles.toJS())
         );
 
-        if (winningStartTiles.length > 0) {
+        if (winningEndTiles.length > 0) {
           return true;
         }
 
@@ -90,7 +90,7 @@ export default function hb(game) {
       return winningColour;
     }
 
-    return COLOUR_NEUTRAL;
+    return null;
   }
 
   return {

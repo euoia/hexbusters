@@ -4,6 +4,7 @@ import Messages from '../components/Messages.jsx';
 import Players from '../components/Players.jsx';
 import { connect } from 'react-redux';
 import hb from '../hexbusters/hb.js';
+import GridSettings from '../constants/GridSettings.js';
 
 class Hexbusters extends Component {
   render () {
@@ -16,7 +17,7 @@ class Hexbusters extends Component {
       players
     } = this.props;
 
-    console.log('getWinner', getWinner());
+    console.log('getWinner', getWinner(GridSettings));
 
     return (
       <div>
