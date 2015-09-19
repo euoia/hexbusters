@@ -11,6 +11,7 @@ export default class AIPlayer extends BasePlayer {
     this.playerType = AI_PLAYER;
 
     this.thinkTimeMs = 5000;
+    this.maxDepth = 3;
 
     /**
      * Subscribe to game events.
@@ -26,7 +27,8 @@ export default class AIPlayer extends BasePlayer {
               this.colour,
               this.store.getState().game,
               GridSettings,
-              this.thinkTimeMs
+              this.thinkTimeMs,
+              this.maxDepth
             )
           )
         };

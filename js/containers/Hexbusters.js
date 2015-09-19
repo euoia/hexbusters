@@ -41,7 +41,7 @@ Hexbusters.propTypes = {
 function mapStateToProps(state) {
   return {
     messages: state.game.messages,
-    tileColours: state.game.tileColours,
+    tileColours: state.game.board.get('tileColours'),
     players: state.game.players,
     isCurrentPlayer: hb(state.game).isCurrentPlayer,
     getWinner: hb(state.game).getWinner

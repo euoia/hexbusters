@@ -10,16 +10,19 @@ describe('getWinner', function() {
     const gameState = {
       ...InitialState,
       players: [{colour: COLOUR_RED}, {colour: COLOUR_BLUE}],
-      tileColours: Immutable.Map({
-        'tile-0-0': COLOUR_RED,
-        'tile-0-1': COLOUR_NEUTRAL,
-        'tile-0-2': COLOUR_NEUTRAL,
-        'tile-1-0': COLOUR_RED,
-        'tile-1-1': COLOUR_NEUTRAL,
-        'tile-1-2': COLOUR_NEUTRAL,
-        'tile-2-0': COLOUR_RED,
-        'tile-2-1': COLOUR_NEUTRAL,
-        'tile-2-2': COLOUR_NEUTRAL
+      board: Immutable.fromJS({
+        currentPlayerIdx: 0,
+        tileColours: {
+          'tile-0-0': COLOUR_RED,
+          'tile-0-1': COLOUR_NEUTRAL,
+          'tile-0-2': COLOUR_NEUTRAL,
+          'tile-1-0': COLOUR_RED,
+          'tile-1-1': COLOUR_NEUTRAL,
+          'tile-1-2': COLOUR_NEUTRAL,
+          'tile-2-0': COLOUR_RED,
+          'tile-2-1': COLOUR_NEUTRAL,
+          'tile-2-2': COLOUR_NEUTRAL
+        }
       })
     };
 
@@ -40,7 +43,9 @@ describe('getWinner', function() {
     const gameState = {
       ...InitialState,
       players: [{colour: COLOUR_RED}, {colour: COLOUR_BLUE}],
-      tileColours: Immutable.Map({
+      board: Immutable.fromJS({
+        currentPlayerIdx: 0,
+        tileColours: {
         'tile-0-0': COLOUR_NEUTRAL,
         'tile-0-1': COLOUR_RED,
         'tile-0-2': COLOUR_NEUTRAL,
@@ -50,6 +55,7 @@ describe('getWinner', function() {
         'tile-2-0': COLOUR_NEUTRAL,
         'tile-2-1': COLOUR_NEUTRAL,
         'tile-2-2': COLOUR_BLUE
+        }
       })
     };
 

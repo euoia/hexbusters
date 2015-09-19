@@ -25,5 +25,8 @@ const { statesEvaluated } = Minimax.evaluateState(
   startTime.getTime() + timeLimitMs
 );
 
-console.log(`Evaluated ${statesEvaluated} states.`);
-console.log(`Evaluted ${statesEvaluated / (timeLimitMs / 1000)} states per second.`);
+const endTime = new Date();
+const timeTaken = endTime - startTime;
+
+console.log(`Evaluated ${statesEvaluated} states in ${timeTaken}ms.`);
+console.log(`Evaluted ${statesEvaluated / (timeTaken / 1000)} states per second.`);

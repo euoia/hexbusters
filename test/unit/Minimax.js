@@ -19,17 +19,19 @@ describe('evaluateState', function() {
     const gameState = {
       ...InitialState,
       players: [{colour: COLOUR_RED}, {colour: COLOUR_BLUE}],
+      board: Immutable.fromJS({
       currentPlayerIdx: 0,
-      tileColours: Immutable.Map({
-        'tile-0-0': COLOUR_NEUTRAL,
-        'tile-0-1': COLOUR_RED,
-        'tile-0-2': COLOUR_NEUTRAL,
-        'tile-1-0': COLOUR_NEUTRAL,
-        'tile-1-1': COLOUR_RED,
-        'tile-1-2': COLOUR_NEUTRAL,
-        'tile-2-0': COLOUR_NEUTRAL,
-        'tile-2-1': COLOUR_NEUTRAL,
-        'tile-2-2': COLOUR_BLUE // Otherwise there are 2 possible wins.
+        tileColours: {
+          'tile-0-0': COLOUR_NEUTRAL,
+          'tile-0-1': COLOUR_RED,
+          'tile-0-2': COLOUR_NEUTRAL,
+          'tile-1-0': COLOUR_NEUTRAL,
+          'tile-1-1': COLOUR_RED,
+          'tile-1-2': COLOUR_NEUTRAL,
+          'tile-2-0': COLOUR_NEUTRAL,
+          'tile-2-1': COLOUR_NEUTRAL,
+          'tile-2-2': COLOUR_BLUE // Otherwise there are 2 possible wins.
+        }
       })
     };
 
@@ -52,17 +54,19 @@ describe('evaluateState', function() {
     const gameState = {
       ...InitialState,
       players: [{colour: COLOUR_RED}, {colour: COLOUR_BLUE}],
-      currentPlayerIdx: 1,
-      tileColours: Immutable.Map({
-        'tile-0-0': COLOUR_NEUTRAL,
-        'tile-0-1': COLOUR_NEUTRAL,
-        'tile-0-2': COLOUR_RED,
-        'tile-1-0': COLOUR_NEUTRAL,
-        'tile-1-1': COLOUR_NEUTRAL,
-        'tile-1-2': COLOUR_RED,
-        'tile-2-0': COLOUR_NEUTRAL,
-        'tile-2-1': COLOUR_NEUTRAL,
-        'tile-2-2': COLOUR_NEUTRAL
+      board: Immutable.fromJS({
+        currentPlayerIdx: 1,
+        tileColours: {
+          'tile-0-0': COLOUR_NEUTRAL,
+          'tile-0-1': COLOUR_NEUTRAL,
+          'tile-0-2': COLOUR_RED,
+          'tile-1-0': COLOUR_NEUTRAL,
+          'tile-1-1': COLOUR_NEUTRAL,
+          'tile-1-2': COLOUR_RED,
+          'tile-2-0': COLOUR_NEUTRAL,
+          'tile-2-1': COLOUR_NEUTRAL,
+          'tile-2-2': COLOUR_NEUTRAL
+        }
       })
     };
 

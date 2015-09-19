@@ -9,7 +9,7 @@ export default function hb(game) {
         return null;
       }
 
-      return game.players[game.currentPlayerIdx % game.players.length];
+      return game.players[game.board.get('currentPlayerIdx') % game.players.length];
   };
 
   const isCurrentPlayer = (player) => {
@@ -26,11 +26,11 @@ export default function hb(game) {
   };
 
   const isTileUnoccupied = (tileId) => {
-    return game.tileColours.get(tileId) === COLOUR_NEUTRAL;
+    return game.board.getIn(['tileColours', tileId]) === COLOUR_NEUTRAL;
   };
 
   const getUnoccupiedTiles = () => {
-    return game.tileColours.filter(
+    return game.board.get('tileColours').filter(
       colour => colour === COLOUR_NEUTRAL
     );
   }
@@ -46,13 +46,13 @@ export default function hb(game) {
   };
 
   const getWinner = (gridSettings) => {
-    const validStartTiles = game.tileColours.filter(
+    const validStartTiles = game.board.get('tileColours').filter(
       (colour, tileId) =>
         getTileCoordinatesById(tileId).x === 0 &&
         colour !== COLOUR_NEUTRAL
     );
 
-    const validEndTiles = game.tileColours.filter(
+    const validEndTiles = game.board.get('tileColours').filter(
       (colour, tileId) =>
         getTileCoordinatesById(tileId).x === gridSettings.width - 1 &&
         colour !== COLOUR_NEUTRAL
@@ -65,7 +65,7 @@ export default function hb(game) {
           tileId,
           {
             moveCost: (fromTileId, toTileId) => {
-              return game.tileColours.get(fromTileId) === game.tileColours.get(toTileId) ?
+              return game.board.getIn(['tileColours', fromTileId]) === game.board.getIn(['tileColours', toTileId]) ?
                 0 :
                 Number.POSITIVE_INFINITY;
             },

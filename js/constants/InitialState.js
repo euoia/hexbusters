@@ -6,12 +6,13 @@ import GridSettings from '../constants/GridSettings.js';
 
 export default {
   players: [],
-  currentPlayerIdx: 0,
+  numPlayers: 2,
   messages: [],
-  tileColours: Immutable.Map(
-    _.chain(HexGrid.getTileIds(GridSettings))
-    .indexBy()
-    .mapValues(() => COLOUR_NEUTRAL)
-    .value()
-  )
+  board: Immutable.fromJS({
+    currentPlayerIdx: 0,
+    tileColours: _.chain(HexGrid.getTileIds(GridSettings))
+      .indexBy()
+      .mapValues(() => COLOUR_NEUTRAL)
+      .value()
+  })
 }

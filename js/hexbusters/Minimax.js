@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import gameReducer from '../reducers/game.js';
 import hb from './hb.js';
+import Immutable from 'immutable';
+
+let stateCache = Immutable.Map({});
 
 export default class Minimax {
   /**
@@ -30,12 +33,21 @@ export default class Minimax {
     gameState,
     gridSettings,
     endTime,
+    maxDepth = null,
     maximizingPlayer = true,
     depth = 0,
     statesEvaluated = 0
   ) {
     const now = new Date();
     if (now > endTime) {
+      console.log('Took too long');
+      return {
+        value: 0,
+        statesEvaluated
+      };
+    }
+
+    if (maxDepth !== null && depth > maxDepth) {
       return {
         value: 0,
         statesEvaluated
@@ -44,13 +56,21 @@ export default class Minimax {
 
     let thisStatesEvaluated = statesEvaluated + 1;
 
+    if (stateCache.has(gameState.board)) {
+      return {
+        value: stateCache.get(gameState.board),
+        statesEvaluated: thisStatesEvaluated
+      }
+    }
+
     const game = hb(gameState);
     const winner = game.getWinner(gridSettings);
 
     // Modify the final score by the depth so that the AI prefer to end
     // the game sooner.
     if (winner === playerColour) {
-        // This player wins, best outcome.
+      // This player wins, best outcome.
+      stateCache = stateCache.set(gameState.board, 100 - depth);
       return {
         value: 100 - depth,
         statesEvaluated: thisStatesEvaluated
@@ -59,6 +79,7 @@ export default class Minimax {
 
     if (winner !== null) {
       // Other player wins, worst outcome.
+      stateCache = stateCache.set(gameState.board, -100 + depth);
       return {
         value: -100 + depth,
         statesEvaluated: thisStatesEvaluated
@@ -68,6 +89,7 @@ export default class Minimax {
     const validActions = game.getValidActions();
     if (validActions.count() === 0) {
       // The board is full but no player has won.
+      stateCache = stateCache.set(gameState.board, 0);
       return {
         value: 0,
         statesEvaluated: thisStatesEvaluated
@@ -82,6 +104,7 @@ export default class Minimax {
           gameReducer(gameState, action),
           gridSettings,
           endTime,
+          maxDepth,
           ! maximizingPlayer,
           depth + 1,
           thisStatesEvaluated
@@ -95,16 +118,24 @@ export default class Minimax {
       }
     );
 
+    thisStatesEvaluated += _.sum(_.pluck(actionValues.toJS(), 'statesEvaluated'));
+
     const bestActionValue =
       maximizingPlayer ?
       actionValues.maxBy(action => action.value) :
       actionValues.minBy(action => action.value);
 
-    thisStatesEvaluated += _.sum(_.pluck(actionValues.toJS(), 'statesEvaluated'));
+    const randomBestAction =
+      _.chain(actionValues.toJS())
+      .filter(action => action.value === bestActionValue.value)
+      .shuffle()
+      .first()
+      .value();
 
+    stateCache = stateCache.set(gameState.board, randomBestAction.value);
     return {
-      action: bestActionValue.action,
-      value: bestActionValue.value,
+      action: randomBestAction.action,
+      value: randomBestAction.value,
       statesEvaluated: thisStatesEvaluated
     };
   }
@@ -113,16 +144,21 @@ export default class Minimax {
     playerColour,
     gameState,
     gridSettings,
-    timeLimitMs
+    timeLimitMs,
+    maxDepth
   ) {
+    stateCache = Immutable.Map({});
     const startTime = new Date();
     const endTime = startTime.getTime() + timeLimitMs;
     let evaluation = Minimax.evaluateState(
       playerColour,
       gameState,
       gridSettings,
-      endTime
+      endTime,
+      maxDepth
     );
+
+    console.log(`Evaluated ${evaluation.statesEvaluated} states`);
 
     return evaluation.action;
   }

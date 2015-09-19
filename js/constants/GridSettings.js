@@ -1,6 +1,6 @@
 export default {
-  width: 5,
-  height: 5,
+  width: 4,
+  height: 4,
   orientation: 'flat-topped',
   layout: 'odd-q'
 }
