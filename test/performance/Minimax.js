@@ -1,20 +1,30 @@
+import Immutable from 'immutable';
 import Minimax from '../../js/hexbusters/Minimax.js';
-import InitialState from '../../js/constants/InitialState.js';
-import { COLOUR_RED } from '../../js/constants/Colours.js';
-
-const gameState = {
-  ...InitialState,
-  players: [{colour: 'red'}, {colour: 'blue'}]
-};
+import { COLOUR_NEUTRAL, COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
+import _ from 'lodash';
+import HexGrid from 'hex-grid.js';
 
 const gridSettings = {
-  width: 3,
-  height: 3,
+  width: 4,
+  height: 4,
   orientation: 'flat-topped',
   layout: 'odd-q'
 };
 
-const timeLimitMs = 5000;
+const gameState = {
+  players: [{colour: COLOUR_RED}, {colour: COLOUR_BLUE}],
+  numPlayers: 2,
+  messages: [],
+  board: Immutable.fromJS({
+    currentPlayerIdx: 0,
+    tileColours: _.chain(HexGrid.getTileIds(gridSettings))
+      .indexBy()
+      .mapValues(() => COLOUR_NEUTRAL)
+      .value()
+  })
+};
+
+const timeLimitMs = 10000;
 console.log(`Running Minimax board evaluation for ${timeLimitMs}ms...`);
 
 const startTime = new Date();

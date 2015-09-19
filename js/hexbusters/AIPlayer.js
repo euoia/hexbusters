@@ -10,7 +10,7 @@ export default class AIPlayer extends BasePlayer {
     super(options);
     this.playerType = AI_PLAYER;
 
-    this.thinkTimeMs = 5000;
+    this.thinkTimeMs = 10000;
     this.maxDepth = 3;
 
     /**

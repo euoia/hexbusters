@@ -5,14 +5,19 @@ import InitialState from '../constants/InitialState.js';
 
 function tileChosenReduceBoard(board, tileId, currentPlayer) {
   check.assert.assigned(currentPlayer, 'currentPlayer was undefined.');
-  const newBoard = board.setIn(
-    ['tileColours', tileId],
-    currentPlayer.colour
-  );
 
-  return newBoard.set(
-    'currentPlayerIdx',
-    (newBoard.get('currentPlayerIdx') + 1) % InitialState.numPlayers
+  return board.withMutations(
+    board => {
+      board.setIn(
+        ['tileColours', tileId],
+        currentPlayer.colour
+      );
+
+      board.set(
+        'currentPlayerIdx',
+        (board.get('currentPlayerIdx') + 1) % InitialState.numPlayers
+      );
+    }
   );
 }
 

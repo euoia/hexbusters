@@ -98,7 +98,7 @@ export default class Minimax {
     // Value of the state is the average of the possible action values.
     let actionValues = validActions.map(
       action => {
-        const { value, statesEvaluated } = Minimax.evaluateState(
+        const evaluation = Minimax.evaluateState(
           playerColour,
           gameReducer(gameState, action),
           gridSettings,
@@ -106,18 +106,17 @@ export default class Minimax {
           maxDepth,
           ! maximizingPlayer,
           depth + 1,
-          thisStatesEvaluated
+          statesEvaluated
         );
+
+        thisStatesEvaluated += evaluation.statesEvaluated;
 
         return {
           action,
-          value,
-          statesEvaluated
+          value: evaluation.value
         };
       }
     );
-
-    thisStatesEvaluated += _.sum(_.pluck(actionValues.toJS(), 'statesEvaluated'));
 
     const bestActionValue =
       maximizingPlayer ?
