@@ -108,4 +108,22 @@ export default class Minimax {
       statesEvaluated: thisStatesEvaluated
     };
   }
+
+  static getBestAction(
+    playerColour,
+    gameState,
+    gridSettings,
+    timeLimitMs
+  ) {
+    const startTime = new Date();
+    const endTime = startTime.getTime() + timeLimitMs;
+    let evaluation = Minimax.evaluateState(
+      playerColour,
+      gameState,
+      gridSettings,
+      endTime
+    );
+
+    return evaluation.action;
+  }
 }

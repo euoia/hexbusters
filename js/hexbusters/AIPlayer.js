@@ -10,6 +10,8 @@ export default class AIPlayer extends BasePlayer {
     super(options);
     this.playerType = AI_PLAYER;
 
+    this.thinkTimeMs = 5000;
+
     /**
      * Subscribe to game events.
      * When it's this player's turn, make a decision about which hex to play.
@@ -20,28 +22,17 @@ export default class AIPlayer extends BasePlayer {
       if (game.isCurrentPlayer(this)) {
         const makeChoice = () => {
           this.store.dispatch(
-            this.getBestAction(this.store.getState().game)
+            Minimax.getBestAction(
+              this.colour,
+              this.store.getState().game,
+              GridSettings,
+              this.thinkTimeMs
+            )
           )
         };
 
         _.debounce(makeChoice, 1000)();
       }
     });
-  }
-
-  getBestAction (gameState, timeLimitMs = 5000) {
-    const startTime = new Date();
-
-    const { action, value, statesEvaluated } = Minimax.evaluateState(
-      this.colour,
-      gameState,
-      GridSettings,
-      startTime.getTime() + timeLimitMs
-    );
-
-    let timeTaken = Date.now() - startTime;
-    console.log(`[AIPlayer] Evaluated ${statesEvaluated} states in ${timeTaken}ms.`);
-    console.log(`[AIPlayer] Best action has a value of`, value, action);
-    return action;
   }
 }

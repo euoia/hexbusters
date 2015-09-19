@@ -26,3 +26,4 @@ const { statesEvaluated } = Minimax.evaluateState(
 );
 
 console.log(`Evaluated ${statesEvaluated} states.`);
+console.log(`Evaluted ${statesEvaluated / (timeLimitMs / 1000)} states per second.`);
