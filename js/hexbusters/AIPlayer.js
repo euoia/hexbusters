@@ -18,6 +18,7 @@ export default class AIPlayer extends BasePlayer {
      * When it's this player's turn, make a decision about which hex to play.
      */
     this.store.subscribe(() => {
+      console.log('action!');
       const game = hb(this.store.getState().game);
 
       if (game.isCurrentPlayer(this)) {
