@@ -42,7 +42,7 @@ export default function hb(game) {
           tileId: tileId,
           colour: getCurrentPlayer(game).colour
         })
-      });
+      }).toArray();
   };
 
   const getWinner = (gridSettings) => {

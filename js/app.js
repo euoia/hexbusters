@@ -1,4 +1,4 @@
-import AIPlayer from './hexbusters/AIPlayer.js';
+import MCTSAIPlayer from './hexbusters/MCTSAIPlayer.js';
 import HumanPlayer from './hexbusters/HumanPlayer.js';
 import React from 'react';
 import _ from 'lodash';
@@ -19,7 +19,7 @@ const humanPlayer = new HumanPlayer({
 store.dispatch(
   playersJoin([
     humanPlayer,
-    new AIPlayer({
+    new MCTSAIPlayer({
       name: 'hexBot',
       store: store,
       colour: colours[1]

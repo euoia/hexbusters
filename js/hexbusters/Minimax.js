@@ -86,7 +86,7 @@ export default class Minimax {
     }
 
     const validActions = game.getValidActions();
-    if (validActions.count() === 0) {
+    if (validActions.length === 0) {
       // The board is full but no player has won.
       stateCache = stateCache.set(gameState.board, 0);
       return {
@@ -96,7 +96,8 @@ export default class Minimax {
     }
 
     // Value of the state is the average of the possible action values.
-    let actionValues = validActions.map(
+    let actionValues = _.map(
+      validActions,
       action => {
         const evaluation = Minimax.evaluateState(
           playerColour,
@@ -120,15 +121,14 @@ export default class Minimax {
 
     const bestActionValue =
       maximizingPlayer ?
-      actionValues.maxBy(action => action.value) :
-      actionValues.minBy(action => action.value);
+      _(actionValues).sortByAll('value').last() :
+      _(actionValues).sortByAll('value').first();
 
     const randomBestAction =
-      _.chain(actionValues.toJS())
+      _(actionValues)
       .filter(action => action.value === bestActionValue.value)
       .shuffle()
-      .first()
-      .value();
+      .first();
 
     stateCache = stateCache.set(gameState.board, randomBestAction.value);
     return {
