@@ -11,7 +11,10 @@ export default class BasePlayer {
     this.name = options.name;
 
     check.assert.object(options.store);
-    this.store = options.store;
+    Object.defineProperty(this, 'store', {
+      value: options.store,
+      enumerable: false
+    });
 
     check.assert.assigned(options.colour);
     check.assert(_.includes(validColours, options.colour));

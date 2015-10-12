@@ -1,16 +1,22 @@
 import _ from 'lodash';
-import gameReducer from '../reducers/game.js';
-import hb from './hb.js';
+import gameReducer from '../../reducers/game.js';
+import { getValidActions, getWinner } from '../helpers.js';
 
 // Monte Carlo Tree Search.
 export default class MCTS {
+  constructor (options) {
+    /**
+     * How mant iterations of the algorithm to perform.
+     */
+    this.iterations = options.iterations || 1000;
+  }
+
   static makeNodeId (currentNodeId, actionId) {
     return `${currentNodeId}:${actionId}`;
   }
 
-  static getUnexploredActions (tree, gameState, nodeId) {
-    const game = hb(gameState);
-    const validActions = game.getValidActions();
+  static getUnexploredActions (tree, state, nodeId) {
+    const validActions = getValidActions(state);
 
     // Unexplored actions are children which do not have an entry in the tree.
     return _(validActions)
@@ -29,15 +35,13 @@ export default class MCTS {
       ).value();
   }
 
-  static randomWalk(playerColour, gridSettings, gameState, depth) {
-    const game = hb(gameState);
-
-    switch (game.getWinner(gridSettings)) {
+  static randomWalk(playerColour, gridSettings, state, depth) {
+    switch (getWinner(state, gridSettings)) {
       case playerColour:
         // Prefer quicker wins.
         return 100 - depth;
       case null:
-        const validActions = game.getValidActions();
+        const validActions = getValidActions(state);
 
         // Stalemate.
         if (validActions.length === 0) {
@@ -48,7 +52,7 @@ export default class MCTS {
         return MCTS.randomWalk(
           playerColour,
           gridSettings,
-          gameReducer(gameState, _.sample(validActions)),
+          gameReducer(state, _.sample(validActions)),
           depth + 1
         );
       default:
@@ -57,10 +61,10 @@ export default class MCTS {
     }
   }
 
-  static treeWalk (playerColour, gridSettings, tree, gameState, nodeId = '', depth = 0) {
+  static treeWalk (playerColour, gridSettings, tree, state, nodeId = '', depth = 0) {
     const unexploredActions = MCTS.getUnexploredActions(
       tree,
-      gameState,
+      state,
       nodeId
     );
 
@@ -80,7 +84,7 @@ export default class MCTS {
       reward = this.randomWalk(
         playerColour,
         gridSettings,
-        gameReducer(gameState, action),
+        gameReducer(state, action),
         depth + 1
       );
 
@@ -88,8 +92,7 @@ export default class MCTS {
     } else {
       // This node is not a fringe node: all children have already been
       // explored.  Might as well select a random successor.
-      const game = hb(gameState);
-      const validActions = game.getValidActions();
+      const validActions = getValidActions(state);
       if (validActions.length === 0) {
         return [tree, 0];
       }
@@ -102,7 +105,7 @@ export default class MCTS {
         playerColour,
         gridSettings,
         tree,
-        gameReducer(gameState, action),
+        gameReducer(state, action),
         nextNodeId,
         depth + 1
       );
@@ -112,14 +115,11 @@ export default class MCTS {
     return [tree, reward];
   }
 
-  static getBestAction (
+  getBestAction (
     playerColour,
-    gameState,
+    state,
     gridSettings
   ) {
-    // How many iterations to perform.
-    const limit = 5000;
-
     // The tree is a map of nodeId to node value.
     //
     // The nodeId is a string contructed from:
@@ -128,12 +128,11 @@ export default class MCTS {
     // The root node has an ID of the empty string.
 
     let tree = {'': 0};
-    for (let i = 0; i < limit; i+= 2) {
-      [tree] = MCTS.treeWalk(playerColour, gridSettings, tree, gameState);
+    for (let i = 0; i < this.iterations; i+= 1) {
+      [tree] = MCTS.treeWalk(playerColour, gridSettings, tree, state);
     }
 
-    const game = hb(gameState);
-    const actionValues = _.map(game.getValidActions(), (action, actionIdx) => {
+    const actionValues = _.map(getValidActions(state), (action, actionIdx) => {
       const nodeId = MCTS.makeNodeId('', actionIdx);
       return {
         action,
