@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import gameReducer from '../reducers/game.js';
-import hb from './hb.js';
+import gameReducer from '../../reducers/game.js';
+import helpers from '../helpers.js';
 import Immutable from 'immutable';
 
 let stateCache = Immutable.Map({});
@@ -62,8 +62,7 @@ export default class Minimax {
       }
     }
 
-    const game = hb(gameState);
-    const winner = game.getWinner(gridSettings);
+    const winner = helpers.getWinner(gameState, gridSettings);
 
     // Modify the final score by the depth so that the AI prefer to end
     // the game sooner.
@@ -85,7 +84,7 @@ export default class Minimax {
       };
     }
 
-    const validActions = game.getValidActions();
+    const validActions = helpers.getValidActions(gameState);
     if (validActions.length === 0) {
       // The board is full but no player has won.
       stateCache = stateCache.set(gameState.board, 0);

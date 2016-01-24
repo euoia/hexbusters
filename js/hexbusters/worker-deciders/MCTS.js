@@ -126,6 +126,7 @@ function getBestAction (
   let tree = {'': 0};
   for (let i = 0; i < iterations; i+= 1) {
     [tree] = treeWalk(playerColour, gridSettings, tree, state);
+    console.log(`iterations = ${i}`);
   }
 
   const actionValues = _.map(getValidActions(state), (action, actionIdx) => {
