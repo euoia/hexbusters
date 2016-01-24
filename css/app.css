@@ -2,7 +2,7 @@
 	position: absolute;
 	width: 1024px;
 	height: 768px;
-	background-color: #ababab;
+	background-color: #0D98F2;
 }
 
 #players {
@@ -16,16 +16,15 @@
 
 #messages {
 	position: absolute;
-	right: 0;
-	top: 0;
+	left: 0;
+	top: 100px;
 	width: 234px;
-	height: 768px;
-	background-color: #979797;
+	height: 668px;
 }
 
 #middle {
 	position: absolute;
-	width: 556px;
+	width: 790px;
 	height: 768px;
 	left: 234px;
 	top: 0px;
@@ -34,7 +33,7 @@
 
 #board {
 	position: relative;
-	width: 342px;
+	width: 690px;
 	height: 768px;
 	margin: 100px auto;
 }

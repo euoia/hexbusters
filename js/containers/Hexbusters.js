@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Board from '../components/Board.jsx';
-import Messages from '../components/Messages.jsx';
-import Players from '../components/Players.jsx';
 import { connect } from 'react-redux';
-import hb from '../hexbusters/hb.js';
+import { isCurrentPlayer, getWinner } from '../hexbusters/helpers.js';
 import GridSettings from '../constants/GridSettings.js';
 
 class Hexbusters extends Component {
@@ -11,19 +9,14 @@ class Hexbusters extends Component {
     const {
       tileColours,
       chooseTile,
-      getWinner,
-      isCurrentPlayer,
-      messages,
-      players
+      getWinner
     } = this.props;
 
     console.log('getWinner', getWinner(GridSettings));
 
     return (
       <div>
-        <Players isCurrentPlayer={isCurrentPlayer} players={players} />
         <Board  chooseTile={chooseTile} tileColours={tileColours} />
-        <Messages messages={messages} />
       </div>
     );
   }
@@ -43,8 +36,8 @@ function mapStateToProps(state) {
     messages: state.game.messages,
     tileColours: state.game.board.get('tileColours'),
     players: state.game.players,
-    isCurrentPlayer: hb(state.game).isCurrentPlayer,
-    getWinner: hb(state.game).getWinner
+    isCurrentPlayer: isCurrentPlayer.bind(null, state.game),
+    getWinner: getWinner.bind(null, state.game)
   };
 }
 

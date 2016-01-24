@@ -1,3 +1,14 @@
 export const COLOUR_NEUTRAL = 0;
 export const COLOUR_BLUE = 1;
 export const COLOUR_RED = 2;
+export const BORDER_LEFT = 3;
+export const BORDER_TOP = 4;
+export const BORDER_TOP_RIGHT = 5;
+export const BORDER_RIGHT = 6;
+export const BORDER_BOTTOM_RIGHT = 7;
+export const BORDER_BOTTOM = 8;
+export const BORDER_BOTTOM_LEFT = 9;
+export const BORDER_TOP_LEFT_BLUE = 10;
+export const BORDER_TOP_LEFT_RED = 11;
+export const BORDER_BOTTOM_RIGHT_BLUE = 12;
+export const BORDER_BOTTOM_RIGHT_RED = 13;

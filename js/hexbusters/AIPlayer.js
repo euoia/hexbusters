@@ -34,7 +34,7 @@ export default class AIPlayer extends BasePlayer {
         return;
       }
 
-      console.log('AIPlayer begins thinking...');
+      console.log('[AIPlayer] Thinking...');
       this.isThinking = true;
 
       this.actionDecider.postMessage(transit.toJSON({
@@ -52,7 +52,7 @@ export default class AIPlayer extends BasePlayer {
       }));
 
       this.actionDecider.onmessage = (message) => {
-        console.log(`[AIPlayer] Got a message`, message);
+        console.log(`[AIPlayer] Finished thinking.`, message);
         this.isThinking = false;
         this.store.dispatch(message.data);
       };

@@ -25,5 +25,11 @@ module.exports = {
         include: __dirname
       }
     ]
+  },
+  worker: {
+    output: {
+      filename: "hash.worker.js",
+      chunkFilename: "[id].hash.worker.js"
+    }
   }
 };

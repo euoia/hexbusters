@@ -1,7 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import HexGrid from 'hex-grid.js';
 import GridSettings from '../constants/GridSettings.js';
-import { COLOUR_RED, COLOUR_BLUE, COLOUR_NEUTRAL } from '../constants/Colours.js';
+import { COLOUR_RED, COLOUR_BLUE, COLOUR_NEUTRAL, BORDER_LEFT,
+  BORDER_TOP, BORDER_TOP_RIGHT, BORDER_RIGHT,
+  BORDER_BOTTOM, BORDER_BOTTOM_LEFT, BORDER_TOP_LEFT_BLUE,
+  BORDER_TOP_LEFT_RED, BORDER_BOTTOM_RIGHT_RED, BORDER_BOTTOM_RIGHT_BLUE
+} from '../constants/Colours.js';
+
+const tileWidth = 38;
+const tileHeight = 44;
 
 class Tile extends Component {
   constructor (props, context) {
@@ -12,9 +19,8 @@ class Tile extends Component {
     const {colour, chooseTile, tileId} = this.props;
 
     const tilePos = HexGrid.getTilePositionById(GridSettings, tileId);
-    const tileCoordinates = HexGrid.getTileCoordinatesById(tileId);
 
-    let colourName;
+    let colourName, zIndex = 2;
     switch (colour) {
       case COLOUR_RED:
         colourName = 'red';
@@ -25,27 +31,75 @@ class Tile extends Component {
       case COLOUR_NEUTRAL:
         colourName = 'neutral'
         break;
+      case BORDER_LEFT:
+        colourName = 'blue-w';
+        zIndex = 1;
+        break;
+      case BORDER_TOP:
+        colourName = 'red-n';
+        zIndex = 1;
+        break;
+      case BORDER_TOP_RIGHT:
+        colourName = 'ne';
+        zIndex = 1;
+        break;
+      case BORDER_RIGHT:
+        colourName = 'blue-e';
+        zIndex = 1;
+        break;
+      case BORDER_BOTTOM:
+        colourName = 'red-s';
+        zIndex = 1;
+        break;
+      case BORDER_BOTTOM_LEFT:
+        colourName = 'sw';
+        zIndex = 1;
+        break;
+      case BORDER_TOP_LEFT_BLUE:
+        colourName = 'blue-nw';
+        zIndex = 1;
+        break;
+      case BORDER_TOP_LEFT_RED:
+        colourName = 'red-nw';
+        zIndex = 1;
+        break;
+      case BORDER_BOTTOM_RIGHT_RED:
+        colourName = 'red-se';
+        zIndex = 1;
+        break;
+      case BORDER_BOTTOM_RIGHT_BLUE:
+        colourName = 'blue-se';
+        zIndex = 1;
+        break;
+      case null:
+        return (
+          <div />
+        );
       default:
         throw new Error(`Unhandled colour: ${colour}`);
     }
 
-    let style = {
+    const style = {
       position: 'absolute',
-      left: `${tilePos.x * 63}px`,
-      top: `${tilePos.y * 74}px`,
-      width: `90px`,
-      height: `78px`,
-      backgroundImage: `url(./assets/img/hex-${colourName}@2x.png)`,
-      WebkitClipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
+      left: `${tilePos.x * tileWidth}px`,
+      top: `${tilePos.y * (tileHeight * 0.75)}px`,
+      width: `${tileWidth}px`,
+      height: `${tileHeight}px`,
+      'line-height': `${tileHeight}px`, // For the text.
+      backgroundImage: `url(./assets/img/hex-${colourName}@3x.png)`,
+      backgroundSize: `${tileWidth}px, ${tileHeight}px`,
+      'font-size': `${tileHeight / 4}px`,
+      'font-family': 'sans-serif',
+      zIndex: zIndex,
+      backgroundRepeat: 'round'
     };
-
 
     return (
       <div
+        class='tile'
         onClick={chooseTile.bind(null, tileId)}
         style={style}
       >
-        {tileCoordinates.x} {tileCoordinates.y}
       </div>
     );
   }

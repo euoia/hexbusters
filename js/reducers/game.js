@@ -1,5 +1,5 @@
 import { PLAYERS_JOIN, TILE_CHOSEN, ADD_MESSAGE } from '../constants/ActionTypes.js';
-import hb from '../hexbusters/hb.js';
+import { isTileUnoccupied, getCurrentPlayer } from '../hexbusters/helpers.js';
 import check from 'check-types';
 import InitialState from '../constants/InitialState.js';
 
@@ -30,13 +30,14 @@ export default function gameReducer(state = InitialState, action) {
       };
 
     case TILE_CHOSEN:
-      if (hb(state).isTileUnoccupied(action.tileId) === false) {
+      if (isTileUnoccupied(state, action.tileId) === false) {
         console.log('Tried to choose an occupied tile!');
         return state;
       }
 
-      if (action.colour !== hb(state).getCurrentPlayer().colour) {
+      if (action.colour !== getCurrentPlayer(state).colour) {
         console.log('Wrong player tried to go!');
+        return state;
       }
 
       let ns = {
@@ -44,7 +45,7 @@ export default function gameReducer(state = InitialState, action) {
         board: tileChosenReduceBoard(
           state.board,
           action.tileId,
-          hb(state).getCurrentPlayer()
+          getCurrentPlayer(state)
         )
       };
 
