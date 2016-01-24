@@ -1,5 +1,3 @@
-/* eslint unused: false */
-
 // This is the width of the game board.
 // The width and height of the playing area is this minus 2.
 const rhombusWidth = 11;
