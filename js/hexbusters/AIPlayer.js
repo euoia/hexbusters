@@ -19,6 +19,7 @@ export default class AIPlayer extends BasePlayer {
 
     this.playerType = AI_PLAYER;
     this.isThinking = false;
+    this.timeLimitMs = 1000;
 
     /**
      * Subscribe to game events.
@@ -34,11 +35,12 @@ export default class AIPlayer extends BasePlayer {
         return;
       }
 
-      console.log('[AIPlayer] Thinking...');
+      console.log(`[AIPlayer] Thinking for ${this.timeLimitMs}ms...`);
       this.isThinking = true;
 
       this.actionDecider.postMessage(transit.toJSON({
         action: 'getBestAction',
+        timeLimitMs: this.timeLimitMs,
         playerColour: this.colour,
         state: {
           board: this.store.getState().game.board,

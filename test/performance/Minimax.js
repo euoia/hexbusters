@@ -25,7 +25,7 @@ const gameState = {
 };
 
 const timeLimitMs = 10000;
-console.log(`Running Minimax board evaluation for ${timeLimitMs}ms...`);
+console.log(`[Minimax] Running Minimax board evaluation for ${timeLimitMs}ms...`);
 
 const startTime = new Date();
 const { statesEvaluated } = Minimax.evaluateState(
@@ -38,5 +38,5 @@ const { statesEvaluated } = Minimax.evaluateState(
 const endTime = new Date();
 const timeTaken = endTime - startTime;
 
-console.log(`Evaluated ${statesEvaluated} states in ${timeTaken}ms.`);
-console.log(`Evaluted ${statesEvaluated / (timeTaken / 1000)} states per second.`);
+console.log(`[Minimax] Evaluated ${statesEvaluated} states in ${timeTaken}ms.`);
+console.log(`[Minimax] Evaluted ${statesEvaluated / (timeTaken / 1000)} states per second.`);

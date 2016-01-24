@@ -1,4 +1,4 @@
-import Minimax from '../../js/hexbusters/Minimax-stateful.js';
+import Minimax from '../../js/hexbusters/deciders/Minimax-stateful.js';
 import { COLOUR_NEUTRAL, COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 import _ from 'lodash';
 import HexGrid from 'hex-grid.js';
@@ -24,7 +24,7 @@ const gameState = {
 };
 
 const timeLimitMs = 10000;
-console.log(`Running Minimax board evaluation for ${timeLimitMs}ms...`);
+console.log(`[Minimax Stateful] Running Minimax board evaluation for ${timeLimitMs}ms...`);
 
 const startTime = new Date();
 const { statesEvaluated } = Minimax.evaluateState(
@@ -37,5 +37,5 @@ const { statesEvaluated } = Minimax.evaluateState(
 const endTime = new Date();
 const timeTaken = endTime - startTime;
 
-console.log(`Evaluated ${statesEvaluated} states in ${timeTaken}ms.`);
-console.log(`Evaluted ${statesEvaluated / (timeTaken / 1000)} states per second.`);
+console.log(`[Minimax Stateful] Evaluated ${statesEvaluated} states in ${timeTaken}ms.`);
+console.log(`[Minimax Stateful] Evaluated ${statesEvaluated / (timeTaken / 1000)} states per second.`);

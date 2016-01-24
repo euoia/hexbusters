@@ -5,8 +5,6 @@ import gameReducer from '../../reducers/game.js';
 import { getValidActions, getWinner } from '../helpers.js';
 import transit from 'transit-immutable-js';
 
-const iterations = 1000;
-
 function makeNodeId (currentNodeId, actionId) {
   return `${currentNodeId}:${actionId}`;
 }
@@ -114,7 +112,8 @@ function treeWalk (playerColour, gridSettings, tree, state, nodeId = '', depth =
 function getBestAction (
   playerColour,
   state,
-  gridSettings
+  gridSettings,
+  dateLimit
 ) {
   // The tree is a map of nodeId to node value.
   //
@@ -124,9 +123,10 @@ function getBestAction (
   // The root node has an ID of the empty string.
 
   let tree = {'': 0};
-  for (let i = 0; i < iterations; i+= 1) {
+  let iterations = 0;
+  while (Date.now() < dateLimit) {
     [tree] = treeWalk(playerColour, gridSettings, tree, state);
-    console.log(`iterations = ${i}`);
+    iterations += 1;
   }
 
   const actionValues = _.map(getValidActions(state), (action, actionIdx) => {
@@ -139,20 +139,35 @@ function getBestAction (
 
   console.dir(actionValues);
   const bestAction = _(actionValues).sortByAll('value').last();
-  return bestAction.action;
+
+  return {
+    bestAction: bestAction.action,
+    iterations
+  };
 }
 
-onmessage = function (message) {
+function handleMessage (message) {
   const messageObj = transit.fromJSON(message.data);
 
   switch (messageObj.action) {
     case 'getBestAction':
-      const { playerColour, state, gridSettings } = messageObj;
-      const bestAction = getBestAction(playerColour, state, gridSettings);
-      console.log(`Got best action`, bestAction);
-      postMessage(bestAction);
+      const { playerColour, state, gridSettings, timeLimitMs = 5000} = messageObj;
+      const dateLimit = Date.now() + timeLimitMs;
+      const action = getBestAction(playerColour, state, gridSettings, dateLimit);
+
+      if (typeof postMessage !== 'undefined') {
+        postMessage(action.bestAction);
+      }
+
+      return action;
       break;
     default:
       throw new Error(`Unhandled message action: ${message.data.action}`);
   }
 }
+
+if (typeof onmessage !== 'undefined') {
+  onmessage = handleMessage;
+}
+
+export default {getBestAction: handleMessage};
