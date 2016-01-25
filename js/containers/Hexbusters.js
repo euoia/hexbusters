@@ -8,11 +8,18 @@ class Hexbusters extends Component {
   render () {
     const {
       tileColours,
+      state,
       chooseTile,
       getWinner
     } = this.props;
 
-    console.log('getWinner', getWinner(GridSettings));
+    const winner = getWinner(GridSettings);
+    if (winner !== null) {
+      console.log(`-----------------------`);
+      console.log(`The winner is ${winner}`);
+    } else {
+      console.log(`There is no winner.`);
+    }
 
     return (
       <div>
@@ -37,7 +44,8 @@ function mapStateToProps(state) {
     tileColours: state.game.board.get('tileColours'),
     players: state.game.players,
     isCurrentPlayer: isCurrentPlayer.bind(null, state.game),
-    getWinner: getWinner.bind(null, state.game)
+    getWinner: getWinner.bind(null, state.game),
+    state: state
   };
 }
 

@@ -20,6 +20,7 @@ export default class AIPlayer extends BasePlayer {
     this.playerType = AI_PLAYER;
     this.isThinking = false;
     this.timeLimitMs = 1000;
+    this.debug = true;
 
     /**
      * Subscribe to game events.
@@ -55,8 +56,12 @@ export default class AIPlayer extends BasePlayer {
 
       this.actionDecider.onmessage = (message) => {
         console.log(`[AIPlayer] Finished thinking.`, message);
+        if (this.debug) {
+          console.log(`[AIPlayer] Executed ${message.data.iterations} iterations.`);
+        }
+
         this.isThinking = false;
-        this.store.dispatch(message.data);
+        this.store.dispatch(message.data.bestAction);
       };
     });
   }

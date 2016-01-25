@@ -140,7 +140,6 @@ export default class MCTS {
       };
     });
 
-    console.dir(actionValues);
     const bestAction = _(actionValues).sortByAll('value').last();
     return bestAction.action;
   }

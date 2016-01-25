@@ -137,7 +137,6 @@ function getBestAction (
     };
   });
 
-  console.dir(actionValues);
   const bestAction = _(actionValues).sortByAll('value').last();
 
   return {
@@ -145,6 +144,12 @@ function getBestAction (
     iterations
   };
 }
+
+/**
+ * The slightly odd looking code with onmessage and postmessage is because when
+ * this code is ran in a web worker those functions are globally defined. When
+ * ran in the tests, they're not.
+ */
 
 function handleMessage (message) {
   const messageObj = transit.fromJSON(message.data);
@@ -156,11 +161,10 @@ function handleMessage (message) {
       const action = getBestAction(playerColour, state, gridSettings, dateLimit);
 
       if (typeof postMessage !== 'undefined') {
-        postMessage(action.bestAction);
+        postMessage(action);
       }
 
       return action;
-      break;
     default:
       throw new Error(`Unhandled message action: ${message.data.action}`);
   }

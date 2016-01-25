@@ -1,8 +1,21 @@
 import Immutable from 'immutable';
 import InitialState from '../../js/constants/InitialState.js';
 import expect from 'expect.js';
-import hb from '../../js/hexbusters/hb.js';
+import helpers from '../../js/hexbusters/helpers.js';
 import { COLOUR_BLUE, COLOUR_NEUTRAL, COLOUR_RED } from '../../js/constants/Colours.js';
+
+/**
+ * As of the following commit (and definitely much earlier) these tests appear
+ * to be WRONG!
+ *
+ *     commit c47c4a8309213ecd88c0dc77792ea35f3cfca4c9
+ *     Author: James Pickard <james.pickard@gmail.com>
+ *     Date:   Sun Jan 24 13:05:56 2016 -0500
+ *
+ *         Fixes for MCTS-worker
+ *
+ * Since the map a parallelogram, the getWinner function needs to be rewritten.
+ */
 
 /* eslint-env mocha */
 describe('getWinner', function() {
@@ -33,9 +46,8 @@ describe('getWinner', function() {
       layout: 'odd-q'
     };
 
-    let game = hb(gameState);
     expect(
-      game.getWinner(gridSettings)
+      helpers.getWinner(gameState, gridSettings)
     ).to.equal(COLOUR_RED);
   });
 
@@ -66,9 +78,8 @@ describe('getWinner', function() {
       layout: 'odd-q'
     };
 
-    let game = hb(gameState);
     expect(
-      game.getWinner(gridSettings)
+      helpers.getWinner(gameState, gridSettings)
     ).to.equal(null);
   });
 });
