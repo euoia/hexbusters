@@ -2,7 +2,7 @@ import MCTS from '../../js/hexbusters/worker-deciders/MCTS.js';
 import { COLOUR_NEUTRAL, COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 import _ from 'lodash';
 import transit from 'transit-immutable-js';
-import HexGrid from 'hex-grid.js';
+import { getTileIds } from 'hex-grid.js';
 import Immutable from 'immutable';
 
 const gridSettings = {
@@ -18,7 +18,7 @@ const gameState = {
   messages: [],
   board: Immutable.fromJS({
     currentPlayerIdx: 0,
-    tileColours: _.chain(HexGrid.getTileIds(gridSettings))
+    tileColours: _.chain(getTileIds(gridSettings))
       .indexBy()
       .mapValues(() => COLOUR_NEUTRAL)
       .value()
@@ -29,7 +29,7 @@ const timeLimitMs = 10000;
 console.log(`[MCTS Worker] Running MCTS board evaluation for ${timeLimitMs}ms...`);
 
 const startTime = new Date();
-const { bestAction, iterations } = MCTS.getBestAction({
+const { iterations } = MCTS.getBestAction({
   data: transit.toJSON({
     action: 'getBestAction',
     timeLimitMs: timeLimitMs,

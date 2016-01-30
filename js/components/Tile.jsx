@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import HexGrid from 'hex-grid.js';
+import { getTilePositionById } from 'hex-grid.js';
 import GridSettings from '../constants/GridSettings.js';
 import { COLOUR_RED, COLOUR_BLUE, COLOUR_NEUTRAL, BORDER_LEFT,
   BORDER_TOP, BORDER_TOP_RIGHT, BORDER_RIGHT,
@@ -18,7 +18,7 @@ class Tile extends Component {
   render () {
     const {colour, chooseTile, tileId} = this.props;
 
-    const tilePos = HexGrid.getTilePositionById(GridSettings, tileId);
+    const tilePos = getTilePositionById(GridSettings, tileId);
 
     let colourName, zIndex = 2;
     switch (colour) {

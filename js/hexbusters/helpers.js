@@ -47,13 +47,13 @@ const getValidActions = (state) => {
 const getWinner = (state, gridSettings) => {
   const validStartTiles = state.board.get('tileColours').filter(
     (colour, tileId) =>
-      getTileCoordinatesById(tileId).x === 0 &&
+      getTileCoordinatesById(gridSettings, tileId).x === 0 &&
       colour !== COLOUR_NEUTRAL
   );
 
   const validEndTiles = state.board.get('tileColours').filter(
     (colour, tileId) =>
-      getTileCoordinatesById(tileId).x === gridSettings.width - 1 &&
+      getTileCoordinatesById(gridSettings, tileId).x === gridSettings.width - 1 &&
       colour !== COLOUR_NEUTRAL
   );
 

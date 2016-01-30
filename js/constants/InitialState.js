@@ -5,7 +5,7 @@ import { COLOUR_NEUTRAL, BORDER_LEFT, BORDER_TOP,
 } from '../constants/Colours.js';
 import Immutable from 'immutable';
 import _ from 'lodash';
-import HexGrid from 'hex-grid.js';
+import { getTileIds, getTileCoordinatesById } from 'hex-grid.js';
 import GridSettings from '../constants/GridSettings.js';
 
 export default {
@@ -17,10 +17,10 @@ export default {
     // tileColours is an object mapping the tileId to the tile colour.
     // The tileColour can COLOUR_NEUTRAL, COLOUR_RED, COLOUR_BLUE or null. Null
     // means the tile cannot be occupied.
-    tileColours: _.chain(HexGrid.getTileIds(GridSettings))
+    tileColours: _.chain(getTileIds(GridSettings))
       .indexBy()
       .mapValues((tileId) => {
-        const { x, y } = HexGrid.getTileCoordinatesById(tileId);
+        const { x, y } = getTileCoordinatesById(GridSettings, tileId);
 
         // Left-bottom edge of the rhombus, not playable.
         if (y > 2 * x) {

@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import Minimax from '../../js/hexbusters/deciders/Minimax.js';
 import { COLOUR_NEUTRAL, COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 import _ from 'lodash';
-import HexGrid from 'hex-grid.js';
+import { getTileIds }from 'hex-grid.js';
 
 const gridSettings = {
   width: 4,
@@ -17,7 +17,7 @@ const gameState = {
   messages: [],
   board: Immutable.fromJS({
     currentPlayerIdx: 0,
-    tileColours: _.chain(HexGrid.getTileIds(gridSettings))
+    tileColours: _.chain(getTileIds(gridSettings))
       .indexBy()
       .mapValues(() => COLOUR_NEUTRAL)
       .value()
