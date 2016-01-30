@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import Minimax from '../../js/hexbusters/deciders/Minimax.js';
 import { COLOUR_NEUTRAL, COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 import _ from 'lodash';
-import { getTileIds }from 'hex-grid.js';
+import { getTileIds }from 'hex-grid';
 
 const gridSettings = {
   width: 4,

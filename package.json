@@ -17,7 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "check-types": "^3.3.1",
-    "hex-grid.js": "https://github.com/euoia/hex-grid.js#2.0-dev",
+    "hex-grid": "https://github.com/euoia/hex-grid#2.0-dev",
     "immutable": "^3.7.5",
     "lodash": "^3.10.1",
     "react": "^0.13.3",

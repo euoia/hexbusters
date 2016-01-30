@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { getTilePositionById } from 'hex-grid.js';
+import { getTilePositionById } from 'hex-grid';
 import GridSettings from '../constants/GridSettings.js';
 import { COLOUR_RED, COLOUR_BLUE, COLOUR_NEUTRAL, BORDER_LEFT,
   BORDER_TOP, BORDER_TOP_RIGHT, BORDER_RIGHT,

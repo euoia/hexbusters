@@ -5,7 +5,7 @@ import { COLOUR_NEUTRAL, BORDER_LEFT, BORDER_TOP,
 } from '../constants/Colours.js';
 import Immutable from 'immutable';
 import _ from 'lodash';
-import { getTileIds, getTileCoordinatesById } from 'hex-grid.js';
+import { getTileIds, getTileCoordinatesById } from 'hex-grid';
 import GridSettings from '../constants/GridSettings.js';
 
 export default {

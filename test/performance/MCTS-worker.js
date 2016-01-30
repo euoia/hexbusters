@@ -2,7 +2,7 @@ import MCTS from '../../js/hexbusters/worker-deciders/MCTS.js';
 import { COLOUR_NEUTRAL, COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 import _ from 'lodash';
 import transit from 'transit-immutable-js';
-import { getTileIds } from 'hex-grid.js';
+import { getTileIds } from 'hex-grid';
 import Immutable from 'immutable';
 
 const gridSettings = {

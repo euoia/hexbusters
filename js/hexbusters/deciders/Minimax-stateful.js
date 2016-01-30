@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 import { COLOUR_NEUTRAL } from '../../../js/constants/Colours.js';
 import { TILE_CHOSEN } from '../../constants/ActionTypes.js';
-import { getTileCoordinatesById, getShortestPathsFromTileId } from 'hex-grid.js';
+import { getTileCoordinatesById, getShortestPathsFromTileId } from 'hex-grid';
 import { tileChosen } from '../../actions/PlayerActions.js';
 
 let stateCache = Immutable.Map({});
