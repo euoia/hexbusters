@@ -1,40 +1,35 @@
-import Immutable from 'immutable';
 import Minimax from '../../js/deciders/Minimax.js';
-import { COLOUR_NEUTRAL, COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
-import _ from 'lodash';
-import { getTileIds }from 'hex-grid';
+import gameReducer from '../../js/reducers/hexbusters.js';
+import init from '../../js/hexbusters/init';
+import { COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
+import { playersJoin } from '../../js/actions/GameActions.js';
 
-const GRID = {
-  width: 4,
-  height: 4,
+const timeLimitS = 2;
+const width = 11, height = 11;
+
+const grid = {
+  width: width,
+  height: height,
   orientation: 'flat-topped',
-  layout: 'odd-q'
+  layout: 'odd-q',
+  validate: false
 };
 
-const gameState = {
-  players: [{colour: COLOUR_RED}, {colour: COLOUR_BLUE}],
-  numPlayers: 2,
-  messages: [],
-  board: Immutable.fromJS({
-    currentPlayerIdx: 0,
-    tileColours: _.chain(getTileIds(GRID))
-      .indexBy()
-      .mapValues(() => COLOUR_NEUTRAL)
-      .value()
-  }),
-  blueTiles: {},
-  redTiles: {}
-};
+const gameState = init(grid);
 
-const timeLimitMs = 10000;
-console.log(`[Minimax] Running Minimax board evaluation for ${timeLimitMs}ms...`);
+const testState = gameReducer(
+  gameState,
+  playersJoin([{colour: COLOUR_RED}, {colour: COLOUR_BLUE}])
+);
+
+console.log(`[Minimax] Running MCTS board evaluation for ${timeLimitS}s (${width} x ${height})...`);
 
 const startTime = new Date();
 const { statesEvaluated } = Minimax.evaluateState(
   COLOUR_RED,
-  gameState,
-  GRID,
-  startTime.getTime() + timeLimitMs
+  testState,
+  grid,
+  startTime.getTime() + (timeLimitS * 1000)
 );
 
 const endTime = new Date();
