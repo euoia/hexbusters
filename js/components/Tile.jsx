@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { getTilePositionById } from 'hex-grid';
+import { getTilePositionById, getTileCoordinatesById } from 'hex-grid';
 import GridSettings from '../constants/GridSettings.js';
 import { COLOUR_RED, COLOUR_BLUE, COLOUR_NEUTRAL, BORDER_LEFT,
   BORDER_TOP, BORDER_TOP_RIGHT, BORDER_RIGHT,
@@ -94,12 +94,14 @@ class Tile extends Component {
       backgroundRepeat: 'round'
     };
 
+    const tileCoordinates = getTileCoordinatesById(GridSettings, tileId);
     return (
       <div
         class='tile'
         onClick={chooseTile.bind(null, tileId)}
         style={style}
       >
+        <div>{tileCoordinates.x} {tileCoordinates.y}</div>
       </div>
     );
   }

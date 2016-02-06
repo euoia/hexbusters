@@ -3,22 +3,23 @@ import Board from '../components/Board.jsx';
 import { connect } from 'react-redux';
 import { isCurrentPlayer, getWinner } from '../hexbusters/helpers.js';
 import GridSettings from '../constants/GridSettings.js';
+import { COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 
 class Hexbusters extends Component {
   render () {
     const {
       tileColours,
-      state,
       chooseTile,
       getWinner
     } = this.props;
 
     const winner = getWinner(GridSettings);
-    if (winner !== null) {
-      console.log(`-----------------------`);
-      console.log(`The winner is ${winner}`);
-    } else {
+    if (winner === null) {
       console.log(`There is no winner.`);
+    } else if (winner === COLOUR_BLUE) {
+      console.log(`The winner is blue.`);
+    } else if (winner === COLOUR_RED) {
+      console.log(`The winner is red.`);
     }
 
     return (

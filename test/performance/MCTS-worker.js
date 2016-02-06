@@ -5,11 +5,15 @@ import transit from 'transit-immutable-js';
 import { getTileIds } from 'hex-grid';
 import Immutable from 'immutable';
 
+const width = 11,
+  height = 11;
+
 const gridSettings = {
-  width: 11,
-  height: 11,
+  width: width,
+  height: height,
   orientation: 'flat-topped',
-  layout: 'odd-q'
+  layout: 'odd-q',
+  validate: false
 };
 
 const gameState = {
@@ -22,20 +26,22 @@ const gameState = {
       .indexBy()
       .mapValues(() => COLOUR_NEUTRAL)
       .value()
-  })
+  }),
+  blueTiles: {},
+  redTiles: {}
 };
 
-const timeLimitMs = 10000;
-console.log(`[MCTS Worker] Running MCTS board evaluation for ${timeLimitMs}ms...`);
+const timeLimitS = 10;
+console.log(`[MCTS Worker] Running MCTS board evaluation for ${timeLimitS}s (${width} x ${height})...`);
 
 const startTime = new Date();
 const { iterations } = MCTS.getBestAction({
   data: transit.toJSON({
     action: 'getBestAction',
-    timeLimitMs: timeLimitMs,
+    timeLimitMs: timeLimitS * 1000,
     playerColour: COLOUR_RED,
     state: {
-      board: gameState.board,
+      ...gameState,
       // Having to explicitly omit the actionDecider property is rather unfortunate.
       players: _.map(
         gameState.players,
@@ -50,4 +56,4 @@ const endTime = new Date();
 const timeTaken = endTime - startTime;
 
 console.log(`[MCTS Worker] Executed ${iterations} iterations in ${timeTaken}ms.`);
-console.log(`[MCTS Worker] Executed ${iterations} iterations per second.`);
+console.log(`[MCTS Worker] Executed ${iterations / timeLimitS} iterations per second.`);

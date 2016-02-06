@@ -137,7 +137,8 @@ function getBestAction (
     };
   });
 
-  const bestAction = _(actionValues).sortByAll('value').last();
+  const bestAction = _(actionValues).filter(av => av.value).sortByAll('value').last();
+  _(actionValues).sortByAll('value').each(a => console.log(`${a.value} => ${a.action.tileId}`)).value();
 
   return {
     bestAction: bestAction.action,

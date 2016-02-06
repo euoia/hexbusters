@@ -1,7 +1,6 @@
 import { tileChosen } from '../actions/PlayerActions.js';
-import _ from 'lodash';
-import { getTileCoordinatesById, getShortestPathsFromTileId } from 'hex-grid';
-import { COLOUR_NEUTRAL } from '../constants/Colours.js';
+import { getTileIdByCoordinates, hasPath } from 'hex-grid';
+import { COLOUR_BLUE, COLOUR_RED, COLOUR_NEUTRAL } from '../constants/Colours.js';
 
 const getCurrentPlayer = (state) => {
     if (state.players === undefined || state.players.length === 0) {
@@ -44,49 +43,46 @@ const getValidActions = (state) => {
     }).toArray();
 };
 
+/**
+ * A fast getWinner function is critical to performance of the AI.
+ */
 const getWinner = (state, gridSettings) => {
-  const validStartTiles = state.board.get('tileColours').filter(
-    (colour, tileId) =>
-      getTileCoordinatesById(gridSettings, tileId).x === 0 &&
-      colour !== COLOUR_NEUTRAL
+  var i;
+
+  let blueStartTiles = [];
+  let blueEndTiles = [];
+  for (i = 0; i < gridSettings.height; i += 1) {
+    blueStartTiles.push(getTileIdByCoordinates(gridSettings, 0, i));
+    blueEndTiles.push(getTileIdByCoordinates(gridSettings, gridSettings.width - 1, i));
+  }
+
+  let redStartTiles = [];
+  let redEndTiles = [];
+  for (i = 0; i < gridSettings.width; i += 1) {
+    redStartTiles.push(getTileIdByCoordinates(gridSettings, i, 0));
+    redEndTiles.push(getTileIdByCoordinates(gridSettings, i, gridSettings.height - 1));
+  }
+
+  const blueWin = hasPath(
+    gridSettings,
+    blueStartTiles,
+    blueEndTiles,
+    { isPathable: (tileId) => state.blueTiles[tileId] === true }
   );
 
-  const validEndTiles = state.board.get('tileColours').filter(
-    (colour, tileId) =>
-      getTileCoordinatesById(gridSettings, tileId).x === gridSettings.width - 1 &&
-      colour !== COLOUR_NEUTRAL
+  if (blueWin) {
+    return COLOUR_BLUE;
+  }
+
+  const redWin = hasPath(
+    gridSettings,
+    redStartTiles,
+    redEndTiles,
+    { isPathable: (tileId) => state.redTiles[tileId] === true }
   );
 
-  let winningColour = validStartTiles.find(
-    (colour, tileId) => {
-      let paths = getShortestPathsFromTileId(
-        gridSettings,
-        tileId,
-        {
-          moveCost: (fromTileId, toTileId) => {
-            return state.board.getIn(['tileColours', fromTileId]) === state.board.getIn(['tileColours', toTileId]) ?
-              0 :
-              Number.POSITIVE_INFINITY;
-          },
-          maxCost: 100
-        }
-      );
-
-      let winningEndTiles = _.intersection(
-        Object.keys(paths),
-        Object.keys(validEndTiles.toJS())
-      );
-
-      if (winningEndTiles.length > 0) {
-        return true;
-      }
-
-      return false;
-    }
-  );
-
-  if (winningColour) {
-    return winningColour;
+  if (redWin) {
+    return COLOUR_RED;
   }
 
   return null;

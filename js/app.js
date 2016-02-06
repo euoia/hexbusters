@@ -24,7 +24,7 @@ store.dispatch(
       name: 'hexBot (MCTS)',
       store: store,
       colour: colours[1],
-      actionDecider: new MCTSWorker({iterations: 2000})
+      actionDecider: new MCTSWorker()
     })
   ])
 );

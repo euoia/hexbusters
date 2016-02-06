@@ -4,7 +4,7 @@ import { getValidActions, getWinner } from '../helpers.js';
 
 // Monte Carlo Tree Search.
 export default class MCTS {
-  constructor (options) {
+  constructor (options = {}) {
     /**
      * How mant iterations of the algorithm to perform.
      */
@@ -141,6 +141,7 @@ export default class MCTS {
     });
 
     const bestAction = _(actionValues).sortByAll('value').last();
+    //_(actionValues).sortByAll('value').each(a => console.log(`${a.value} => ${a.action.tileId}`)).value();
     return bestAction.action;
   }
 }

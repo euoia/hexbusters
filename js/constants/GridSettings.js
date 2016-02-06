@@ -1,11 +1,13 @@
 // This is the width of the game board.
 // The width and height of the playing area is this minus 2.
-const rhombusWidth = 11;
+const rhombusWidth = 3;
 
 export default {
   rhombusWidth: rhombusWidth,
-  width: Math.floor(rhombusWidth * 1.5),
+  width: rhombusWidth,
   height: rhombusWidth,
   orientation: 'pointy-topped',
-  layout: 'even-r'
+  layout: 'odd-r',
+  shape: 'parallelogram',
+  validate: false
 }

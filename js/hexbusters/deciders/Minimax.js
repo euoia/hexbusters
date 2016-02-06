@@ -155,8 +155,6 @@ export default class Minimax {
       maxDepth
     );
 
-    console.log(`Evaluated ${evaluation.statesEvaluated} states`);
-
     return evaluation.action;
   }
 }

@@ -2,6 +2,8 @@ import { PLAYERS_JOIN, TILE_CHOSEN, ADD_MESSAGE } from '../constants/ActionTypes
 import { isTileUnoccupied, getCurrentPlayer } from '../hexbusters/helpers.js';
 import check from 'check-types';
 import InitialState from '../constants/InitialState.js';
+import { COLOUR_RED, COLOUR_BLUE } from '../constants/Colours.js';
+import _ from 'lodash';
 
 function tileChosenReduceBoard(board, tileId, currentPlayer) {
   check.assert.assigned(currentPlayer, 'currentPlayer was undefined.');
@@ -19,6 +21,26 @@ function tileChosenReduceBoard(board, tileId, currentPlayer) {
       );
     }
   );
+}
+
+function tileChosenReduceRedTiles(redTiles, tileId, currentPlayer) {
+  if (currentPlayer.colour !== COLOUR_RED) {
+    return redTiles;
+  }
+
+  const newRedTiles = _.clone(redTiles);
+  newRedTiles[tileId] = true;
+  return newRedTiles;
+}
+
+function tileChosenReduceBlueTiles(blueTiles, tileId, currentPlayer) {
+  if (currentPlayer.colour !== COLOUR_BLUE) {
+    return blueTiles;
+  }
+
+  const newBlueTiles = _.clone(blueTiles);
+  newBlueTiles[tileId] = true;
+  return newBlueTiles;
 }
 
 export default function gameReducer(state = InitialState, action) {
@@ -40,13 +62,16 @@ export default function gameReducer(state = InitialState, action) {
         return state;
       }
 
+      const currentPlayer = getCurrentPlayer(state);
       let ns = {
         ...state,
         board: tileChosenReduceBoard(
           state.board,
           action.tileId,
-          getCurrentPlayer(state)
-        )
+          currentPlayer
+        ),
+        redTiles: tileChosenReduceRedTiles(state.redTiles, action.tileId, currentPlayer),
+        blueTiles: tileChosenReduceBlueTiles(state.blueTiles, action.tileId, currentPlayer)
       };
 
       return ns;

@@ -38,13 +38,12 @@ export default class AIPlayer extends BasePlayer {
 
       console.log(`[AIPlayer] Thinking for ${this.timeLimitMs}ms...`);
       this.isThinking = true;
-
-      this.actionDecider.postMessage(transit.toJSON({
+      const message = {
         action: 'getBestAction',
         timeLimitMs: this.timeLimitMs,
         playerColour: this.colour,
         state: {
-          board: this.store.getState().game.board,
+          ...this.store.getState().game,
           // Having to explicitly omit the actionDecider property is rather unfortunate.
           players: _.map(
             this.store.getState().game.players,
@@ -52,10 +51,13 @@ export default class AIPlayer extends BasePlayer {
           )
         },
         gridSettings: GridSettings
-      }));
+      };
+
+      console.log(message);
+      this.actionDecider.postMessage(transit.toJSON(message));
 
       this.actionDecider.onmessage = (message) => {
-        console.log(`[AIPlayer] Finished thinking.`, message);
+        console.log(`[AIPlayer] Finished thinking and decided ${message.data.bestAction.tileId}.`, message);
         if (this.debug) {
           console.log(`[AIPlayer] Executed ${message.data.iterations} iterations.`);
         }
