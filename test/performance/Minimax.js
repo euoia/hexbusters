@@ -21,7 +21,9 @@ const gameState = {
       .indexBy()
       .mapValues(() => COLOUR_NEUTRAL)
       .value()
-  })
+  }),
+  blueTiles: {},
+  redTiles: {}
 };
 
 const timeLimitMs = 10000;
