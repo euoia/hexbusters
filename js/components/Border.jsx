@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { getTilePositionById, getTileCoordinatesById } from 'hex-grid';
-import GRID from '../constants/Grid.js';
-import { COLOUR_RED, COLOUR_BLUE, COLOUR_NEUTRAL, BORDER_LEFT,
-  BORDER_TOP, BORDER_TOP_RIGHT, BORDER_RIGHT,
+import {
+  BORDER_LEFT, BORDER_TOP, BORDER_TOP_RIGHT, BORDER_RIGHT,
   BORDER_BOTTOM, BORDER_BOTTOM_LEFT, BORDER_TOP_LEFT_BLUE,
   BORDER_TOP_LEFT_RED, BORDER_BOTTOM_RIGHT_RED, BORDER_BOTTOM_RIGHT_BLUE
 } from '../constants/Colours.js';
@@ -10,83 +9,59 @@ import { COLOUR_RED, COLOUR_BLUE, COLOUR_NEUTRAL, BORDER_LEFT,
 const tileWidth = 38;
 const tileHeight = 44;
 
-class Tile extends Component {
+class Border extends Component {
   constructor (props, context) {
     super(props, context);
   }
 
   render () {
-    const {colour, chooseTile, tileId} = this.props;
+    const {tileId, grid} = this.props;
+    const tilePos = getTilePositionById(grid, tileId);
 
-    const tilePos = getTilePositionById(GRID, tileId);
-
-    let colourName, zIndex = 2;
+    let colourName;
+    const colour = getBorderColour(grid, tileId);
     switch (colour) {
-      case COLOUR_RED:
-        colourName = 'red';
-        break;
-      case COLOUR_BLUE:
-        colourName = 'blue';
-        break;
-      case COLOUR_NEUTRAL:
-        colourName = 'neutral'
-        break;
       case BORDER_LEFT:
         colourName = 'blue-w';
-        zIndex = 1;
         break;
       case BORDER_TOP:
         colourName = 'red-n';
-        zIndex = 1;
         break;
       case BORDER_TOP_RIGHT:
         colourName = 'ne';
-        zIndex = 1;
         break;
       case BORDER_RIGHT:
         colourName = 'blue-e';
-        zIndex = 1;
         break;
       case BORDER_BOTTOM:
         colourName = 'red-s';
-        zIndex = 1;
         break;
       case BORDER_BOTTOM_LEFT:
         colourName = 'sw';
-        zIndex = 1;
         break;
       case BORDER_TOP_LEFT_BLUE:
         colourName = 'blue-nw';
-        zIndex = 1;
         break;
       case BORDER_TOP_LEFT_RED:
         colourName = 'red-nw';
-        zIndex = 1;
         break;
       case BORDER_BOTTOM_RIGHT_RED:
         colourName = 'red-se';
-        zIndex = 1;
         break;
       case BORDER_BOTTOM_RIGHT_BLUE:
         colourName = 'blue-se';
-        zIndex = 1;
         break;
       case null:
+      default:
         return (
           <div />
         );
-      default:
-        throw new Error(`Unhandled colour: ${colour}`);
     }
-
-    // Move across for the border.
-    const xPos = tilePos.x + 1.5;
-    const yPos = tilePos.y + 1;
 
     const style = {
       position: 'absolute',
-      left: `${xPos * tileWidth}px`,
-      top: `${yPos * (tileHeight * 0.75)}px`,
+      left: `${tilePos.x * tileWidth}px`,
+      top: `${tilePos.y * (tileHeight * 0.75)}px`,
       width: `${tileWidth}px`,
       height: `${tileHeight}px`,
       'line-height': `${tileHeight}px`, // For the text.
@@ -94,16 +69,14 @@ class Tile extends Component {
       backgroundSize: `${tileWidth}px, ${tileHeight}px`,
       'font-size': `${tileHeight / 4}px`,
       'font-family': 'sans-serif',
-      zIndex: zIndex,
       backgroundRepeat: 'round'
     };
 
-    console.log(`rendering tile`);
-    const tileCoordinates = getTileCoordinatesById(GRID, tileId);
+    console.log(`rendering border`);
+    const tileCoordinates = getTileCoordinatesById(grid, tileId);
     return (
       <div
         class='tile'
-        onClick={chooseTile.bind(null, tileId)}
         style={style}
       >
         <div>{tileCoordinates.x} {tileCoordinates.y}</div>
@@ -112,9 +85,82 @@ class Tile extends Component {
   }
 }
 
-Tile.propTypes = {
-  chooseTile: PropTypes.func.isRequired,
-  colour: PropTypes.any.isRequired
+function getBorderColour(grid, tileId) {
+  const { x, y } = getTileCoordinatesById(grid, tileId);
+
+  let leftBorder = false, topBorder = false, rightBorder = false,
+    bottomBorder = false;
+
+  if (y === 0) {
+    topBorder = true;
+  }
+
+  if (y === grid.height - 1) {
+    bottomBorder = true;
+  }
+
+  if (x === 0) {
+    leftBorder = true;
+  }
+
+  if (x === grid.width - 1) {
+    rightBorder = true;
+  }
+
+  if (leftBorder && topBorder) {
+    return null;
+  }
+
+  if (bottomBorder && rightBorder) {
+    return null;
+  }
+
+  if (leftBorder && y === 1) {
+    return BORDER_TOP_LEFT_BLUE;
+  }
+
+  if (topBorder && x === 1) {
+    return BORDER_TOP_LEFT_RED;
+  }
+
+  if (leftBorder && bottomBorder) {
+    return BORDER_BOTTOM_LEFT;
+  }
+
+  if (bottomBorder && x === grid.width - 2) {
+    return BORDER_BOTTOM_RIGHT_RED;
+  }
+
+  if (rightBorder && y === grid.height - 2) {
+    return BORDER_BOTTOM_RIGHT_BLUE;
+  }
+
+  if (topBorder && rightBorder) {
+    return BORDER_TOP_RIGHT;
+  }
+
+  if (topBorder) {
+    return BORDER_TOP;
+  }
+
+  if (rightBorder) {
+    return BORDER_RIGHT;
+  }
+
+  if (bottomBorder) {
+    return BORDER_BOTTOM;
+  }
+
+  if (leftBorder) {
+    return BORDER_LEFT;
+  }
+
+  return null;
+}
+
+Border.propTypes = {
+  grid: PropTypes.object.isRequired,
+  tileId: PropTypes.string.isRequired
 };
 
-export default Tile;
+export default Border;
