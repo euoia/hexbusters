@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import Minimax from '../../js/hexbusters/deciders/Minimax.js';
+import Minimax from '../../js/deciders/Minimax.js';
 import { COLOUR_NEUTRAL, COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 import _ from 'lodash';
 import { getTileIds }from 'hex-grid';
