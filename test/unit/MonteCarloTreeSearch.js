@@ -1,42 +1,24 @@
 /* eslint-env mocha */
-import Immutable from 'immutable';
-import InitialState from '../../js/constants/InitialState.js';
-import MCTS from '../../js/hexbusters/deciders/MCTS.js';
+import MonteCarloTreeSearch from '../../js/deciders/MonteCarloTreeSearch.js';
 import expect from 'expect.js';
-import { COLOUR_BLUE, COLOUR_NEUTRAL, COLOUR_RED } from '../../js/constants/Colours.js';
+import { COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 import { tileChosen } from '../../js/actions/PlayerActions.js';
 import { playersJoin } from '../../js/actions/GameActions.js';
-import gameReducer from '../../js/reducers/game.js';
+import gameReducer from '../../js/reducers/hexbusters.js';
 import _ from 'lodash';
+import init from '../../js/hexbusters/init.js';
 
-const gridSettings = {
+const grid = {
   width: 3,
   height: 3,
   orientation: 'flat-topped',
   layout: 'odd-q'
 };
+const gameState = init(grid);
 
-const gameState = {
-  ...InitialState,
-  board: Immutable.fromJS({
-    currentPlayerIdx: 0,
-    tileColours: {
-      'tile-0-0': COLOUR_NEUTRAL,
-      'tile-0-1': COLOUR_NEUTRAL,
-      'tile-0-2': COLOUR_NEUTRAL,
-      'tile-1-0': COLOUR_NEUTRAL,
-      'tile-1-1': COLOUR_NEUTRAL,
-      'tile-1-2': COLOUR_NEUTRAL,
-      'tile-2-0': COLOUR_NEUTRAL,
-      'tile-2-1': COLOUR_NEUTRAL,
-      'tile-2-2': COLOUR_NEUTRAL
-    }
-  })
-};
+const mcts = new MonteCarloTreeSearch({timeLimitMs: 1000});
 
-const mcts = new MCTS();
-
-describe('MCTS', function() {
+describe('MonteCarloTreeSearch', function() {
   this.timeout(5000);
 
   describe('getBestAction', function() {
@@ -55,14 +37,8 @@ describe('MCTS', function() {
         return gameReducer(gameState, action);
       }, gameState);
 
-      // The AI is RED.
-      const bestAction = mcts.getBestAction(
-        COLOUR_RED,
-        testState,
-        gridSettings
-      );
-
-      expect(bestAction.tileId).to.equal('tile-0-2');
+      const action = mcts.getBestAction(COLOUR_RED, testState, grid);
+      expect(action.bestAction.tileId).to.equal('tile-0-2');
     });
 
     it('Should prevent the other player winning', function() {
@@ -80,14 +56,8 @@ describe('MCTS', function() {
         return gameReducer(gameState, action);
       }, gameState);
 
-      // The AI is BLUE.
-      const bestAction = mcts.getBestAction(
-        COLOUR_BLUE,
-        testState,
-        gridSettings
-      );
-
-      expect(bestAction.tileId).to.equal('tile-0-2');
+      const action = mcts.getBestAction(COLOUR_BLUE, testState, grid);
+      expect(action.bestAction.tileId).to.equal('tile-0-2');
     });
   });
 });

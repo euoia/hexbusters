@@ -1,35 +1,37 @@
+import { COLOUR_NEUTRAL } from '../constants/Colours.js';
+import { getTileIds } from 'hex-grid';
+import Immutable from 'immutable';
+import _ from 'lodash';
+
+export default (grid) => {
+  return {
+    players: [],
+    numPlayers: 2,
+    messages: [],
+    board: Immutable.fromJS({
+      currentPlayerIdx: 0,
+      // tileColours is an object mapping the tileId to the tile colour.
+      // The tileColour can COLOUR_NEUTRAL, COLOUR_RED, COLOUR_BLUE or null. Null
+      // means the tile cannot be occupied.
+      tileColours: _.chain(getTileIds(grid))
+        .indexBy()
+        .mapValues(() => COLOUR_NEUTRAL)
+        .value()
+    }),
+    blueTiles: {},
+    redTiles: {}
+  };
+}
+
+/*
 import { COLOUR_NEUTRAL, BORDER_LEFT, BORDER_TOP,
   BORDER_TOP_RIGHT, BORDER_RIGHT, BORDER_BOTTOM,
   BORDER_BOTTOM_LEFT, BORDER_TOP_LEFT_BLUE, BORDER_TOP_LEFT_RED,
   BORDER_BOTTOM_RIGHT_RED, BORDER_BOTTOM_RIGHT_BLUE
 } from '../constants/Colours.js';
-import Immutable from 'immutable';
-import _ from 'lodash';
-import { getTileIds, getTileCoordinatesById } from 'hex-grid';
-import GridSettings from '../constants/GridSettings.js';
-
-export default {
-  players: [],
-  numPlayers: 2,
-  messages: [],
-  board: Immutable.fromJS({
-    currentPlayerIdx: 0,
-    // tileColours is an object mapping the tileId to the tile colour.
-    // The tileColour can COLOUR_NEUTRAL, COLOUR_RED, COLOUR_BLUE or null. Null
-    // means the tile cannot be occupied.
-    tileColours: _.chain(getTileIds(GridSettings))
-      .indexBy()
-      .mapValues(() => COLOUR_NEUTRAL)
-      .value()
-  }),
-  blueTiles: {},
-  redTiles: {}
-}
-
 // TODO: Replace this.
 function getBorderColour(tileId) {
-  /* eslint no-unused-vars: [0] */
-  const { x, y } = getTileCoordinatesById(GridSettings, tileId);
+  const { x, y } = getTileCoordinatesById(GRID, tileId);
 
   let leftBorder = false, topBorder = false, rightBorder = false,
     bottomBorder = false;
@@ -38,7 +40,7 @@ function getBorderColour(tileId) {
     topBorder = true;
   }
 
-  if (y === GridSettings.height - 1) {
+  if (y === GRID.height - 1) {
     bottomBorder = true;
   }
 
@@ -46,7 +48,7 @@ function getBorderColour(tileId) {
     leftBorder = true;
   }
 
-  if (x === GridSettings.width - 1) {
+  if (x === GRID.width - 1) {
     rightBorder = true;
   }
 
@@ -70,11 +72,11 @@ function getBorderColour(tileId) {
     return BORDER_BOTTOM_LEFT;
   }
 
-  if (bottomBorder && x === GridSettings.width - 2) {
+  if (bottomBorder && x === GRID.width - 2) {
     return BORDER_BOTTOM_RIGHT_RED;
   }
 
-  if (rightBorder && y === GridSettings.height - 2) {
+  if (rightBorder && y === GRID.height - 2) {
     return BORDER_BOTTOM_RIGHT_BLUE;
   }
 
@@ -100,3 +102,4 @@ function getBorderColour(tileId) {
 
   return COLOUR_NEUTRAL;
 }
+*/

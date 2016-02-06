@@ -4,7 +4,7 @@ import { COLOUR_NEUTRAL, COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colo
 import _ from 'lodash';
 import { getTileIds }from 'hex-grid';
 
-const gridSettings = {
+const GRID = {
   width: 4,
   height: 4,
   orientation: 'flat-topped',
@@ -17,7 +17,7 @@ const gameState = {
   messages: [],
   board: Immutable.fromJS({
     currentPlayerIdx: 0,
-    tileColours: _.chain(getTileIds(gridSettings))
+    tileColours: _.chain(getTileIds(GRID))
       .indexBy()
       .mapValues(() => COLOUR_NEUTRAL)
       .value()
@@ -33,7 +33,7 @@ const startTime = new Date();
 const { statesEvaluated } = Minimax.evaluateState(
   COLOUR_RED,
   gameState,
-  gridSettings,
+  GRID,
   startTime.getTime() + timeLimitMs
 );
 

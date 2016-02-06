@@ -1,9 +1,12 @@
 import { PLAYERS_JOIN, TILE_CHOSEN, ADD_MESSAGE } from '../constants/ActionTypes.js';
 import { isTileUnoccupied, getCurrentPlayer } from '../hexbusters/helpers.js';
 import check from 'check-types';
-import InitialState from '../constants/InitialState.js';
+import init from '../hexbusters/init.js';
 import { COLOUR_RED, COLOUR_BLUE } from '../constants/Colours.js';
+import GRID from '../constants/Grid.js';
 import _ from 'lodash';
+
+const numPlayers = 2;
 
 function tileChosenReduceBoard(board, tileId, currentPlayer) {
   check.assert.assigned(currentPlayer, 'currentPlayer was undefined.');
@@ -17,7 +20,7 @@ function tileChosenReduceBoard(board, tileId, currentPlayer) {
 
       board.set(
         'currentPlayerIdx',
-        (board.get('currentPlayerIdx') + 1) % InitialState.numPlayers
+        (board.get('currentPlayerIdx') + 1) % numPlayers
       );
     }
   );
@@ -43,7 +46,11 @@ function tileChosenReduceBlueTiles(blueTiles, tileId, currentPlayer) {
   return newBlueTiles;
 }
 
-export default function gameReducer(state = InitialState, action) {
+export default function gameReducer(state, action) {
+  if (state === undefined) {
+    state = init(GRID);
+  }
+
   switch (action.type) {
     case PLAYERS_JOIN:
       return {

@@ -1,7 +1,7 @@
 import BasePlayer from './BasePlayer.js';
-import { isCurrentPlayer } from './helpers.js';
+import { isCurrentPlayer } from '../hexbusters/helpers.js';
 import { AI_PLAYER } from '../constants/PlayerTypes.js';
-import GridSettings from '../constants/GridSettings.js';
+import GRID from '../constants/Grid.js';
 import check from 'check-types';
 import transit from 'transit-immutable-js';
 import _ from 'lodash';
@@ -50,7 +50,7 @@ export default class AIPlayer extends BasePlayer {
             player => _.omit(player, 'actionDecider')
           )
         },
-        gridSettings: GridSettings
+        GRID: GRID
       };
 
       console.log(message);

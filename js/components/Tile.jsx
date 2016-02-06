@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { getTilePositionById, getTileCoordinatesById } from 'hex-grid';
-import GridSettings from '../constants/GridSettings.js';
+import GRID from '../constants/Grid.js';
 import { COLOUR_RED, COLOUR_BLUE, COLOUR_NEUTRAL, BORDER_LEFT,
   BORDER_TOP, BORDER_TOP_RIGHT, BORDER_RIGHT,
   BORDER_BOTTOM, BORDER_BOTTOM_LEFT, BORDER_TOP_LEFT_BLUE,
@@ -18,7 +18,7 @@ class Tile extends Component {
   render () {
     const {colour, chooseTile, tileId} = this.props;
 
-    const tilePos = getTilePositionById(GridSettings, tileId);
+    const tilePos = getTilePositionById(GRID, tileId);
 
     let colourName, zIndex = 2;
     switch (colour) {
@@ -94,7 +94,7 @@ class Tile extends Component {
       backgroundRepeat: 'round'
     };
 
-    const tileCoordinates = getTileCoordinatesById(GridSettings, tileId);
+    const tileCoordinates = getTileCoordinatesById(GRID, tileId);
     return (
       <div
         class='tile'

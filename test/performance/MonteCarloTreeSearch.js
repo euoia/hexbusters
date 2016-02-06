@@ -1,4 +1,4 @@
-import MCTS from '../../js/hexbusters/worker-deciders/MCTS.js';
+import MonteCarloTreeSearch from '../../js/hexbusters/deciders/MonteCarloTreeSearch.js';
 import { COLOUR_NEUTRAL, COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 import _ from 'lodash';
 import transit from 'transit-immutable-js';
@@ -32,10 +32,10 @@ const gameState = {
 };
 
 const timeLimitS = 10;
-console.log(`[MCTS Worker] Running MCTS board evaluation for ${timeLimitS}s (${width} x ${height})...`);
+console.log(`[MonteCarloTreeSearch] Running MCTS board evaluation for ${timeLimitS}s (${width} x ${height})...`);
 
 const startTime = new Date();
-const { iterations } = MCTS.getBestAction({
+const { iterations } = MonteCarloTreeSearch.getBestAction({
   data: transit.toJSON({
     action: 'getBestAction',
     timeLimitMs: timeLimitS * 1000,
@@ -55,5 +55,5 @@ const { iterations } = MCTS.getBestAction({
 const endTime = new Date();
 const timeTaken = endTime - startTime;
 
-console.log(`[MCTS Worker] Executed ${iterations} iterations in ${timeTaken}ms.`);
-console.log(`[MCTS Worker] Executed ${iterations / timeLimitS} iterations per second.`);
+console.log(`[MonteCarloTreeSearch] Executed ${iterations} iterations in ${timeTaken}ms.`);
+console.log(`[MonteCarloTreeSearch] Executed ${iterations / timeLimitS} iterations per second.`);

@@ -1,38 +1,20 @@
-import Immutable from 'immutable';
-import InitialState from '../../js/constants/InitialState.js';
-import Minimax from '../../js/hexbusters/deciders/Minimax.js';
-import expect from 'expect.js';
-import { COLOUR_BLUE, COLOUR_NEUTRAL, COLOUR_RED } from '../../js/constants/Colours.js';
-import { tileChosen } from '../../js/actions/PlayerActions.js';
-import { playersJoin } from '../../js/actions/GameActions.js';
-import gameReducer from '../../js/reducers/game.js';
-import _ from 'lodash';
-
 /* eslint-env mocha */
-const gridSettings = {
+import Minimax from '../../js/deciders/Minimax.js';
+import _ from 'lodash';
+import expect from 'expect.js';
+import gameReducer from '../../js/reducers/hexbusters.js';
+import init from '../../js/hexbusters/init.js';
+import { COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
+import { playersJoin } from '../../js/actions/GameActions.js';
+import { tileChosen } from '../../js/actions/PlayerActions.js';
+
+const grid = {
   width: 3,
   height: 3,
   orientation: 'flat-topped',
   layout: 'odd-q'
 };
-
-const gameState = {
-  ...InitialState,
-  board: Immutable.fromJS({
-    currentPlayerIdx: 0,
-    tileColours: {
-      'tile-0-0': COLOUR_NEUTRAL,
-      'tile-0-1': COLOUR_NEUTRAL,
-      'tile-0-2': COLOUR_NEUTRAL,
-      'tile-1-0': COLOUR_NEUTRAL,
-      'tile-1-1': COLOUR_NEUTRAL,
-      'tile-1-2': COLOUR_NEUTRAL,
-      'tile-2-0': COLOUR_NEUTRAL,
-      'tile-2-1': COLOUR_NEUTRAL,
-      'tile-2-2': COLOUR_NEUTRAL
-    }
-  })
-};
+const gameState = init(grid);
 
 describe('Minimax', function() {
   const timeLimitMs = 1000;
@@ -56,7 +38,7 @@ describe('Minimax', function() {
       const action = Minimax.getBestAction(
         COLOUR_RED,
         testState,
-        gridSettings,
+        grid,
         timeLimitMs
       );
 
@@ -82,7 +64,7 @@ describe('Minimax', function() {
       const action = Minimax.getBestAction(
         COLOUR_BLUE,
         testState,
-        gridSettings,
+        grid,
         timeLimitMs
       );
 

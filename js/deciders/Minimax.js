@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import gameReducer from '../../reducers/game.js';
-import helpers from '../helpers.js';
+import gameReducer from '../reducers/hexbusters.js';
+import helpers from '../hexbusters/helpers.js';
 import Immutable from 'immutable';
 
 let stateCache = Immutable.Map({});
@@ -31,7 +31,7 @@ export default class Minimax {
   static evaluateState (
     playerColour,
     gameState,
-    gridSettings,
+    GRID,
     endTime,
     maxDepth = null,
     maximizingPlayer = true,
@@ -62,7 +62,7 @@ export default class Minimax {
       }
     }
 
-    const winner = helpers.getWinner(gameState, gridSettings);
+    const winner = helpers.getWinner(gameState, GRID);
 
     // Modify the final score by the depth so that the AI prefer to end
     // the game sooner.
@@ -101,7 +101,7 @@ export default class Minimax {
         const evaluation = Minimax.evaluateState(
           playerColour,
           gameReducer(gameState, action),
-          gridSettings,
+          GRID,
           endTime,
           maxDepth,
           ! maximizingPlayer,
@@ -140,7 +140,7 @@ export default class Minimax {
   static getBestAction(
     playerColour,
     gameState,
-    gridSettings,
+    GRID,
     timeLimitMs,
     maxDepth
   ) {
@@ -150,7 +150,7 @@ export default class Minimax {
     let evaluation = Minimax.evaluateState(
       playerColour,
       gameState,
-      gridSettings,
+      GRID,
       endTime,
       maxDepth
     );

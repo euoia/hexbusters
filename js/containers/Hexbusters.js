@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Board from '../components/Board.jsx';
 import { connect } from 'react-redux';
 import { isCurrentPlayer, getWinner } from '../hexbusters/helpers.js';
-import GridSettings from '../constants/GridSettings.js';
+import GRID from '../constants/Grid.js';
 import { COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 
 class Hexbusters extends Component {
@@ -13,7 +13,7 @@ class Hexbusters extends Component {
       getWinner
     } = this.props;
 
-    const winner = getWinner(GridSettings);
+    const winner = getWinner(GRID);
     if (winner === null) {
       console.log(`There is no winner.`);
     } else if (winner === COLOUR_BLUE) {

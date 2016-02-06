@@ -11,7 +11,7 @@
     "start": "node server.js",
     "build": "webpack",
     "test": "mocha --compilers js:babel/register test/unit",
-    "perf": "babel-node ./test/performance/Minimax.js && babel-node ./test/performance/MCTS-worker.js"
+    "perf": "babel-node ./test/performance/Minimax.js && babel-node ./test/performance/MonteCarloTreeSearchWebWorker.js"
   },
   "author": "James Pickard <james.pickard@gmail.com>",
   "license": "ISC",

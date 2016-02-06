@@ -1,14 +1,18 @@
 import _ from 'lodash';
-import gameReducer from '../../reducers/game.js';
-import { getValidActions, getWinner } from '../helpers.js';
+import gameReducer from '../reducers/hexbusters.js';
+import { getValidActions, getWinner } from '../hexbusters/helpers.js';
 
-// Monte Carlo Tree Search.
-export default class MCTS {
+export default class MonteCarloTreeSearch {
   constructor (options = {}) {
     /**
-     * How mant iterations of the algorithm to perform.
+     * How much time to spend thinking.
      */
-    this.iterations = options.iterations || 1000;
+    this.timeLimitMs = options.timeLimitMs || 1000;
+
+    /**
+     * Whether to output debug information.
+     */
+    this.debug = options.debug || false;
   }
 
   static makeNodeId (currentNodeId, actionId) {
@@ -29,14 +33,14 @@ export default class MCTS {
         }
       ).filter(
         (action) => {
-          const actionNodeId = MCTS.makeNodeId(nodeId, action.actionId);
+          const actionNodeId = MonteCarloTreeSearch.makeNodeId(nodeId, action.actionId);
           return tree[actionNodeId] === undefined;
         }
       ).value();
   }
 
-  static randomWalk(playerColour, gridSettings, state, depth) {
-    switch (getWinner(state, gridSettings)) {
+  static randomWalk(playerColour, GRID, state, depth) {
+    switch (getWinner(state, GRID)) {
       case playerColour:
         // Prefer quicker wins.
         return 100 - depth;
@@ -49,9 +53,9 @@ export default class MCTS {
         }
 
         // Keep going.
-        return MCTS.randomWalk(
+        return MonteCarloTreeSearch.randomWalk(
           playerColour,
-          gridSettings,
+          GRID,
           gameReducer(state, _.sample(validActions)),
           depth + 1
         );
@@ -61,8 +65,8 @@ export default class MCTS {
     }
   }
 
-  static treeWalk (playerColour, gridSettings, tree, state, nodeId = '', depth = 0) {
-    const unexploredActions = MCTS.getUnexploredActions(
+  static treeWalk (playerColour, GRID, tree, state, nodeId = '', depth = 0) {
+    const unexploredActions = MonteCarloTreeSearch.getUnexploredActions(
       tree,
       state,
       nodeId
@@ -77,13 +81,13 @@ export default class MCTS {
       // Descend the unexplored parts of the tree until this node is no longer
       // a fringe node.
       const action = _.sample(unexploredActions);
-      const nextNodeId = MCTS.makeNodeId(nodeId, action.actionId);
+      const nextNodeId = MonteCarloTreeSearch.makeNodeId(nodeId, action.actionId);
 
       tree[nextNodeId] = tree[nextNodeId] || 0;
 
       reward = this.randomWalk(
         playerColour,
-        gridSettings,
+        GRID,
         gameReducer(state, action),
         depth + 1
       );
@@ -99,11 +103,11 @@ export default class MCTS {
 
       const actionIdx = _.random(validActions.length - 1);
       const action = validActions[actionIdx];
-      const nextNodeId = MCTS.makeNodeId(nodeId, actionIdx);
+      const nextNodeId = MonteCarloTreeSearch.makeNodeId(nodeId, actionIdx);
 
-      [tree, reward] = MCTS.treeWalk(
+      [tree, reward] = MonteCarloTreeSearch.treeWalk(
         playerColour,
-        gridSettings,
+        GRID,
         tree,
         gameReducer(state, action),
         nextNodeId,
@@ -118,7 +122,7 @@ export default class MCTS {
   getBestAction (
     playerColour,
     state,
-    gridSettings
+    GRID
   ) {
     // The tree is a map of nodeId to node value.
     //
@@ -127,13 +131,17 @@ export default class MCTS {
     //
     // The root node has an ID of the empty string.
 
+    const dateLimit = Date.now() + this.timeLimitMs;
+
     let tree = {'': 0};
-    for (let i = 0; i < this.iterations; i+= 1) {
-      [tree] = MCTS.treeWalk(playerColour, gridSettings, tree, state);
+    let iterations = 0;
+    while (Date.now() < dateLimit) {
+      [tree] = MonteCarloTreeSearch.treeWalk(playerColour, GRID, tree, state);
+      iterations += 1;
     }
 
     const actionValues = _.map(getValidActions(state), (action, actionIdx) => {
-      const nodeId = MCTS.makeNodeId('', actionIdx);
+      const nodeId = MonteCarloTreeSearch.makeNodeId('', actionIdx);
       return {
         action,
         value: tree[nodeId]
@@ -141,7 +149,16 @@ export default class MCTS {
     });
 
     const bestAction = _(actionValues).sortByAll('value').last();
-    //_(actionValues).sortByAll('value').each(a => console.log(`${a.value} => ${a.action.tileId}`)).value();
-    return bestAction.action;
+
+    if (this.debug) {
+      _(actionValues).sortByAll('value').each(
+        a => console.log(`${a.value} => ${a.action.tileId}`)
+      ).value();
+    }
+
+    return {
+      bestAction: bestAction.action,
+      iterations
+    };
   }
 }
