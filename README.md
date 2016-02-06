@@ -1,3 +1,5 @@
+![Travis CI staus](https://travis-ci.org/euoia/hexbusters.svg?branch=master)
+
 # HEXBUSTERS
 
 My first attempts at making a game with React and Redux.
