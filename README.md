@@ -1,4 +1,4 @@
-![Travis CI staus](https://travis-ci.org/euoia/hexbusters.svg?branch=master)
+![Travis CI status](https://travis-ci.org/euoia/hexbusters.svg?branch=master)
 
 # HEXBUSTERS
 
