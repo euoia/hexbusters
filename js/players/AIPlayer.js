@@ -19,7 +19,7 @@ export default class AIPlayer extends BasePlayer {
 
     this.playerType = AI_PLAYER;
     this.isThinking = false;
-    this.timeLimitMs = 1000;
+    this.timeLimitMs = 2000;
     this.debug = true;
 
     /**
@@ -50,10 +50,10 @@ export default class AIPlayer extends BasePlayer {
             player => _.omit(player, 'actionDecider')
           )
         },
-        GRID: GRID
+        GRID: GRID,
+        debug: this.debug
       };
 
-      console.log(message);
       this.actionDecider.postMessage(transit.toJSON(message));
 
       this.actionDecider.onmessage = (message) => {

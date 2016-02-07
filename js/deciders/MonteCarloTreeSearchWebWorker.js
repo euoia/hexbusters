@@ -13,8 +13,8 @@ function handleMessage (message) {
 
   switch (messageObj.action) {
     case 'getBestAction':
-      const { playerColour, state, GRID, timeLimitMs = 5000} = messageObj;
-      const mcts = new MonteCarloTreeSearch({timeLimitMs});
+      const { debug, playerColour, state, GRID, timeLimitMs = 5000} = messageObj;
+      const mcts = new MonteCarloTreeSearch({timeLimitMs, debug});
       const action = mcts.getBestAction(playerColour, state, GRID);
 
       if (typeof postMessage !== 'undefined') {

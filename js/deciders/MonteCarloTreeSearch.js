@@ -1,6 +1,55 @@
 import _ from 'lodash';
 import gameReducer from '../reducers/hexbusters.js';
-import { getValidActions, getWinner } from '../hexbusters/helpers.js';
+import { getValidActions, getCurrentPlayer, getWinner } from '../hexbusters/helpers.js';
+
+class Node {
+  constructor ({action = null, parent = null, state = null}) {
+    // The action that led to this node. Null for the root node.
+    this.action = action;
+
+    // Null for the root node.
+    this.parentNode = parent;
+    this.childNodes = new Set([]);
+    this.wins = 0;
+    this.visits = 0;
+    this.untriedActions = new Set(getValidActions(state));
+    this.currentPlayer = getCurrentPlayer(state);
+  }
+
+  addChild (action, state) {
+    const n = new Node({action, state, parent: this});
+    this.untriedActions.delete(action);
+    this.childNodes.add(n);
+    return n;
+  }
+
+  update (result) {
+    this.visits += 1;
+    this.wins += result;
+  }
+
+  /**
+   * Use the UCB1 formula to select a child node.
+   */
+  UCB1SelectChild () {
+    return _(Array.from(this.childNodes))
+      .sortByAll(n => n.wins / n.visits + Math.sqrt(2 * Math.log(this.visits) / n.visits))
+      .last();
+  }
+}
+
+function getStateValue (state, grid, player) {
+  const winner = getWinner(state, grid);
+  switch (winner) {
+    case player.colour:
+      return -1;
+    case null:
+      // Stalemate.
+      return 0;
+    default:
+      return 1;
+  }
+}
 
 export default class MonteCarloTreeSearch {
   constructor (options = {}) {
@@ -15,149 +64,55 @@ export default class MonteCarloTreeSearch {
     this.debug = options.debug || false;
   }
 
-  static makeNodeId (currentNodeId, actionId) {
-    return `${currentNodeId}:${actionId}`;
-  }
-
-  static getUnexploredActions (tree, state, nodeId) {
-    const validActions = getValidActions(state);
-
-    // Unexplored actions are children which do not have an entry in the tree.
-    return _(validActions)
-      .map(
-        (action, actionIdx) => {
-          return {
-            ...action,
-            actionId: actionIdx
-          };
-        }
-      ).filter(
-        (action) => {
-          const actionNodeId = MonteCarloTreeSearch.makeNodeId(nodeId, action.actionId);
-          return tree[actionNodeId] === undefined;
-        }
-      ).value();
-  }
-
-  static randomWalk(playerColour, GRID, state, depth) {
-    switch (getWinner(state, GRID)) {
-      case playerColour:
-        // Prefer quicker wins.
-        return 100 - depth;
-      case null:
-        const validActions = getValidActions(state);
-
-        // Stalemate.
-        if (validActions.length === 0) {
-          return 0;
-        }
-
-        // Keep going.
-        return MonteCarloTreeSearch.randomWalk(
-          playerColour,
-          GRID,
-          gameReducer(state, _.sample(validActions)),
-          depth + 1
-        );
-      default:
-        // Prefer further away losses.
-        return -100 + depth;
-    }
-  }
-
-  static treeWalk (playerColour, GRID, tree, state, nodeId = '', depth = 0) {
-    const unexploredActions = MonteCarloTreeSearch.getUnexploredActions(
-      tree,
-      state,
-      nodeId
-    );
-
-    // Fringe nodes are nodes that we still need to explore.
-    // That is, they have remaining unexplored actions.
-    const isFringeNode = (unexploredActions.length > 0);
-
-    let reward;
-    if (isFringeNode) {
-      // Descend the unexplored parts of the tree until this node is no longer
-      // a fringe node.
-      const action = _.sample(unexploredActions);
-      const nextNodeId = MonteCarloTreeSearch.makeNodeId(nodeId, action.actionId);
-
-      tree[nextNodeId] = tree[nextNodeId] || 0;
-
-      reward = this.randomWalk(
-        playerColour,
-        GRID,
-        gameReducer(state, action),
-        depth + 1
-      );
-
-      tree[nextNodeId] += reward;
-    } else {
-      // This node is not a fringe node: all children have already been
-      // explored.  Might as well select a random successor.
-      const validActions = getValidActions(state);
-      if (validActions.length === 0) {
-        return [tree, 0];
-      }
-
-      const actionIdx = _.random(validActions.length - 1);
-      const action = validActions[actionIdx];
-      const nextNodeId = MonteCarloTreeSearch.makeNodeId(nodeId, actionIdx);
-
-      [tree, reward] = MonteCarloTreeSearch.treeWalk(
-        playerColour,
-        GRID,
-        tree,
-        gameReducer(state, action),
-        nextNodeId,
-        depth + 1
-      );
-    }
-
-    tree[nodeId] = (tree[nodeId] || 0) + reward;
-    return [tree, reward];
-  }
-
   getBestAction (
     playerColour,
-    state,
-    GRID
+    rootState,
+    grid
   ) {
-    // The tree is a map of nodeId to node value.
-    //
-    // The nodeId is a string contructed from:
-    // concat(parentNodeId, actionIdx).
-    //
-    // The root node has an ID of the empty string.
-
     const dateLimit = Date.now() + this.timeLimitMs;
+    const rootNode = new Node({state: rootState});
 
-    let tree = {'': 0};
     let iterations = 0;
     while (Date.now() < dateLimit) {
-      [tree] = MonteCarloTreeSearch.treeWalk(playerColour, GRID, tree, state);
+      let node = rootNode;
+      let state = rootState;
+
+      // Select until a new fringe node is found.
+      while (node.untriedActions.size === 0 && node.childNodes.size > 0) {
+        node = node.UCB1SelectChild();
+        state = gameReducer(state, node.action);
+      }
+
+      // Expand the new node.
+      if (node.untriedActions.size > 0) {
+        let action = _.sample(Array.from(node.untriedActions));
+        state = gameReducer(state, action);
+        node = node.addChild(action, state);
+      }
+
+      // Rollout to a terminal state.
+      // Random walk the tree to a terminal node.
+      while (getValidActions(state).length > 0) {
+        state = gameReducer(state, _.sample(getValidActions(state)));
+      }
+
+      // Back propagate the terminal state's value.
+      while (node !== null) {
+        node.update(getStateValue(state, grid, node.currentPlayer));
+        node = node.parentNode;
+      }
+
       iterations += 1;
     }
 
-    const actionValues = _.map(getValidActions(state), (action, actionIdx) => {
-      const nodeId = MonteCarloTreeSearch.makeNodeId('', actionIdx);
-      return {
-        action,
-        value: tree[nodeId]
-      };
-    });
-
-    const bestAction = _(actionValues).sortByAll('value').last();
+    const rankedNodes = _(Array.from(rootNode.childNodes)).sortByAll('visits');
 
     if (this.debug) {
-      _(actionValues).sortByAll('value').each(
-        a => console.log(`${a.value} => ${a.action.tileId}`)
-      ).value();
+      rankedNodes.each(n => console.log(`${n.visits} => ${n.wins} wins :: ${n.action.tileId}`)).value();
     }
 
     return {
-      bestAction: bestAction.action,
+      bestAction: rankedNodes.last().action,
       iterations
     };
   }
