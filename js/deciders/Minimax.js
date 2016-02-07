@@ -62,7 +62,7 @@ export default class Minimax {
       }
     }
 
-    const winner = helpers.getWinner(gameState, GRID);
+    const winner = gameState.winner;
 
     // Modify the final score by the depth so that the AI prefer to end
     // the game sooner.
@@ -84,7 +84,7 @@ export default class Minimax {
       };
     }
 
-    const validActions = helpers.getValidActions(gameState);
+    const validActions = helpers.getActions(gameState);
     if (validActions.length === 0) {
       // The board is full but no player has won.
       stateCache = stateCache.set(gameState.board, 0);

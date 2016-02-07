@@ -98,7 +98,6 @@ class Tile extends Component {
       backgroundRepeat: 'round'
     };
 
-    console.log(`rendering tile`);
     const tileCoordinates = getTileCoordinatesById(GRID, tileId);
     return (
       <div

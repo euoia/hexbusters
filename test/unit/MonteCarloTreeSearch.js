@@ -23,12 +23,14 @@ describe('MonteCarloTreeSearch', function() {
 
   describe('getBestAction', function() {
     it('Should return a winning action', function() {
-      // A game state where red is one move away from winning.
-      // Red is about to get the first column.
+      // Red is one move away from winning with the first column.
+      // Blue will win on the next turn with a diagonal from top right to
+      // bottom left.
+      // It is red's turn.
       const actions = [
         playersJoin([{colour: COLOUR_RED}, {colour: COLOUR_BLUE}]),
         tileChosen({tileId: 'tile-0-0', colour: COLOUR_RED }),
-        tileChosen({tileId: 'tile-1-0', colour: COLOUR_BLUE }),
+        tileChosen({tileId: 'tile-2-0', colour: COLOUR_BLUE }),
         tileChosen({tileId: 'tile-0-1', colour: COLOUR_RED }),
         tileChosen({tileId: 'tile-1-1', colour: COLOUR_BLUE })
       ];

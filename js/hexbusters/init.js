@@ -18,7 +18,11 @@ export default (grid) => {
         .mapValues(() => COLOUR_NEUTRAL)
         .value()
     }),
-    blueTiles: {},
-    redTiles: {}
+    tiles: {
+      neutral: _(getTileIds(grid)).mapKeys().mapValues(() => true).value(),
+      blue: {},
+      red: {}
+    },
+    winner: null
   };
 }

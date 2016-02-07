@@ -12,7 +12,7 @@ import MonteCarloTreeSearchWebWorker from 'worker!./deciders/MonteCarloTreeSearc
 const colours = _.shuffle([COLOUR_BLUE, COLOUR_RED]);
 
 const humanPlayer = new HumanPlayer({
-  name: 'Bob',
+  name: 'Player',
   store: store,
   colour: colours[0]
 });
@@ -21,7 +21,7 @@ store.dispatch(
   playersJoin([
     humanPlayer,
     new AIPlayer({
-      name: 'hexBot',
+      name: 'Hexbot',
       store: store,
       colour: colours[1],
       actionDecider: new MonteCarloTreeSearchWebWorker()

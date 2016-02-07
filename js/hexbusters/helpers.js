@@ -1,9 +1,10 @@
 import { tileChosen } from '../actions/PlayerActions.js';
 import { getTileIdByCoordinates, hasPath } from 'hex-grid';
 import { COLOUR_BLUE, COLOUR_RED, COLOUR_NEUTRAL } from '../constants/Colours.js';
+import _ from 'lodash';
 
 const getCurrentPlayer = (state) => {
-    if (state.players === undefined || state.players.length === 0) {
+    if (state.players === undefined || state.players.length === 0 || state.winner) {
       return null;
     }
 
@@ -33,7 +34,11 @@ const getUnoccupiedTiles = (state) => {
   );
 }
 
-const getValidActions = (state) => {
+const getActions = (state) => {
+  if (state.winner) {
+    return [];
+  }
+
   return getUnoccupiedTiles(state).map(
     (colour, tileId) => {
       return tileChosen({
@@ -41,6 +46,22 @@ const getValidActions = (state) => {
         colour: getCurrentPlayer(state).colour
       })
     }).toArray();
+};
+
+const getRandomAction = (state) => {
+  if (state.winner) {
+    return null;
+  }
+
+  const neutralTiles = Object.keys(state.tiles.neutral);
+  if (neutralTiles.length === 0) {
+    return null;
+  }
+
+  return tileChosen({
+    tileId: _.sample(neutralTiles),
+    colour: getCurrentPlayer(state).colour
+  });
 };
 
 /**
@@ -67,7 +88,7 @@ const getWinner = (state, GRID) => {
     GRID,
     blueStartTiles,
     blueEndTiles,
-    { isPathable: (tileId) => state.blueTiles[tileId] === true }
+    { isPathable: (tileId) => state.tiles.blue[tileId] === true }
   );
 
   if (blueWin) {
@@ -78,7 +99,7 @@ const getWinner = (state, GRID) => {
     GRID,
     redStartTiles,
     redEndTiles,
-    { isPathable: (tileId) => state.redTiles[tileId] === true }
+    { isPathable: (tileId) => state.tiles.red[tileId] === true }
   );
 
   if (redWin) {
@@ -92,6 +113,7 @@ export default {
   getCurrentPlayer,
   isCurrentPlayer,
   isTileUnoccupied,
-  getValidActions,
+  getActions,
+  getRandomAction,
   getWinner
 };

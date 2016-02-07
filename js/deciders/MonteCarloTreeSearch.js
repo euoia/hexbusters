@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import gameReducer from '../reducers/hexbusters.js';
-import { getValidActions, getCurrentPlayer, getWinner } from '../hexbusters/helpers.js';
+import { getActions, getRandomAction, getCurrentPlayer } from '../hexbusters/helpers.js';
 
 class Node {
   constructor ({action = null, parent = null, state = null}) {
@@ -12,7 +12,7 @@ class Node {
     this.childNodes = new Set([]);
     this.wins = 0;
     this.visits = 0;
-    this.untriedActions = new Set(getValidActions(state));
+    this.untriedActions = new Set(getActions(state));
     this.currentPlayer = getCurrentPlayer(state);
   }
 
@@ -39,8 +39,11 @@ class Node {
 }
 
 function getStateValue (state, grid, player) {
-  const winner = getWinner(state, grid);
-  switch (winner) {
+  if (player === null) {
+    return null;
+  }
+
+  switch (state.winner) {
     case player.colour:
       return -1;
     case null:
@@ -92,8 +95,10 @@ export default class MonteCarloTreeSearch {
 
       // Rollout to a terminal state.
       // Random walk the tree to a terminal node.
-      while (getValidActions(state).length > 0) {
-        state = gameReducer(state, _.sample(getValidActions(state)));
+      let randomAction = getRandomAction(state);
+      while (randomAction !== null) {
+        state = gameReducer(state, randomAction);
+        randomAction = getRandomAction(state);
       }
 
       // Back propagate the terminal state's value.

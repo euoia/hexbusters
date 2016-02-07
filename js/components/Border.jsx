@@ -72,14 +72,12 @@ class Border extends Component {
       backgroundRepeat: 'round'
     };
 
-    console.log(`rendering border`);
     const tileCoordinates = getTileCoordinatesById(grid, tileId);
     return (
       <div
         class='tile'
         style={style}
       >
-        <div>{tileCoordinates.x} {tileCoordinates.y}</div>
       </div>
     );
   }

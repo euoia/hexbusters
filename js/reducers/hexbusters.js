@@ -4,11 +4,12 @@ import check from 'check-types';
 import init from '../hexbusters/init.js';
 import { COLOUR_RED, COLOUR_BLUE } from '../constants/Colours.js';
 import GRID from '../constants/Grid.js';
+import { getWinner } from '../hexbusters/helpers.js';
 import _ from 'lodash';
 
 const numPlayers = 2;
 
-function tileChosenReduceBoard(board, tileId, currentPlayer) {
+function reduceBoard(board, tileId, currentPlayer) {
   check.assert.assigned(currentPlayer, 'currentPlayer was undefined.');
 
   return board.withMutations(
@@ -26,24 +27,20 @@ function tileChosenReduceBoard(board, tileId, currentPlayer) {
   );
 }
 
-function tileChosenReduceRedTiles(redTiles, tileId, currentPlayer) {
-  if (currentPlayer.colour !== COLOUR_RED) {
-    return redTiles;
+function reduceTiles(tiles, tileId, currentPlayer) {
+  const newTiles = _.cloneDeep(tiles);
+
+  if (currentPlayer.colour === COLOUR_RED) {
+    newTiles.red[tileId] = true;
   }
 
-  const newRedTiles = _.clone(redTiles);
-  newRedTiles[tileId] = true;
-  return newRedTiles;
-}
-
-function tileChosenReduceBlueTiles(blueTiles, tileId, currentPlayer) {
-  if (currentPlayer.colour !== COLOUR_BLUE) {
-    return blueTiles;
+  if (currentPlayer.colour === COLOUR_BLUE) {
+    newTiles.blue[tileId] = true;
   }
 
-  const newBlueTiles = _.clone(blueTiles);
-  newBlueTiles[tileId] = true;
-  return newBlueTiles;
+  delete newTiles.neutral[tileId];
+
+  return newTiles;
 }
 
 export default function gameReducer(state, action) {
@@ -59,6 +56,11 @@ export default function gameReducer(state, action) {
       };
 
     case TILE_CHOSEN:
+      if (state.winner) {
+        console.log(`Tried to choose a tile after the game is over!`);
+        return state;
+      }
+
       if (isTileUnoccupied(state, action.tileId) === false) {
         console.log('Tried to choose an occupied tile!');
         return state;
@@ -72,15 +74,15 @@ export default function gameReducer(state, action) {
       const currentPlayer = getCurrentPlayer(state);
       let ns = {
         ...state,
-        board: tileChosenReduceBoard(
+        board: reduceBoard(
           state.board,
           action.tileId,
           currentPlayer
         ),
-        redTiles: tileChosenReduceRedTiles(state.redTiles, action.tileId, currentPlayer),
-        blueTiles: tileChosenReduceBlueTiles(state.blueTiles, action.tileId, currentPlayer)
+        tiles: reduceTiles(state.tiles, action.tileId, currentPlayer)
       };
 
+      ns.winner = getWinner(ns, GRID);
       return ns;
 
     case ADD_MESSAGE:
