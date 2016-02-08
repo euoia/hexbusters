@@ -1,9 +1,6 @@
 import _ from 'lodash';
 import gameReducer from '../reducers/hexbusters.js';
 import helpers from '../hexbusters/helpers.js';
-import Immutable from 'immutable';
-
-let stateCache = Immutable.Map({});
 
 export default class Minimax {
   /**
@@ -55,20 +52,12 @@ export default class Minimax {
 
     let thisStatesEvaluated = statesEvaluated + 1;
 
-    if (stateCache.has(gameState.board)) {
-      return {
-        value: stateCache.get(gameState.board),
-        statesEvaluated: thisStatesEvaluated
-      }
-    }
-
     const winner = gameState.winner;
 
     // Modify the final score by the depth so that the AI prefer to end
     // the game sooner.
     if (winner === playerColour) {
       // This player wins, best outcome.
-      stateCache = stateCache.set(gameState.board, 100 - depth);
       return {
         value: 100 - depth,
         statesEvaluated: thisStatesEvaluated
@@ -77,7 +66,6 @@ export default class Minimax {
 
     if (winner !== null) {
       // Other player wins, worst outcome.
-      stateCache = stateCache.set(gameState.board, -100 + depth);
       return {
         value: -100 + depth,
         statesEvaluated: thisStatesEvaluated
@@ -87,7 +75,6 @@ export default class Minimax {
     const validActions = helpers.getActions(gameState);
     if (validActions.length === 0) {
       // The board is full but no player has won.
-      stateCache = stateCache.set(gameState.board, 0);
       return {
         value: 0,
         statesEvaluated: thisStatesEvaluated
@@ -129,7 +116,6 @@ export default class Minimax {
       .shuffle()
       .first();
 
-    stateCache = stateCache.set(gameState.board, randomBestAction.value);
     return {
       action: randomBestAction.action,
       value: randomBestAction.value,
@@ -144,7 +130,6 @@ export default class Minimax {
     timeLimitMs,
     maxDepth
   ) {
-    stateCache = Immutable.Map({});
     const startTime = new Date();
     const endTime = startTime.getTime() + timeLimitMs;
     let evaluation = Minimax.evaluateState(

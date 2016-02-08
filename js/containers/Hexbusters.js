@@ -6,16 +6,11 @@ import { isCurrentPlayer } from '../hexbusters/helpers.js';
 
 class Hexbusters extends Component {
   render () {
-    const {
-      tileColours,
-      chooseTile,
-      isCurrentPlayer,
-      players
-    } = this.props;
+    const { tiles, chooseTile, isCurrentPlayer, players, winner } = this.props;
 
     return (
       <div>
-        <Board chooseTile={chooseTile} tileColours={tileColours} />
+        <Board chooseTile={chooseTile} tiles={tiles} winner={winner} />
         <Players isCurrentPlayer={isCurrentPlayer} players={players} />
       </div>
     );
@@ -24,20 +19,17 @@ class Hexbusters extends Component {
 
 Hexbusters.propTypes = {
   chooseTile: PropTypes.func.isRequired,
-  dispatch: PropTypes.func.isRequired,
   isCurrentPlayer: PropTypes.func.isRequired,
-  messages: PropTypes.array.isRequired,
   players: PropTypes.array.isRequired,
-  tileColours: PropTypes.object.isRequired
+  tiles: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    messages: state.game.messages,
-    tileColours: state.game.board.get('tileColours'),
-    players: state.game.players,
     isCurrentPlayer: isCurrentPlayer.bind(null, state.game),
-    state: state
+    players: state.game.players,
+    tiles: state.game.tiles,
+    winner: state.game.winner
   };
 }
 

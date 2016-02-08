@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import Tile from './Tile.jsx';
 import Winner from './Winner.jsx';
 import hg from 'hex-grid';
+import { COLOUR_RED, COLOUR_BLUE, COLOUR_NEUTRAL } from '../constants/Colours.js';
 
 export default class Board extends Component {
   constructor (props, context) {
@@ -19,7 +20,7 @@ export default class Board extends Component {
   }
 
   render () {
-    const { tileColours, chooseTile, winner } = this.props;
+    const { tiles, chooseTile, winner } = this.props;
 
     const borderGridTileIds = this.borderGridTileIds;
     const boardStyle = {
@@ -36,25 +37,20 @@ export default class Board extends Component {
         <div id="board" style={boardStyle} >
           <Winner winner={winner} />
           {
-            tileColours.map(
-              (colour, tileId) =>
-                <Tile
-                  chooseTile={chooseTile}
-                  colour={colour}
-                  key={tileId}
-                  tileId={tileId}
-                />
-            )
+            Object.keys(tiles.neutral).map(tileId =>
+              <Tile chooseTile={chooseTile} colour={COLOUR_NEUTRAL} key={tileId} tileId={tileId} />)
           }
-
           {
-            borderGridTileIds.map(
-              tileId =>
-                <Border
-                  grid={this.grid}
-                  tileId={tileId}
-                />
-            )
+            Object.keys(tiles.red).map(tileId =>
+              <Tile colour={COLOUR_RED} key={tileId} tileId={tileId} />)
+          }
+          {
+            Object.keys(tiles.blue).map(tileId =>
+              <Tile colour={COLOUR_BLUE} key={tileId} tileId={tileId} />)
+          }
+          {
+            borderGridTileIds.map(tileId =>
+              <Border grid={this.grid} key={`b` + tileId} tileId={tileId} />)
           }
         </div>
       </div>
@@ -64,6 +60,5 @@ export default class Board extends Component {
 
 Board.propTypes = {
   chooseTile: PropTypes.func.isRequired,
-  tileColours: PropTypes.object.isRequired,
-  winner: PropTypes.string.isRequired
+  tiles: PropTypes.object.isRequired
 };

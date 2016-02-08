@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { COLOUR_RED, COLOUR_BLUE }  from '../constants/Colours.js';
 
 export default class Board extends Component {
@@ -16,6 +16,10 @@ export default class Board extends Component {
       [COLOUR_RED]: 'red',
       [COLOUR_BLUE]: 'blue'
     }[winner];
+
+    if (winningColour === undefined) {
+      throw new Error(`Unhandled winning colour: ${winner}`);
+    }
 
     const containerStyle = {
       width: '100%',
@@ -43,6 +47,4 @@ export default class Board extends Component {
   }
 }
 
-Board.propTypes = {
-  winner: PropTypes.string.isRequired
-};
+Board.propTypes = {};

@@ -32,4 +32,4 @@ const endTime = new Date();
 const timeTaken = endTime - startTime;
 
 console.log(`[MonteCarloTreeSearch] Executed ${iterations} iterations in ${timeTaken}ms.`);
-console.log(`[MonteCarloTreeSearch] Executed ${timeTaken / 1000} iterations per second.`);
+console.log(`[MonteCarloTreeSearch] Executed ${iterations / (timeTaken / 1000)} iterations per second.`);

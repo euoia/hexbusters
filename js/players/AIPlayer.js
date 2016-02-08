@@ -3,7 +3,6 @@ import { isCurrentPlayer } from '../hexbusters/helpers.js';
 import { AI_PLAYER } from '../constants/PlayerTypes.js';
 import GRID from '../constants/Grid.js';
 import check from 'check-types';
-import transit from 'transit-immutable-js';
 import _ from 'lodash';
 
 export default class AIPlayer extends BasePlayer {
@@ -54,7 +53,7 @@ export default class AIPlayer extends BasePlayer {
         debug: this.debug
       };
 
-      this.actionDecider.postMessage(transit.toJSON(message));
+      this.actionDecider.postMessage(JSON.stringify(message));
 
       this.actionDecider.onmessage = (message) => {
         console.log(`[AIPlayer] Finished thinking and decided ${message.data.bestAction.tileId}.`, message);

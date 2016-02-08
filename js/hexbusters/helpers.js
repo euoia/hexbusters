@@ -1,6 +1,6 @@
 import { tileChosen } from '../actions/PlayerActions.js';
 import { getTileIdByCoordinates, hasPath } from 'hex-grid';
-import { COLOUR_BLUE, COLOUR_RED, COLOUR_NEUTRAL } from '../constants/Colours.js';
+import { COLOUR_BLUE, COLOUR_RED } from '../constants/Colours.js';
 import _ from 'lodash';
 
 const getCurrentPlayer = (state) => {
@@ -8,7 +8,7 @@ const getCurrentPlayer = (state) => {
       return null;
     }
 
-    return state.players[state.board.get('currentPlayerIdx') % state.players.length];
+    return state.players[state.currentPlayerIdx % state.numPlayers];
 };
 
 const isCurrentPlayer = (state, player) => {
@@ -24,28 +24,19 @@ const isCurrentPlayer = (state, player) => {
   return currentPlayer.name === player.name;
 };
 
-const isTileUnoccupied = (state, tileId) => {
-  return state.board.getIn(['tileColours', tileId]) === COLOUR_NEUTRAL;
-};
-
-const getUnoccupiedTiles = (state) => {
-  return state.board.get('tileColours').filter(
-    colour => colour === COLOUR_NEUTRAL
-  );
-}
-
 const getActions = (state) => {
   if (state.winner) {
     return [];
   }
 
-  return getUnoccupiedTiles(state).map(
-    (colour, tileId) => {
+  const neutralTiles = Object.keys(state.tiles.neutral);
+  return neutralTiles.map(
+    tileId => {
       return tileChosen({
         tileId: tileId,
         colour: getCurrentPlayer(state).colour
       })
-    }).toArray();
+    });
 };
 
 const getRandomAction = (state) => {
@@ -112,7 +103,6 @@ const getWinner = (state, GRID) => {
 export default {
   getCurrentPlayer,
   isCurrentPlayer,
-  isTileUnoccupied,
   getActions,
   getRandomAction,
   getWinner

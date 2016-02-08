@@ -1,6 +1,5 @@
 /* eslint-env worker */
 import MonteCarloTreeSearch from './MonteCarloTreeSearch.js';
-import transit from 'transit-immutable-js';
 
 /**
  * The slightly odd looking code with onmessage and postmessage is because when
@@ -9,10 +8,12 @@ import transit from 'transit-immutable-js';
  */
 
 function handleMessage (message) {
-  const messageObj = transit.fromJSON(message.data);
+  const messageObj = JSON.parse(message.data);
 
   switch (messageObj.action) {
     case 'getBestAction':
+      // We can't store the tiles as a Set because it's not supported in the web browser.
+      // "Set is not function".
       const { debug, playerColour, state, GRID, timeLimitMs = 5000} = messageObj;
       const mcts = new MonteCarloTreeSearch({timeLimitMs, debug});
       const action = mcts.getBestAction(playerColour, state, GRID);

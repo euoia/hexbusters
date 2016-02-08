@@ -64,18 +64,14 @@ class Border extends Component {
       top: `${tilePos.y * (tileHeight * 0.75)}px`,
       width: `${tileWidth}px`,
       height: `${tileHeight}px`,
-      'line-height': `${tileHeight}px`, // For the text.
       backgroundImage: `url(./assets/img/hex-${colourName}@3x.png)`,
       backgroundSize: `${tileWidth}px, ${tileHeight}px`,
-      'font-size': `${tileHeight / 4}px`,
-      'font-family': 'sans-serif',
       backgroundRepeat: 'round'
     };
 
-    const tileCoordinates = getTileCoordinatesById(grid, tileId);
     return (
       <div
-        class='tile'
+        className='tile'
         style={style}
       >
       </div>
