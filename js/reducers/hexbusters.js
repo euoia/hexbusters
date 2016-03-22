@@ -1,4 +1,4 @@
-import { PLAYERS_JOIN, TILE_CHOSEN, ADD_MESSAGE } from '../constants/ActionTypes.js';
+import { PLAYERS_JOIN, TILE_CHOSEN } from '../constants/ActionTypes.js';
 import { getCurrentPlayer } from '../hexbusters/helpers.js';
 import init from '../hexbusters/init.js';
 import { COLOUR_RED, COLOUR_BLUE } from '../constants/Colours.js';
@@ -60,12 +60,6 @@ export default function gameReducer(state, action) {
       ns.winner = getWinner(ns, GRID);
       return ns;
 
-    case ADD_MESSAGE:
-      const { playerName, text } = action;
-      return {
-        ...state,
-        messages: [{playerName, text}, ...state.messages]
-      };
     default:
       return state;
   }
