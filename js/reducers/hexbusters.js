@@ -7,16 +7,23 @@ import { getWinner } from '../hexbusters/helpers.js';
 import _ from 'lodash';
 
 function reduceTiles(tiles, tileId, currentPlayer) {
-  const newTiles = _.cloneDeep(tiles);
+  const newTiles = {};
 
   if (currentPlayer.colour === COLOUR_RED) {
+    newTiles.red = _.clone(tiles.red);
     newTiles.red[tileId] = true;
+  } else {
+    newTiles.red = tiles.red;
   }
 
   if (currentPlayer.colour === COLOUR_BLUE) {
+    newTiles.blue = _.clone(tiles.blue);
     newTiles.blue[tileId] = true;
+  } else {
+    newTiles.blue = tiles.blue;
   }
 
+  newTiles.neutral = _.clone(tiles.neutral);
   delete newTiles.neutral[tileId];
 
   return newTiles;
