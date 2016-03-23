@@ -19,7 +19,7 @@ export default class AIPlayer extends BasePlayer {
     this.playerType = AI_PLAYER;
     this.isThinking = false;
     this.timeLimitMs = 2000;
-    this.debug = true;
+    this.debug = false;
 
     /**
      * Subscribe to game events.
