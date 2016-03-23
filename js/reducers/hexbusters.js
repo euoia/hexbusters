@@ -31,7 +31,7 @@ function reduceTiles(tiles, tileId, currentPlayer) {
 
 export default function gameReducer(state, action) {
   if (state === undefined) {
-    state = init(GRID);
+    return init(GRID);
   }
 
   switch (action.type) {
