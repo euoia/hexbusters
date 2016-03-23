@@ -7,11 +7,13 @@ import { combineReducers, compose, createStore, applyMiddleware } from 'redux';
 import { devTools, persistState } from 'redux-devtools';
 import Hexbusters from './Hexbusters.js';
 
+const debug = false;
+
 const finalCreateStore = compose(
   // Enables your middleware:
   applyMiddleware(thunk),
   // Provides support for DevTools:
-  devTools(),
+  debug ? devTools() : (next) => next,
   // Lets you write ?debug_session=<name> in address bar to persist debug sessions
   persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
 )(createStore);
@@ -32,9 +34,13 @@ export class AppContainer extends Component {
         <Provider store={store}>
           {() => <Hexbusters chooseTile={this.props.chooseTile} />}
         </Provider>
-        <DebugPanel bottom right top >
-          <DevTools monitor={LogMonitor} store={store} visibleOnLoad={true} />
-        </DebugPanel>
+        {
+          debug ?
+            <DebugPanel bottom right top >
+              <DevTools monitor={LogMonitor} store={store} visibleOnLoad={true} />
+            </DebugPanel>
+            : <span />
+        }
       </div>
     );
   }

@@ -1,7 +1,6 @@
 import BasePlayer from './BasePlayer.js';
 import { isCurrentPlayer } from '../hexbusters/helpers.js';
 import { AI_PLAYER } from '../constants/PlayerTypes.js';
-import GRID from '../constants/Grid.js';
 import check from 'check-types';
 import _ from 'lodash';
 
@@ -49,7 +48,6 @@ export default class AIPlayer extends BasePlayer {
             player => _.omit(player, 'actionDecider')
           )
         },
-        GRID: GRID,
         debug: this.debug
       };
 
@@ -57,9 +55,7 @@ export default class AIPlayer extends BasePlayer {
 
       this.actionDecider.onmessage = (message) => {
         console.log(`[AIPlayer] Finished thinking and decided ${message.data.bestAction.tileId}.`, message);
-        if (this.debug) {
-          console.log(`[AIPlayer] Executed ${message.data.iterations} iterations.`);
-        }
+        console.log(`[AIPlayer] Executed ${message.data.iterations} iterations.`);
 
         this.isThinking = false;
         this.store.dispatch(message.data.bestAction);
