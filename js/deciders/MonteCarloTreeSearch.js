@@ -38,7 +38,7 @@ class Node {
   }
 }
 
-function getStateValue (state, grid, player) {
+function getStateValue (state, player) {
   if (player === null) {
     return null;
   }
@@ -69,8 +69,7 @@ export default class MonteCarloTreeSearch {
 
   getBestAction (
     playerColour,
-    rootState,
-    grid
+    rootState
   ) {
     const dateLimit = Date.now() + this.timeLimitMs;
     const rootNode = new Node({state: rootState});
@@ -103,7 +102,7 @@ export default class MonteCarloTreeSearch {
 
       // Back propagate the terminal state's value.
       while (node !== null) {
-        node.update(getStateValue(state, grid, node.currentPlayer));
+        node.update(getStateValue(state, node.currentPlayer));
         node = node.parentNode;
       }
 
