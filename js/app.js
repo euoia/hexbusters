@@ -4,7 +4,6 @@ import React from 'react';
 import _ from 'lodash';
 import { AppContainer, store } from './containers/AppContainer.js';
 import { COLOUR_BLUE, COLOUR_RED } from './constants/Colours.js';
-import { addMessage } from './actions/MessageActions.js';
 import { playersJoin } from './actions/GameActions.js';
 import MonteCarloTreeSearchWebWorker from 'worker!./deciders/MonteCarloTreeSearchWebWorker.js';
 
@@ -27,14 +26,6 @@ store.dispatch(
       actionDecider: new MonteCarloTreeSearchWebWorker()
     })
   ])
-);
-
-// Just a test message.
-store.dispatch(
-    addMessage({
-      playerName: 'Bob',
-      text: 'Hello world!'
-    })
 );
 
 React.render(
