@@ -2,7 +2,7 @@
 
 # HEXBUSTERS
 
-My first attempts at making a game with React and Redux.
+My first attempt at making a game with React and Redux.
 
 ## Requirements
 
