@@ -5,10 +5,11 @@ import _ from 'lodash';
 // "Set is not function".
 export default (grid) => {
   return {
-    players: [],
-    numPlayers: 2,
     currentPlayerIdx: 0,
+    grid: grid,
     messages: [],
+    numPlayers: 2,
+    players: [],
     tiles: {
       neutral: _(getTileIds(grid)).mapKeys().mapValues(() => true).value(),
       blue: {},

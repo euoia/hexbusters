@@ -14,9 +14,9 @@ function handleMessage (message) {
     case 'getBestAction':
       // We can't store the tiles as a Set because it's not supported in the web browser.
       // "Set is not function".
-      const { debug, playerColour, state, GRID, timeLimitMs = 5000} = messageObj;
+      const { debug, playerColour, state, timeLimitMs = 5000} = messageObj;
       const mcts = new MonteCarloTreeSearch({timeLimitMs, debug});
-      const action = mcts.getBestAction(playerColour, state, GRID);
+      const action = mcts.getBestAction(playerColour, state);
 
       if (typeof postMessage !== 'undefined') {
         postMessage(action);

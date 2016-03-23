@@ -8,11 +8,14 @@ import gameReducer from '../../js/reducers/hexbusters.js';
 import _ from 'lodash';
 import init from '../../js/hexbusters/init.js';
 
+const rhombusWidth = 3;
 const grid = {
-  width: 3,
-  height: 3,
-  orientation: 'flat-topped',
-  layout: 'odd-q'
+  width: rhombusWidth,
+  height: rhombusWidth,
+  orientation: 'pointy-topped',
+  layout: 'odd-r',
+  shape: 'parallelogram',
+  validate: false
 };
 const gameState = init(grid);
 

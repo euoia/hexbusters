@@ -8,11 +8,13 @@ import { COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 import { playersJoin } from '../../js/actions/GameActions.js';
 import { tileChosen } from '../../js/actions/PlayerActions.js';
 
+const rhombusWidth = 3;
 const grid = {
-  width: 3,
-  height: 3,
-  orientation: 'flat-topped',
-  layout: 'odd-q'
+  width: rhombusWidth,
+  height: rhombusWidth,
+  orientation: 'pointy-topped',
+  layout: 'odd-r',
+  shape: 'parallelogram'
 };
 const gameState = init(grid);
 

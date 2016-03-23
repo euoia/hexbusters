@@ -28,7 +28,6 @@ export default class Minimax {
   static evaluateState (
     playerColour,
     gameState,
-    GRID,
     endTime,
     maxDepth = null,
     maximizingPlayer = true,
@@ -88,7 +87,6 @@ export default class Minimax {
         const evaluation = Minimax.evaluateState(
           playerColour,
           gameReducer(gameState, action),
-          GRID,
           endTime,
           maxDepth,
           ! maximizingPlayer,
@@ -126,7 +124,6 @@ export default class Minimax {
   static getBestAction(
     playerColour,
     gameState,
-    GRID,
     timeLimitMs,
     maxDepth
   ) {
@@ -135,7 +132,6 @@ export default class Minimax {
     let evaluation = Minimax.evaluateState(
       playerColour,
       gameState,
-      GRID,
       endTime,
       maxDepth
     );

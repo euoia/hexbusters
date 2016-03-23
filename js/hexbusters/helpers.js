@@ -58,25 +58,25 @@ const getRandomAction = (state) => {
 /**
  * A fast getWinner function is critical to performance of the AI.
  */
-const getWinner = (state, GRID) => {
+const getWinner = (state) => {
   var i;
 
   let blueStartTiles = [];
   let blueEndTiles = [];
-  for (i = 0; i < GRID.height; i += 1) {
-    blueStartTiles.push(getTileIdByCoordinates(GRID, 0, i));
-    blueEndTiles.push(getTileIdByCoordinates(GRID, GRID.width - 1, i));
+  for (i = 0; i < state.grid.height; i += 1) {
+    blueStartTiles.push(getTileIdByCoordinates(state.grid, 0, i));
+    blueEndTiles.push(getTileIdByCoordinates(state.grid, state.grid.width - 1, i));
   }
 
   let redStartTiles = [];
   let redEndTiles = [];
-  for (i = 0; i < GRID.width; i += 1) {
-    redStartTiles.push(getTileIdByCoordinates(GRID, i, 0));
-    redEndTiles.push(getTileIdByCoordinates(GRID, i, GRID.height - 1));
+  for (i = 0; i < state.grid.width; i += 1) {
+    redStartTiles.push(getTileIdByCoordinates(state.grid, i, 0));
+    redEndTiles.push(getTileIdByCoordinates(state.grid, i, state.grid.height - 1));
   }
 
   const blueWin = hasPath(
-    GRID,
+    state.grid,
     blueStartTiles,
     blueEndTiles,
     { isPathable: (tileId) => state.tiles.blue[tileId] === true }
@@ -87,7 +87,7 @@ const getWinner = (state, GRID) => {
   }
 
   const redWin = hasPath(
-    GRID,
+    state.grid,
     redStartTiles,
     redEndTiles,
     { isPathable: (tileId) => state.tiles.red[tileId] === true }

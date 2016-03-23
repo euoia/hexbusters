@@ -64,7 +64,7 @@ export default function gameReducer(state, action) {
         currentPlayerIdx: state.currentPlayerIdx + 1
       };
 
-      ns.winner = getWinner(ns, GRID);
+      ns.winner = getWinner(ns, ns.grid);
       return ns;
 
     default:
