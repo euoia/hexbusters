@@ -8,10 +8,10 @@ import gameReducer from '../../js/reducers/hexbusters.js';
 import _ from 'lodash';
 import init from '../../js/hexbusters/init.js';
 
-const rhombusWidth = 3;
+const size = 3;
 const grid = {
-  width: rhombusWidth,
-  height: rhombusWidth,
+  width: size,
+  height: size,
   orientation: 'pointy-topped',
   layout: 'odd-r',
   shape: 'parallelogram',
