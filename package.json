@@ -11,6 +11,7 @@
     "start": "node server.js",
     "build": "webpack",
     "test": "eslint . && mocha --compilers js:babel/register test/unit && babel-node ./test/performance/Minimax.js && babel-node ./test/performance/MonteCarloTreeSearch.js",
+    "test:unit": "mocha --compilers js:babel/register test/unit",
     "perf": "babel-node ./test/performance/Minimax.js && babel-node ./test/performance/MonteCarloTreeSearch.js"
   },
   "author": "James Pickard <james.pickard@gmail.com>",
