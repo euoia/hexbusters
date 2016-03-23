@@ -18,4 +18,4 @@ Go to http://localhost:3000
 
 # To run the performance tests
 
-`npn run perf`
+`npn run test:perf`
