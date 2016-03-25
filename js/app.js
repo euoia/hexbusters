@@ -32,4 +32,3 @@ React.render(
   <AppContainer chooseTile={humanPlayer.chooseTile.bind(humanPlayer)} />,
   document.getElementById('hexbusters')
 );
-
