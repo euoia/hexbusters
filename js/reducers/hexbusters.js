@@ -7,13 +7,26 @@ import { getWinner } from '../hexbusters/helpers.js';
 import _ from 'lodash';
 
 function reduceTiles(tiles, tileId, currentPlayer) {
-  const isRed = currentPlayer.colour === COLOUR_RED;
-  const isBlue = currentPlayer.colour === COLOUR_BLUE;
-  return {
-    red: isRed ?  _.chain(tiles.red).clone().set(tileId, true).value() : tiles.red,
-    blue: isBlue ?  _.chain(tiles.blue).clone().set(tileId, true).value() : tiles.blue,
-    neutral: _.chain(tiles.neutral).clone().omit(tileId).value()
-  };
+  const newTiles = {};
+
+  if (currentPlayer.colour === COLOUR_RED) {
+    newTiles.red = _.clone(tiles.red);
+    newTiles.red[tileId] = true;
+  } else {
+    newTiles.red = tiles.red;
+  }
+
+  if (currentPlayer.colour === COLOUR_BLUE) {
+    newTiles.blue = _.clone(tiles.blue);
+    newTiles.blue[tileId] = true;
+  } else {
+    newTiles.blue = tiles.blue;
+  }
+
+  newTiles.neutral = _.clone(tiles.neutral);
+  delete newTiles.neutral[tileId];
+
+  return newTiles;
 }
 
 export default function gameReducer(state, action) {
