@@ -105,8 +105,8 @@ export default class Minimax {
 
     const bestActionValue =
       maximizingPlayer ?
-      _(actionValues).sortByAll('value').last() :
-      _(actionValues).sortByAll('value').first();
+      _(actionValues).sortBy('value').last() :
+      _(actionValues).sortBy('value').first();
 
     const randomBestAction =
       _(actionValues)

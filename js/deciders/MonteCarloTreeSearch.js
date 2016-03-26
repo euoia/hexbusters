@@ -33,7 +33,7 @@ class Node {
    */
   UCB1SelectChild () {
     return _(Array.from(this.childNodes))
-      .sortByAll(n => n.wins / n.visits + Math.sqrt(2 * Math.log(this.visits) / n.visits))
+      .sortBy(n => n.wins / n.visits + Math.sqrt(2 * Math.log(this.visits) / n.visits))
       .last();
   }
 }
@@ -109,7 +109,7 @@ export default class MonteCarloTreeSearch {
       iterations += 1;
     }
 
-    const rankedNodes = _(Array.from(rootNode.childNodes)).sortByAll('visits');
+    const rankedNodes = _(Array.from(rootNode.childNodes)).sortBy('visits');
 
     if (this.debug) {
       rankedNodes.each(n => console.log(`${n.visits} => ${n.wins} wins :: ${n.action.tileId}`)).value();

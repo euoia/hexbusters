@@ -3,7 +3,7 @@ import { getCurrentPlayer } from '../hexbusters/helpers.js';
 import init from '../hexbusters/init.js';
 import { COLOUR_RED, COLOUR_BLUE } from '../constants/Colours.js';
 import GRID from '../constants/Grid.js';
-import { getWinner } from '../hexbusters/helpers.js';
+import { hasPath } from 'hex-grid';
 import _ from 'lodash';
 
 function reduceTiles(tiles, tileId, currentPlayer) {
@@ -12,6 +12,7 @@ function reduceTiles(tiles, tileId, currentPlayer) {
   if (currentPlayer.colour === COLOUR_RED) {
     newTiles.red = _.clone(tiles.red);
     newTiles.red[tileId] = true;
+
   } else {
     newTiles.red = tiles.red;
   }
@@ -27,6 +28,20 @@ function reduceTiles(tiles, tileId, currentPlayer) {
   delete newTiles.neutral[tileId];
 
   return newTiles;
+}
+
+function checkWin (tileId, colour, tiles, startTiles, endTiles, grid) {
+  const colourTiles = colour === COLOUR_RED ? tiles.red : tiles.blue;
+  const pathFn = tileId => colourTiles[tileId] === true;
+
+  const hasWin = hasPath(grid, [tileId], startTiles, {isPathable: pathFn}) &&
+    hasPath(grid, [tileId], endTiles, {isPathable: pathFn});
+
+  if (hasWin) {
+    return colour;
+  }
+
+  return null;
 }
 
 export default function reduceGame(state, action) {
@@ -64,7 +79,8 @@ export default function reduceGame(state, action) {
         currentPlayerIdx: state.currentPlayerIdx + 1
       };
 
-      ns.winner = getWinner(ns);
+      ns.winner = checkWin(action.tileId, currentPlayer.colour, ns.tiles,
+        ns.startTiles[currentPlayer.colour], ns.endTiles[currentPlayer.colour], ns.grid);
       return ns;
 
     default:

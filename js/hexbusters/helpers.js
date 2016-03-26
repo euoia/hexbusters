@@ -55,55 +55,9 @@ const getRandomAction = (state) => {
   });
 };
 
-/**
- * A fast getWinner function is critical to performance of the AI.
- */
-const getWinner = (state) => {
-  var i;
-
-  let blueStartTiles = [];
-  let blueEndTiles = [];
-  for (i = 0; i < state.grid.height; i += 1) {
-    blueStartTiles.push(getTileIdByCoordinates(state.grid, 0, i));
-    blueEndTiles.push(getTileIdByCoordinates(state.grid, state.grid.width - 1, i));
-  }
-
-  let redStartTiles = [];
-  let redEndTiles = [];
-  for (i = 0; i < state.grid.width; i += 1) {
-    redStartTiles.push(getTileIdByCoordinates(state.grid, i, 0));
-    redEndTiles.push(getTileIdByCoordinates(state.grid, i, state.grid.height - 1));
-  }
-
-  const blueWin = hasPath(
-    state.grid,
-    blueStartTiles,
-    blueEndTiles,
-    { isPathable: (tileId) => state.tiles.blue[tileId] === true }
-  );
-
-  if (blueWin) {
-    return COLOUR_BLUE;
-  }
-
-  const redWin = hasPath(
-    state.grid,
-    redStartTiles,
-    redEndTiles,
-    { isPathable: (tileId) => state.tiles.red[tileId] === true }
-  );
-
-  if (redWin) {
-    return COLOUR_RED;
-  }
-
-  return null;
-}
-
 export default {
   getCurrentPlayer,
   isCurrentPlayer,
   getActions,
-  getRandomAction,
-  getWinner
+  getRandomAction
 };
