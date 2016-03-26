@@ -8,6 +8,10 @@
 /node_modules
 /npm-debug.log
 
+# Tern
+# ######################
+/.tern-port
+
 # OS generated files
 # ######################
 .DS_Store
