@@ -29,7 +29,7 @@ function reduceTiles(tiles, tileId, currentPlayer) {
   return newTiles;
 }
 
-export default function gameReducer(state, action) {
+export default function reduceGame(state, action) {
   if (state === undefined) {
     return init(GRID);
   }
@@ -64,7 +64,7 @@ export default function gameReducer(state, action) {
         currentPlayerIdx: state.currentPlayerIdx + 1
       };
 
-      ns.winner = getWinner(ns, ns.grid);
+      ns.winner = getWinner(ns);
       return ns;
 
     default:
