@@ -36,21 +36,30 @@ export default class AIPlayer extends BasePlayer {
 
       console.log(`[AIPlayer] Thinking for ${this.timeLimitMs}ms...`);
       this.isThinking = true;
+      const gameState = this.store.getState().game;
       const message = {
         action: 'getBestAction',
         timeLimitMs: this.timeLimitMs,
         playerColour: this.colour,
         state: {
-          ...this.store.getState().game,
+          ...gameState,
+          tiles: {
+            neutral: gameState.tiles.neutral.toJS(),
+            red: gameState.tiles.red.toJS(),
+            blue: gameState.tiles.blue.toJS()
+          },
           // Having to explicitly omit the actionDecider property is rather unfortunate.
           players: _.map(
-            this.store.getState().game.players,
+            gameState.players,
             player => _.omit(player, 'actionDecider')
           )
         },
         debug: this.debug
       };
 
+      // Pass the message to the action decider.
+      // The message needs to be serialized since the decider could be a web worker.
+      //this.actionDecider.postMessage(JSON.stringify(message));
       this.actionDecider.postMessage(JSON.stringify(message));
 
       this.actionDecider.onmessage = (message) => {

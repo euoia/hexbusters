@@ -37,15 +37,15 @@ export default class Board extends Component {
         <div id="board" style={boardStyle} >
           <Winner winner={winner} />
           {
-            Object.keys(tiles.neutral).map(tileId =>
+            tiles.neutral.toArray().map(tileId =>
               <Tile chooseTile={chooseTile} colour={COLOUR_NEUTRAL} key={tileId} tileId={tileId} />)
           }
           {
-            Object.keys(tiles.red).map(tileId =>
+            tiles.red.toArray().map(tileId =>
               <Tile colour={COLOUR_RED} key={tileId} tileId={tileId} />)
           }
           {
-            Object.keys(tiles.blue).map(tileId =>
+            tiles.blue.toArray().map(tileId =>
               <Tile colour={COLOUR_BLUE} key={tileId} tileId={tileId} />)
           }
           {
