@@ -37,7 +37,7 @@ export class AppContainer extends Component {
         {
           debug ?
             <DebugPanel bottom right top >
-              <DevTools monitor={LogMonitor} store={store} visibleOnLoad={true} />
+              <DevTools monitor={LogMonitor} store={store} visibleOnLoad />
             </DebugPanel>
             : <span />
         }

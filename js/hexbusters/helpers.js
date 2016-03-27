@@ -1,6 +1,4 @@
 import { tileChosen } from '../actions/PlayerActions.js';
-import { getTileIdByCoordinates, hasPath } from 'hex-grid';
-import { COLOUR_BLUE, COLOUR_RED } from '../constants/Colours.js';
 import _ from 'lodash';
 
 const getCurrentPlayer = (state) => {
