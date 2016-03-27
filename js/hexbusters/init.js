@@ -1,6 +1,7 @@
 import { getTileIds, getTileIdByCoordinates } from 'hex-grid';
 import { COLOUR_RED, COLOUR_BLUE } from '../constants/Colours.js';
 import _ from 'lodash';
+import { Set } from 'immutable';
 
 // We can't store the tiles as a Set because it's not supported in the web browser.
 // "Set is not function".
@@ -28,9 +29,9 @@ export default (grid) => {
       ).value()
     },
     tiles: {
-      neutral: _(getTileIds(grid)).mapKeys().mapValues(() => true).value(),
-      blue: {},
-      red: {}
+      neutral: new Set(getTileIds(grid)),
+      blue: new Set(),
+      red: new Set()
     },
     winner: null
   };
