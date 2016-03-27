@@ -12,7 +12,7 @@
     "build": "webpack",
     "test": "npm run test:lint && npm run test:unit && npm run test:perf",
     "test:lint": "eslint .",
-    "test:unit": "which node && node -v && mocha --compilers js:babel-register test/unit",
+    "test:unit": "mocha --compilers js:babel-register test/unit",
     "test:perf": "babel-node ./test/performance/Minimax.js && babel-node ./test/performance/MonteCarloTreeSearch.js"
   },
   "author": "James Pickard <james.pickard@gmail.com>",
