@@ -4,35 +4,18 @@ import init from '../hexbusters/init.js';
 import { COLOUR_RED, COLOUR_BLUE } from '../constants/Colours.js';
 import GRID from '../constants/Grid.js';
 import { hasPath } from 'hex-grid';
-import _ from 'lodash';
 
 function reduceTiles(tiles, tileId, currentPlayer) {
-  const newTiles = {};
-
-  if (currentPlayer.colour === COLOUR_RED) {
-    newTiles.red = _.clone(tiles.red);
-    newTiles.red[tileId] = true;
-
-  } else {
-    newTiles.red = tiles.red;
-  }
-
-  if (currentPlayer.colour === COLOUR_BLUE) {
-    newTiles.blue = _.clone(tiles.blue);
-    newTiles.blue[tileId] = true;
-  } else {
-    newTiles.blue = tiles.blue;
-  }
-
-  newTiles.neutral = _.clone(tiles.neutral);
-  delete newTiles.neutral[tileId];
-
-  return newTiles;
+  return {
+    red: currentPlayer.colour === COLOUR_RED ? tiles.red.add(tileId) : tiles.red,
+    blue: currentPlayer.colour === COLOUR_BLUE ? tiles.blue.add(tileId) : tiles.blue,
+    neutral: tiles.neutral.delete(tileId)
+  };
 }
 
 function checkWin (tileId, colour, tiles, startTiles, endTiles, grid) {
   const colourTiles = colour === COLOUR_RED ? tiles.red : tiles.blue;
-  const pathFn = tileId => colourTiles[tileId] === true;
+  const pathFn = tileId => colourTiles.contains(tileId);
 
   const hasWin = hasPath(grid, [tileId], startTiles, {isPathable: pathFn}) &&
     hasPath(grid, [tileId], endTiles, {isPathable: pathFn});
@@ -62,8 +45,8 @@ export default function reduceGame(state, action) {
         return state;
       }
 
-      if (state.tiles.neutral[action.tileId] === undefined) {
-        console.log('Tried to choose an occupied tile!');
+      if (state.tiles.neutral.contains(action.tileId) === false) {
+        console.log('Tried to choose an occupied tile', action.tileId);
         return state;
       }
 

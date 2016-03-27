@@ -27,8 +27,7 @@ const getActions = (state) => {
     return [];
   }
 
-  const neutralTiles = Object.keys(state.tiles.neutral);
-  return neutralTiles.map(
+  return state.tiles.neutral.toArray().map(
     tileId => {
       return tileChosen({
         tileId: tileId,
@@ -42,7 +41,8 @@ const getRandomAction = (state) => {
     return null;
   }
 
-  const neutralTiles = Object.keys(state.tiles.neutral);
+  // Convert immutable.js set to an array.
+  const neutralTiles = state.tiles.neutral.toArray();
   if (neutralTiles.length === 0) {
     return null;
   }
