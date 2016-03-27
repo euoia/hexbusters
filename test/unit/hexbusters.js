@@ -6,12 +6,14 @@ import { playersJoin } from '../../js/actions/GameActions.js';
 import gameReducer from '../../js/reducers/hexbusters.js';
 import _ from 'lodash';
 import init from '../../js/hexbusters/init.js';
+import { getTileIdByCoordinates } from 'hex-grid';
 
 const grid = {
   width: 3,
   height: 3,
   orientation: 'flat-topped',
-  layout: 'odd-q'
+  layout: 'odd-q',
+  shape: 'parallelogram'
 };
 const gameState = init(grid);
 
@@ -20,11 +22,11 @@ describe('hexbusters', function() {
     it('should return the correct winner (red)', function() {
       const actions = [
         playersJoin([{colour: COLOUR_RED}, {colour: COLOUR_BLUE}]),
-        tileChosen({tileId: 'tile-0-0', colour: COLOUR_RED }),
-        tileChosen({tileId: 'tile-1-0', colour: COLOUR_BLUE }),
-        tileChosen({tileId: 'tile-0-1', colour: COLOUR_RED }),
-        tileChosen({tileId: 'tile-1-1', colour: COLOUR_BLUE }),
-        tileChosen({tileId: 'tile-0-2', colour: COLOUR_RED })
+        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 0), colour: COLOUR_RED }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 0), colour: COLOUR_BLUE }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 1), colour: COLOUR_RED }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 1), colour: COLOUR_BLUE }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 2), colour: COLOUR_RED })
       ];
 
       const testState = _.reduce(actions, (gameState, action) => {
@@ -37,10 +39,10 @@ describe('hexbusters', function() {
     it('should return no winner', function() {
       const actions = [
         playersJoin([{colour: COLOUR_RED}, {colour: COLOUR_BLUE}]),
-        tileChosen({tileId: 'tile-0-0', colour: COLOUR_RED }),
-        tileChosen({tileId: 'tile-1-0', colour: COLOUR_BLUE }),
-        tileChosen({tileId: 'tile-0-1', colour: COLOUR_RED }),
-        tileChosen({tileId: 'tile-1-1', colour: COLOUR_BLUE })
+        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 0), colour: COLOUR_RED }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 0), colour: COLOUR_BLUE }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 1), colour: COLOUR_RED }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 1), colour: COLOUR_BLUE })
       ];
 
       const testState = _.reduce(actions, (gameState, action) => {

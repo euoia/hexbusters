@@ -7,6 +7,7 @@ import init from '../../js/hexbusters/init.js';
 import { COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 import { playersJoin } from '../../js/actions/GameActions.js';
 import { tileChosen } from '../../js/actions/PlayerActions.js';
+import { getTileCoordinatesById, getTileIdByCoordinates } from 'hex-grid';
 
 const size = 3;
 const grid = {
@@ -27,10 +28,10 @@ describe('Minimax', function() {
       // Red is about to get the first column.
       const actions = [
         playersJoin([{colour: COLOUR_RED}, {colour: COLOUR_BLUE}]),
-        tileChosen({tileId: 'tile-0-0', colour: COLOUR_RED }),
-        tileChosen({tileId: 'tile-1-0', colour: COLOUR_BLUE }),
-        tileChosen({tileId: 'tile-0-1', colour: COLOUR_RED }),
-        tileChosen({tileId: 'tile-1-1', colour: COLOUR_BLUE })
+        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 0), colour: COLOUR_RED }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 0), colour: COLOUR_BLUE }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 1), colour: COLOUR_RED }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 1), colour: COLOUR_BLUE })
       ];
 
       const testState = _.reduce(actions, (gameState, action) => {
@@ -44,7 +45,7 @@ describe('Minimax', function() {
         timeLimitMs
       );
 
-      expect(action.tileId).to.equal('tile-0-2');
+      expect(getTileCoordinatesById(grid, action.tileId)).to.eql({x: 0, y: 2});
     });
 
     it('Should prevent the other player winning', function() {
@@ -52,10 +53,10 @@ describe('Minimax', function() {
       // It is Blue's turn.
       const actions = [
         playersJoin([{colour: COLOUR_BLUE}, {colour: COLOUR_RED}]),
-        tileChosen({tileId: 'tile-1-0', colour: COLOUR_BLUE }),
-        tileChosen({tileId: 'tile-0-0', colour: COLOUR_RED }),
-        tileChosen({tileId: 'tile-1-1', colour: COLOUR_BLUE }),
-        tileChosen({tileId: 'tile-0-1', colour: COLOUR_RED })
+        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 0), colour: COLOUR_BLUE }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 0), colour: COLOUR_RED }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 1), colour: COLOUR_BLUE }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 1), colour: COLOUR_RED })
       ];
 
       const testState = _.reduce(actions, (gameState, action) => {
@@ -70,7 +71,7 @@ describe('Minimax', function() {
         timeLimitMs
       );
 
-      expect(action.tileId).to.equal('tile-0-2');
+      expect(getTileCoordinatesById(grid, action.tileId)).to.eql({x: 0, y: 2});
     });
   });
 });

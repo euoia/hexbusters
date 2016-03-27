@@ -154,7 +154,7 @@ function getBorderColour(grid, tileId) {
 
 Border.propTypes = {
   grid: PropTypes.object.isRequired,
-  tileId: PropTypes.string.isRequired
+  tileId: PropTypes.any.isRequired
 };
 
 export default Border;

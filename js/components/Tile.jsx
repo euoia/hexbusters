@@ -53,11 +53,11 @@ class Tile extends Component {
 
     return (
       <div
-        className='tile'
+        className="tile"
         onClick={chooseTile ? chooseTile.bind(null, tileId) : null}
         style={style}
       >
-        <div>{tileCoordinates.x} {tileCoordinates.y}</div>
+        <div>{tileId}: {tileCoordinates.x} {tileCoordinates.y}</div>
       </div>
     );
   }
