@@ -32,4 +32,4 @@ if (typeof onmessage !== 'undefined') {
   onmessage = handleMessage;
 }
 
-export default {getBestAction: handleMessage};
+export default handleMessage;

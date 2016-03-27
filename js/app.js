@@ -1,6 +1,7 @@
 import AIPlayer from './players/AIPlayer.js';
 import HumanPlayer from './players/HumanPlayer.js';
 import React from 'react';
+import { render } from 'react-dom';
 import _ from 'lodash';
 import { AppContainer, store } from './containers/AppContainer.js';
 import { COLOUR_BLUE, COLOUR_RED } from './constants/Colours.js';
@@ -28,7 +29,7 @@ store.dispatch(
   ])
 );
 
-React.render(
+render(
   <AppContainer chooseTile={humanPlayer.chooseTile.bind(humanPlayer)} />,
   document.getElementById('hexbusters')
 );

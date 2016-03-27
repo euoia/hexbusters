@@ -53,9 +53,9 @@ const getRandomAction = (state) => {
   });
 };
 
-export default {
+export {
   getCurrentPlayer,
   isCurrentPlayer,
   getActions,
   getRandomAction
-};
+}

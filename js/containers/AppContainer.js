@@ -32,7 +32,7 @@ export class AppContainer extends Component {
     return (
       <div>
         <Provider store={store}>
-          {() => <Hexbusters chooseTile={this.props.chooseTile} />}
+          <Hexbusters chooseTile={this.props.chooseTile} />
         </Provider>
         {
           debug ?

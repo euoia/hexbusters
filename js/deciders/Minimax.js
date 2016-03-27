@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import gameReducer from '../reducers/hexbusters.js';
-import helpers from '../hexbusters/helpers.js';
+import { getActions } from '../hexbusters/helpers.js';
 
 export default class Minimax {
   /**
@@ -71,7 +71,7 @@ export default class Minimax {
       };
     }
 
-    const validActions = helpers.getActions(gameState);
+    const validActions = getActions(gameState);
     if (validActions.length === 0) {
       // The board is full but no player has won.
       return {
