@@ -17,6 +17,7 @@ export default class Players extends Component {
           (player, idx) =>
             <Player
               current={isCurrentPlayer(player)}
+              index={idx}
               key={idx}
               player={player}
             />

@@ -3,27 +3,28 @@ import { COLOUR_RED, COLOUR_BLUE }  from '../constants/Colours.js';
 
 export default class Player extends Component {
   render () {
-    const {current, player} = this.props;
+    const {current, player, index} = this.props;
 
-    const playerColour = {
-      [COLOUR_RED]: '#E95A26',
-      [COLOUR_BLUE]: '#084595'
+    const colour = {
+      [COLOUR_RED]: current ? 'red' : 'grey',
+      [COLOUR_BLUE]: current ? 'blue' : 'grey'
     }[player.colour];
 
     const style = {
-      color: playerColour,
-      fontSize: '30px',
-      fontWeight: 600,
-      textAlign: 'left',
+      position: 'absolute',
+      right: `-200px`,
+      top: 90 * index,
+      width: '256px',
+      height: '75px'
     };
 
-    if (current) {
+    if (player.name === 'Hexbot') {
       return (
-        <div className="player" style={style}>{player.name}'s turn</div>
+        <img src={`/assets/img/${colour}-hexbots-turn@3x.png`} style={style} />
       );
     } else {
       return (
-        <div className="player" style={style}>{player.name}</div>
+        <img src={`/assets/img/${colour}-players-turn@3x.png`} style={style} />
       );
     }
   }

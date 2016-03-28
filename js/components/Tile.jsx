@@ -41,7 +41,7 @@ class Tile extends Component {
       width: `${tileWidth}px`,
       height: `${tileHeight}px`,
       lineHeight: `${tileHeight}px`, // For the text.
-      backgroundImage: `url(./assets/img/hex-${colourName}@3x.png)`,
+      backgroundImage: `url(/assets/img/hex-${colourName}@3x.png)`,
       backgroundSize: `${tileWidth}px, ${tileHeight}px`,
       fontSize: `${tileHeight / 4}px`,
       fontFamily: 'sans-serif',
@@ -57,7 +57,7 @@ class Tile extends Component {
         onClick={chooseTile ? chooseTile.bind(null, tileId) : null}
         style={style}
       >
-        <div style={{display: "visible"}}>{tileId}: {tileCoordinates.x} {tileCoordinates.y}</div>
+        <div style={{display: "none"}}>{tileId}: {tileCoordinates.x} {tileCoordinates.y}</div>
       </div>
     );
   }

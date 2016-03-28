@@ -64,14 +64,14 @@ class Border extends Component {
       top: `${tilePos.y * (tileHeight * 0.75)}px`,
       width: `${tileWidth}px`,
       height: `${tileHeight}px`,
-      backgroundImage: `url(./assets/img/hex-${colourName}@3x.png)`,
+      backgroundImage: `url(/assets/img/hex-${colourName}@3x.png)`,
       backgroundSize: `${tileWidth}px, ${tileHeight}px`,
       backgroundRepeat: 'round'
     };
 
     return (
       <div
-        className='tile'
+        className="tile"
         style={style}
       >
       </div>

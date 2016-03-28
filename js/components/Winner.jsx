@@ -40,7 +40,7 @@ export default class Board extends Component {
     return (
       <div style={containerStyle}>
         <div>
-          <img src={"./assets/img/" + winningColour + "-wins@2x.png"} style={style} />
+          <img src={"/assets/img/" + winningColour + "-wins@2x.png"} style={style} />
         </div>
       </div>
     );
