@@ -15,12 +15,15 @@ function reduceTiles(tiles, tileId, currentPlayer) {
 
 function checkWin (tileId, colour, tiles, startTiles, endTiles, grid) {
   const colourTiles = colour === COLOUR_RED ? tiles.red : tiles.blue;
-  const pathFn = tileId => colourTiles.contains(tileId);
 
-  const hasWin = hasPath(grid, [tileId], startTiles, {isPathable: pathFn}) &&
-    hasPath(grid, [tileId], endTiles, {isPathable: pathFn});
+  // This improves performance enormously.
+  const colourTilesObj = colourTiles.toObject();
+  const pathFn = tileId => colourTilesObj[tileId] !== undefined;
 
-  if (hasWin) {
+  const pathToStart = hasPath(grid, [tileId], startTiles, {isPathable: pathFn});
+  const pathToEnd = hasPath(grid, [tileId], endTiles, {isPathable: pathFn});
+
+  if (pathToStart && pathToEnd) {
     return colour;
   }
 

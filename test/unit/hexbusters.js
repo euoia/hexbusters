@@ -11,8 +11,8 @@ import { getTileIdByCoordinates } from 'hex-grid';
 const grid = {
   width: 3,
   height: 3,
-  orientation: 'flat-topped',
-  layout: 'odd-q',
+  orientation: 'pointy-topped',
+  layout: 'odd-r',
   shape: 'parallelogram'
 };
 const gameState = init(grid);
@@ -29,9 +29,11 @@ describe('hexbusters', function() {
         tileChosen({tileId: getTileIdByCoordinates(grid, 0, 2), colour: COLOUR_RED })
       ];
 
-      const testState = _.reduce(actions, (gameState, action) => {
-        return gameReducer(gameState, action);
-      }, gameState);
+      const testState = _.reduce(
+        actions,
+        (gameState, action) => gameReducer(gameState, action),
+        gameState
+      );
 
       expect(testState.winner).to.equal(COLOUR_RED);
     });
@@ -45,9 +47,11 @@ describe('hexbusters', function() {
         tileChosen({tileId: getTileIdByCoordinates(grid, 1, 1), colour: COLOUR_BLUE })
       ];
 
-      const testState = _.reduce(actions, (gameState, action) => {
-        return gameReducer(gameState, action);
-      }, gameState);
+      const testState = _.reduce(
+        actions,
+        (gameState, action) => gameReducer(gameState, action),
+        gameState
+      );
 
       expect(testState.winner).to.equal(null);
     });
