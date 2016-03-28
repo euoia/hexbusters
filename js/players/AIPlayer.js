@@ -25,7 +25,12 @@ export default class AIPlayer extends BasePlayer {
      * When it's this player's turn, make a decision about which hex to play.
      */
     this.store.subscribe(() => {
-      if (isCurrentPlayer(this.store.getState().game, this) === false) {
+      const gameState = this.store.getState().game;
+      if (isCurrentPlayer(gameState, this) === false) {
+        return;
+      }
+
+      if (gameState.winner !== null) {
         return;
       }
 
@@ -36,7 +41,6 @@ export default class AIPlayer extends BasePlayer {
 
       console.log(`[AIPlayer] Thinking for ${this.timeLimitMs}ms...`);
       this.isThinking = true;
-      const gameState = this.store.getState().game;
       const message = {
         action: 'getBestAction',
         timeLimitMs: this.timeLimitMs,
