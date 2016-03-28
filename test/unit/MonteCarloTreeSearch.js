@@ -19,7 +19,7 @@ const grid = {
 };
 const gameState = init(grid);
 
-const mcts = new MonteCarloTreeSearch({timeLimitMs: 1000, debug: true});
+const mcts = new MonteCarloTreeSearch({timeLimitMs: 1000});
 
 describe('MonteCarloTreeSearch', function() {
   this.timeout(5000);
@@ -31,7 +31,7 @@ describe('MonteCarloTreeSearch', function() {
       const actions = [
         playersJoin([{colour: COLOUR_RED}, {colour: COLOUR_BLUE}]),
         tileChosen({tileId: getTileIdByCoordinates(grid, 0, 0), colour: COLOUR_RED }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 0), colour: COLOUR_BLUE }),
+        tileChosen({tileId: getTileIdByCoordinates(grid, 2, 0), colour: COLOUR_BLUE }),
         tileChosen({tileId: getTileIdByCoordinates(grid, 0, 1), colour: COLOUR_RED }),
         tileChosen({tileId: getTileIdByCoordinates(grid, 1, 1), colour: COLOUR_BLUE })
       ];

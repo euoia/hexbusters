@@ -5,7 +5,7 @@ import { COLOUR_BLUE, COLOUR_RED } from '../../js/constants/Colours.js';
 import { playersJoin } from '../../js/actions/GameActions.js';
 
 const timeLimitS = 2;
-const size = 11;
+const size = 6;
 const grid = {
   width: size,
   height: size,
