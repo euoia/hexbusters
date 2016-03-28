@@ -2,7 +2,7 @@ import { tileChosen } from '../actions/PlayerActions.js';
 import _ from 'lodash';
 
 const getCurrentPlayer = (state) => {
-    if (state.players === undefined || state.players.length === 0 || state.winner) {
+    if (state.players === undefined || state.players.length === 0) {
       return null;
     }
 

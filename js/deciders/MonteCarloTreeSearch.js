@@ -112,7 +112,8 @@ export default class MonteCarloTreeSearch {
     const rankedNodes = _(Array.from(rootNode.childNodes)).sortBy('visits');
 
     if (this.debug) {
-      rankedNodes.forEach(n => console.log(`${n.visits} => ${n.wins} wins :: tileId=${n.action.tileId}`));
+      const orderedNodes = _(Array.from(rootNode.childNodes)).sortBy('action.tileId');
+      orderedNodes.forEach(n => console.log(`${n.visits} => ${n.wins} wins :: tileId=${n.action.tileId}`));
     }
 
     return {

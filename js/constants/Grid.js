@@ -1,6 +1,6 @@
 // This is the width of the game board.
 // The width and height of the playing area is this minus 2.
-const size = 6;
+const size = 7;
 
 export default {
   width: size,

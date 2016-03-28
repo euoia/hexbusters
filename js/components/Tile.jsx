@@ -57,7 +57,7 @@ class Tile extends Component {
         onClick={chooseTile ? chooseTile.bind(null, tileId) : null}
         style={style}
       >
-        <div>{tileId}: {tileCoordinates.x} {tileCoordinates.y}</div>
+        <div style={{display: "visible"}}>{tileId}: {tileCoordinates.x} {tileCoordinates.y}</div>
       </div>
     );
   }
