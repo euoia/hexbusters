@@ -3,7 +3,11 @@ import { COLOUR_RED, COLOUR_BLUE }  from '../constants/Colours.js';
 
 export default class Player extends Component {
   render () {
-    const {current, player, index} = this.props;
+    const {current, player} = this.props;
+
+    if (current === false) {
+      return <span />
+    }
 
     const colour = {
       [COLOUR_RED]: current ? 'red' : 'grey',
@@ -12,8 +16,7 @@ export default class Player extends Component {
 
     const style = {
       position: 'absolute',
-      right: `-200px`,
-      top: 90 * index,
+      right: `-100px`,
       width: '256px',
       height: '75px'
     };
