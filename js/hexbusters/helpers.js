@@ -2,11 +2,11 @@ import { tileChosen } from '../actions/PlayerActions.js';
 import _ from 'lodash';
 
 const getCurrentPlayer = (state) => {
-    if (state.players === undefined || state.players.length === 0) {
-      return null;
-    }
+  if (state.players === undefined || state.players.length === 0) {
+    return null;
+  }
 
-    return state.players[state.currentPlayerIdx % state.numPlayers];
+  return state.players[state.currentPlayerIdx % state.numPlayers];
 };
 
 const isCurrentPlayer = (state, player) => {
@@ -27,13 +27,12 @@ const getActions = (state) => {
     return [];
   }
 
-  return state.tiles.neutral.toArray().map(
-    tileId => {
-      return tileChosen({
-        tileId: tileId,
-        colour: getCurrentPlayer(state).colour
-      })
+  return state.tiles.neutral.toArray().map((tileId) => {
+    return tileChosen({
+      tileId: tileId,
+      colour: getCurrentPlayer(state).colour
     });
+  });
 };
 
 const getRandomAction = (state) => {
@@ -53,9 +52,4 @@ const getRandomAction = (state) => {
   });
 };
 
-export {
-  getCurrentPlayer,
-  isCurrentPlayer,
-  getActions,
-  getRandomAction
-}
+export { getCurrentPlayer, isCurrentPlayer, getActions, getRandomAction };

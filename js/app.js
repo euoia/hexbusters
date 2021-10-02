@@ -6,7 +6,11 @@ import _ from 'lodash';
 import { AppContainer, store } from './containers/AppContainer.js';
 import { COLOUR_BLUE, COLOUR_RED } from './constants/Colours.js';
 import { playersJoin } from './actions/GameActions.js';
-import MonteCarloTreeSearchWebWorker from 'worker!./deciders/MonteCarloTreeSearchWebWorker.js';
+import MonteCarloTreeSearchWebWorker from 'worker-loader!./deciders/MonteCarloTreeSearchWebWorker.js';
+
+import '../css/app.css';
+
+const actionDecider = new MonteCarloTreeSearchWebWorker();
 
 // Shuffle the colours since blue always goes first.
 const colours = _.shuffle([COLOUR_BLUE, COLOUR_RED]);
@@ -24,12 +28,15 @@ store.dispatch(
       name: 'Hexbot',
       store: store,
       colour: colours[1],
-      actionDecider: new MonteCarloTreeSearchWebWorker()
+      actionDecider: actionDecider
     })
   ])
 );
 
+const container = document.createElement('section');
+document.body.appendChild(container);
+
 render(
   <AppContainer chooseTile={humanPlayer.chooseTile.bind(humanPlayer)} />,
-  document.getElementById('hexbusters')
+  container
 );

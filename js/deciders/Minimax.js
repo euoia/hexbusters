@@ -25,7 +25,7 @@ export default class Minimax {
    *   value           - The value of the best action.
    *   statesEvaluated - The number of states evaluated.
    */
-  static evaluateState (
+  static evaluateState(
     playerColour,
     gameState,
     endTime,
@@ -81,36 +81,31 @@ export default class Minimax {
     }
 
     // Value of the state is the average of the possible action values.
-    let actionValues = _.map(
-      validActions,
-      action => {
-        const evaluation = Minimax.evaluateState(
-          playerColour,
-          gameReducer(gameState, action),
-          endTime,
-          maxDepth,
-          ! maximizingPlayer,
-          depth + 1,
-          statesEvaluated
-        );
+    let actionValues = _.map(validActions, (action) => {
+      const evaluation = Minimax.evaluateState(
+        playerColour,
+        gameReducer(gameState, action),
+        endTime,
+        maxDepth,
+        !maximizingPlayer,
+        depth + 1,
+        statesEvaluated
+      );
 
-        thisStatesEvaluated += evaluation.statesEvaluated;
+      thisStatesEvaluated += evaluation.statesEvaluated;
 
-        return {
-          action,
-          value: evaluation.value
-        };
-      }
-    );
+      return {
+        action,
+        value: evaluation.value
+      };
+    });
 
-    const bestActionValue =
-      maximizingPlayer ?
-      _(actionValues).sortBy('value').last() :
-      _(actionValues).sortBy('value').first();
+    const bestActionValue = maximizingPlayer
+      ? _(actionValues).sortBy('value').last()
+      : _(actionValues).sortBy('value').first();
 
-    const randomBestAction =
-      _(actionValues)
-      .filter(action => action.value === bestActionValue.value)
+    const randomBestAction = _(actionValues)
+      .filter((action) => action.value === bestActionValue.value)
       .shuffle()
       .first();
 
@@ -121,12 +116,7 @@ export default class Minimax {
     };
   }
 
-  static getBestAction(
-    playerColour,
-    gameState,
-    timeLimitMs,
-    maxDepth
-  ) {
+  static getBestAction(playerColour, gameState, timeLimitMs, maxDepth) {
     const startTime = new Date();
     const endTime = startTime.getTime() + timeLimitMs;
     let evaluation = Minimax.evaluateState(

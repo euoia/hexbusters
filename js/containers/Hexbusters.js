@@ -1,11 +1,12 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Board from '../components/Board.jsx';
 import Players from '../components/Players.jsx';
 import { connect } from 'react-redux';
 import { isCurrentPlayer } from '../hexbusters/helpers.js';
 
 class Hexbusters extends Component {
-  render () {
+  render() {
     const { tiles, chooseTile, isCurrentPlayer, players, winner } = this.props;
 
     return (

@@ -1,18 +1,16 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Message from './Message.jsx';
 
 export default class Messages extends Component {
-  render () {
+  render() {
     const { messages } = this.props;
 
     return (
       <div id="messages">
-        {
-          messages.map(
-            (message, idx) =>
-              <Message key={idx} message={message} />
-          )
-        }
+        {messages.map((message, idx) => (
+          <Message key={idx} message={message} />
+        ))}
       </div>
     );
   }

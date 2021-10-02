@@ -13,20 +13,20 @@ export default (grid) => {
     numPlayers: 2,
     players: [],
     startTiles: {
-      [COLOUR_RED]: _.chain(_.range(0, grid.width)).flatMap(
-        x => [getTileIdByCoordinates(grid, x, 0)]
-      ).value(),
-      [COLOUR_BLUE]: _.chain(_.range(0, grid.height)).flatMap(
-        y => [getTileIdByCoordinates(grid, 0, y)]
-      ).value()
+      [COLOUR_RED]: _.chain(_.range(0, grid.width))
+        .flatMap((x) => [getTileIdByCoordinates(grid, x, 0)])
+        .value(),
+      [COLOUR_BLUE]: _.chain(_.range(0, grid.height))
+        .flatMap((y) => [getTileIdByCoordinates(grid, 0, y)])
+        .value()
     },
     endTiles: {
-      [COLOUR_RED]: _.chain(_.range(0, grid.width)).flatMap(
-        x => [getTileIdByCoordinates(grid, x, grid.height -1)]
-      ).value(),
-      [COLOUR_BLUE]: _.chain(_.range(0, grid.height)).flatMap(
-        y => [getTileIdByCoordinates(grid, grid.width -1, y)]
-      ).value()
+      [COLOUR_RED]: _.chain(_.range(0, grid.width))
+        .flatMap((x) => [getTileIdByCoordinates(grid, x, grid.height - 1)])
+        .value(),
+      [COLOUR_BLUE]: _.chain(_.range(0, grid.height))
+        .flatMap((y) => [getTileIdByCoordinates(grid, grid.width - 1, y)])
+        .value()
     },
     tiles: {
       neutral: new Set(getTileIds(grid)),
@@ -35,4 +35,4 @@ export default (grid) => {
     },
     winner: null
   };
-}
+};

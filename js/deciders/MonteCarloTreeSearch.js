@@ -1,9 +1,13 @@
 import _ from 'lodash';
 import gameReducer from '../reducers/hexbusters.js';
-import { getActions, getRandomAction, getCurrentPlayer } from '../hexbusters/helpers.js';
+import {
+  getActions,
+  getRandomAction,
+  getCurrentPlayer
+} from '../hexbusters/helpers.js';
 
 class Node {
-  constructor ({action = null, parent = null, state = null}) {
+  constructor({ action = null, parent = null, state = null }) {
     // The action that led to this node. Null for the root node.
     this.action = action;
 
@@ -16,14 +20,14 @@ class Node {
     this.currentPlayer = getCurrentPlayer(state);
   }
 
-  addChild (action, state) {
-    const n = new Node({action, state, parent: this});
+  addChild(action, state) {
+    const n = new Node({ action, state, parent: this });
     this.untriedActions.delete(action);
     this.childNodes.add(n);
     return n;
   }
 
-  update (result) {
+  update(result) {
     this.visits += 1;
     this.wins += result;
   }
@@ -31,14 +35,17 @@ class Node {
   /**
    * Use the UCB1 formula to select a child node.
    */
-  UCB1SelectChild () {
+  UCB1SelectChild() {
     return _(Array.from(this.childNodes))
-      .sortBy(n => n.wins / n.visits + Math.sqrt(2 * Math.log(this.visits) / n.visits))
+      .sortBy(
+        (n) =>
+          n.wins / n.visits + Math.sqrt((2 * Math.log(this.visits)) / n.visits)
+      )
       .last();
   }
 }
 
-function getStateValue (state, player) {
+function getStateValue(state, player) {
   if (player === null) {
     return null;
   }
@@ -55,7 +62,7 @@ function getStateValue (state, player) {
 }
 
 export default class MonteCarloTreeSearch {
-  constructor (options = {}) {
+  constructor(options = {}) {
     /**
      * How much time to spend thinking.
      */
@@ -67,12 +74,9 @@ export default class MonteCarloTreeSearch {
     this.debug = options.debug || false;
   }
 
-  getBestAction (
-    playerColour,
-    rootState
-  ) {
+  getBestAction(playerColour, rootState) {
     const dateLimit = Date.now() + this.timeLimitMs;
-    const rootNode = new Node({state: rootState});
+    const rootNode = new Node({ state: rootState });
 
     let iterations = 0;
     while (Date.now() < dateLimit) {
@@ -112,8 +116,14 @@ export default class MonteCarloTreeSearch {
     const rankedNodes = _(Array.from(rootNode.childNodes)).sortBy('visits');
 
     if (this.debug) {
-      const orderedNodes = _(Array.from(rootNode.childNodes)).sortBy('action.tileId');
-      orderedNodes.forEach(n => console.log(`${n.visits} => ${n.wins} wins :: tileId=${n.action.tileId}`));
+      const orderedNodes = _(Array.from(rootNode.childNodes)).sortBy(
+        'action.tileId'
+      );
+      orderedNodes.forEach((n) =>
+        console.log(
+          `${n.visits} => ${n.wins} wins :: tileId=${n.action.tileId}`
+        )
+      );
     }
 
     return {

@@ -9,4 +9,4 @@ export default {
   orientation: 'pointy-topped',
   shape: 'parallelogram',
   validate: false
-}
+};

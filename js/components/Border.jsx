@@ -1,21 +1,29 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { getTilePositionById, getTileCoordinatesById } from 'hex-grid';
 import {
-  BORDER_LEFT, BORDER_TOP, BORDER_TOP_RIGHT, BORDER_RIGHT,
-  BORDER_BOTTOM, BORDER_BOTTOM_LEFT, BORDER_TOP_LEFT_BLUE,
-  BORDER_TOP_LEFT_RED, BORDER_BOTTOM_RIGHT_RED, BORDER_BOTTOM_RIGHT_BLUE
+  BORDER_LEFT,
+  BORDER_TOP,
+  BORDER_TOP_RIGHT,
+  BORDER_RIGHT,
+  BORDER_BOTTOM,
+  BORDER_BOTTOM_LEFT,
+  BORDER_TOP_LEFT_BLUE,
+  BORDER_TOP_LEFT_RED,
+  BORDER_BOTTOM_RIGHT_RED,
+  BORDER_BOTTOM_RIGHT_BLUE
 } from '../constants/Colours.js';
 
 const tileWidth = 38;
 const tileHeight = 44;
 
 class Border extends Component {
-  constructor (props, context) {
+  constructor(props, context) {
     super(props, context);
   }
 
-  render () {
-    const {tileId, grid} = this.props;
+  render() {
+    const { tileId, grid } = this.props;
     const tilePos = getTilePositionById(grid, tileId);
 
     let colourName;
@@ -53,10 +61,10 @@ class Border extends Component {
         break;
       case null:
       default:
-        return (
-          <div />
-        );
+        return <div />;
     }
+
+    const colourHex = require(`/assets/img/hex-${colourName}@3x.png`);
 
     const style = {
       position: 'absolute',
@@ -64,25 +72,21 @@ class Border extends Component {
       top: `${tilePos.y * (tileHeight * 0.75)}px`,
       width: `${tileWidth}px`,
       height: `${tileHeight}px`,
-      backgroundImage: `url(/assets/img/hex-${colourName}@3x.png)`,
+      backgroundImage: `url(${colourHex})`,
       backgroundSize: `${tileWidth}px, ${tileHeight}px`,
       backgroundRepeat: 'round'
     };
 
-    return (
-      <div
-        className="tile"
-        style={style}
-      >
-      </div>
-    );
+    return <div className="tile" style={style}></div>;
   }
 }
 
 function getBorderColour(grid, tileId) {
   const { x, y } = getTileCoordinatesById(grid, tileId);
 
-  let leftBorder = false, topBorder = false, rightBorder = false,
+  let leftBorder = false,
+    topBorder = false,
+    rightBorder = false,
     bottomBorder = false;
 
   if (y === 0) {

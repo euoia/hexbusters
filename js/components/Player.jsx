@@ -1,12 +1,13 @@
-import React, { Component, PropTypes } from 'react';
-import { COLOUR_RED, COLOUR_BLUE }  from '../constants/Colours.js';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { COLOUR_RED, COLOUR_BLUE } from '../constants/Colours.js';
 
 export default class Player extends Component {
-  render () {
-    const {current, player} = this.props;
+  render() {
+    const { current, player } = this.props;
 
     if (current === false) {
-      return <span />
+      return <span />;
     }
 
     const colour = {
@@ -23,11 +24,17 @@ export default class Player extends Component {
 
     if (player.name === 'Hexbot') {
       return (
-        <img src={`/assets/img/${colour}-hexbots-turn@3x.png`} style={style} />
+        <img
+          src={require(`../../assets/img/${colour}-hexbots-turn@3x.png`)}
+          style={style}
+        />
       );
     } else {
       return (
-        <img src={`/assets/img/${colour}-players-turn@3x.png`} style={style} />
+        <img
+          src={require(`../../assets/img/${colour}-players-turn@3x.png`)}
+          style={style}
+        />
       );
     }
   }

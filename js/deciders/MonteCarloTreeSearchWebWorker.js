@@ -8,21 +8,24 @@ import { Set, fromJS } from 'immutable';
  * ran in the tests, they're not.
  */
 
-function handleMessage (message) {
-  const messageObj = JSON.parse(message.data);
+function handleMessage(message) {
+  console.log(`[MonteCarloTreeSearchWebWorker] Got message`, message);
+
+  const messageObj =
+    typeof message === 'object' ? message.data : JSON.parse(message);
 
   switch (messageObj.action) {
     case 'getBestAction':
       // We can't store the tiles as a Set because it's not supported in the web browser.
       // "Set is not function".
-      const { debug, playerColour, state, timeLimitMs = 5000} = messageObj;
+      const { debug, playerColour, state, timeLimitMs = 5000 } = messageObj;
 
       // Convert the immutable.js sets back to sets.
       state.tiles.neutral = new Set(fromJS(state.tiles.neutral));
       state.tiles.red = new Set(fromJS(state.tiles.red));
       state.tiles.blue = new Set(fromJS(state.tiles.blue));
 
-      const mcts = new MonteCarloTreeSearch({timeLimitMs, debug});
+      const mcts = new MonteCarloTreeSearch({ timeLimitMs, debug });
       const action = mcts.getBestAction(playerColour, state);
       console.log(`Best action is`, action);
 
@@ -32,11 +35,12 @@ function handleMessage (message) {
 
       return action;
     default:
-      throw new Error(`Unhandled message action: ${message.data.action}`);
+      console.warn(`Unhandled message action: ${message.data.action}`);
   }
 }
 
 if (typeof onmessage !== 'undefined') {
+  console.log(`Initialising onmessage`);
   onmessage = handleMessage;
 }
 

@@ -7,21 +7,27 @@ import { hasPath } from 'hex-grid';
 
 function reduceTiles(tiles, tileId, currentPlayer) {
   return {
-    red: currentPlayer.colour === COLOUR_RED ? tiles.red.add(tileId) : tiles.red,
-    blue: currentPlayer.colour === COLOUR_BLUE ? tiles.blue.add(tileId) : tiles.blue,
+    red:
+      currentPlayer.colour === COLOUR_RED ? tiles.red.add(tileId) : tiles.red,
+    blue:
+      currentPlayer.colour === COLOUR_BLUE
+        ? tiles.blue.add(tileId)
+        : tiles.blue,
     neutral: tiles.neutral.delete(tileId)
   };
 }
 
-function checkWin (tileId, colour, tiles, startTiles, endTiles, grid) {
+function checkWin(tileId, colour, tiles, startTiles, endTiles, grid) {
   const colourTiles = colour === COLOUR_RED ? tiles.red : tiles.blue;
 
   // This improves performance enormously.
   const colourTilesObj = colourTiles.toObject();
-  const pathFn = tileId => colourTilesObj[tileId] !== undefined;
+  const pathFn = (tileId) => colourTilesObj[tileId] !== undefined;
 
-  const pathToStart = hasPath(grid, [tileId], startTiles, {isPathable: pathFn});
-  const pathToEnd = hasPath(grid, [tileId], endTiles, {isPathable: pathFn});
+  const pathToStart = hasPath(grid, [tileId], startTiles, {
+    isPathable: pathFn
+  });
+  const pathToEnd = hasPath(grid, [tileId], endTiles, { isPathable: pathFn });
 
   if (pathToStart && pathToEnd) {
     return colour;
@@ -65,8 +71,14 @@ export default function reduceGame(state, action) {
         currentPlayerIdx: state.currentPlayerIdx + 1
       };
 
-      ns.winner = checkWin(action.tileId, currentPlayer.colour, ns.tiles,
-        ns.startTiles[currentPlayer.colour], ns.endTiles[currentPlayer.colour], ns.grid);
+      ns.winner = checkWin(
+        action.tileId,
+        currentPlayer.colour,
+        ns.tiles,
+        ns.startTiles[currentPlayer.colour],
+        ns.endTiles[currentPlayer.colour],
+        ns.grid
+      );
       return ns;
 
     default:

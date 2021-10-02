@@ -5,14 +5,17 @@ import check from 'check-types';
 import _ from 'lodash';
 
 export default class AIPlayer extends BasePlayer {
-  constructor (options) {
+  constructor(options) {
     super(options);
 
     /**
      * The actionDecider is a web worker which determines which move the AI
      * should play.
      */
-    check.assert.assigned(options.actionDecider, 'Must provide an actionDecider.');
+    check.assert.assigned(
+      options.actionDecider,
+      'Must provide an actionDecider.'
+    );
     this.actionDecider = options.actionDecider;
 
     this.playerType = AI_PLAYER;
@@ -53,9 +56,8 @@ export default class AIPlayer extends BasePlayer {
             blue: gameState.tiles.blue.toJS()
           },
           // Having to explicitly omit the actionDecider property is rather unfortunate.
-          players: _.map(
-            gameState.players,
-            player => _.omit(player, 'actionDecider')
+          players: _.map(gameState.players, (player) =>
+            _.omit(player, 'actionDecider')
           )
         },
         debug: this.debug
@@ -64,11 +66,17 @@ export default class AIPlayer extends BasePlayer {
       // Pass the message to the action decider.
       // The message needs to be serialized since the decider could be a web worker.
       //this.actionDecider.postMessage(JSON.stringify(message));
-      this.actionDecider.postMessage(JSON.stringify(message));
+      console.log(`Posting message to action decider...`, message);
+      this.actionDecider.postMessage(message);
 
       this.actionDecider.onmessage = (message) => {
-        console.log(`[AIPlayer] Finished thinking and decided ${message.data.bestAction.tileId}.`, message);
-        console.log(`[AIPlayer] Executed ${message.data.iterations} iterations.`);
+        console.log(
+          `[AIPlayer] Finished thinking and decided ${message.data.bestAction.tileId}.`,
+          message
+        );
+        console.log(
+          `[AIPlayer] Executed ${message.data.iterations} iterations.`
+        );
 
         this.isThinking = false;
         this.store.dispatch(message.data.bestAction);

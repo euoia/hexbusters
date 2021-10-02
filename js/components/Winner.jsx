@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { COLOUR_RED, COLOUR_BLUE }  from '../constants/Colours.js';
+import { COLOUR_RED, COLOUR_BLUE } from '../constants/Colours.js';
 
 export default class Board extends Component {
-  constructor (props, context) {
+  constructor(props, context) {
     super(props, context);
   }
 
-  render () {
+  render() {
     const { winner } = this.props;
     if (winner === null) {
       return <div />;
@@ -40,7 +40,10 @@ export default class Board extends Component {
     return (
       <div style={containerStyle}>
         <div>
-          <img src={"/assets/img/" + winningColour + "-wins@2x.png"} style={style} />
+          <img
+            src={require(`/assets/img/${winningColour}-wins@2x.png`)}
+            style={style}
+          />
         </div>
       </div>
     );

@@ -1,21 +1,27 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { getTilePositionById, getTileCoordinatesById } from 'hex-grid';
 import GRID from '../constants/Grid.js';
-import { COLOUR_RED, COLOUR_BLUE, COLOUR_NEUTRAL } from '../constants/Colours.js';
+import {
+  COLOUR_RED,
+  COLOUR_BLUE,
+  COLOUR_NEUTRAL
+} from '../constants/Colours.js';
 
 const tileWidth = 38;
 const tileHeight = 44;
 
 class Tile extends Component {
-  constructor (props, context) {
+  constructor(props, context) {
     super(props, context);
   }
 
-  render () {
-    const {colour, chooseTile, tileId} = this.props;
+  render() {
+    const { colour, chooseTile, tileId } = this.props;
     const tilePos = getTilePositionById(GRID, tileId);
 
-    let colourName, zIndex = 2;
+    let colourName,
+      zIndex = 2;
     switch (colour) {
       case COLOUR_RED:
         colourName = 'red';
@@ -24,7 +30,7 @@ class Tile extends Component {
         colourName = 'blue';
         break;
       case COLOUR_NEUTRAL:
-        colourName = 'neutral'
+        colourName = 'neutral';
         break;
       default:
         throw new Error(`Unhandled colour: ${colour}`);
@@ -34,6 +40,8 @@ class Tile extends Component {
     const xPos = tilePos.x + 1.5;
     const yPos = tilePos.y + 1;
 
+    const colourHex = require(`/assets/img/hex-${colourName}@3x.png`);
+
     const style = {
       position: 'absolute',
       left: `${xPos * tileWidth}px`,
@@ -41,7 +49,7 @@ class Tile extends Component {
       width: `${tileWidth}px`,
       height: `${tileHeight}px`,
       lineHeight: `${tileHeight}px`, // For the text.
-      backgroundImage: `url(/assets/img/hex-${colourName}@3x.png)`,
+      backgroundImage: `url(${colourHex})`,
       backgroundSize: `${tileWidth}px, ${tileHeight}px`,
       fontSize: `${tileHeight / 4}px`,
       fontFamily: 'sans-serif',
@@ -57,7 +65,9 @@ class Tile extends Component {
         onClick={chooseTile ? chooseTile.bind(null, tileId) : null}
         style={style}
       >
-        <div style={{display: "none"}}>{tileId}: {tileCoordinates.x} {tileCoordinates.y}</div>
+        <div style={{ display: 'none' }}>
+          {tileId}: {tileCoordinates.x} {tileCoordinates.y}
+        </div>
       </div>
     );
   }

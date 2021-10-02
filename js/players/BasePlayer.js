@@ -6,7 +6,7 @@ import { COLOUR_RED, COLOUR_BLUE } from '../constants/Colours.js';
 const validColours = [COLOUR_RED, COLOUR_BLUE];
 
 export default class BasePlayer {
-  constructor (options) {
+  constructor(options) {
     check.assert.string(options.name);
     this.name = options.name;
 
@@ -21,7 +21,7 @@ export default class BasePlayer {
     this.colour = options.colour;
   }
 
-  chooseTile (tileId) {
+  chooseTile(tileId) {
     this.store.dispatch(
       tileChosen({
         tileId,

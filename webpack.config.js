@@ -1,35 +1,42 @@
-var path = require('path');
-var webpack = require('webpack');
+var path = require("path");
+var webpack = require("webpack");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  devtool: 'cheap-module-eval-source-map',
-  entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
-    './js/app.js'
-  ],
+  mode: "development",
+  entry: ["./js/app.js"],
+  devtool: "inline-source-map",
+  devServer: {
+    static: "./dist",
+  },
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/static/'
+    path: path.join(__dirname, "dist"),
+    filename: "[name].bundle.js",
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new HtmlWebpackPlugin({
+      title: "HEXBUSTERS • A board game",
+    }),
   ],
   module: {
-    loaders: [
+    rules: [
+      { test: /\.js|\.jsx$/, use: "babel-loader" },
       {
-        test: /\.js|\.jsx$/,
-        loaders: ['babel-loader'],
-        exclude: /node_modules/,
-        include: __dirname
-      }
-    ]
+        test: /\.css$/i,
+        use: ["css-loader"],
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              // Don't want ES modules because we need to dynamically require images.
+              esModule: false,
+            },
+          },
+        ],
+      },
+    ],
   },
-  worker: {
-    output: {
-      filename: "hash.worker.js",
-      chunkFilename: "[id].hash.worker.js"
-    }
-  }
 };
