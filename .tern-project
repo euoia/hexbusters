@@ -1,9 +1,8 @@
 {
-  "libs": [
-  ],
+  "libs": [],
   "plugins": {
-	"node": {},
-	"modules": {},
-	"es_modules": {}
+    "node": {},
+    "modules": {},
+    "es_modules": {}
   }
 }

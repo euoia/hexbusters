@@ -17,16 +17,31 @@ const grid = {
 };
 const gameState = init(grid);
 
-describe('hexbusters', function() {
-  describe('gameReducer', function() {
-    it('should return the correct winner (red)', function() {
+describe('hexbusters', function () {
+  describe('gameReducer', function () {
+    it('should return the correct winner (red)', function () {
       const actions = [
-        playersJoin([{colour: COLOUR_RED}, {colour: COLOUR_BLUE}]),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 0), colour: COLOUR_RED }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 0), colour: COLOUR_BLUE }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 1), colour: COLOUR_RED }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 1), colour: COLOUR_BLUE }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 2), colour: COLOUR_RED })
+        playersJoin([{ colour: COLOUR_RED }, { colour: COLOUR_BLUE }]),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 0, 0),
+          colour: COLOUR_RED
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 1, 0),
+          colour: COLOUR_BLUE
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 0, 1),
+          colour: COLOUR_RED
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 1, 1),
+          colour: COLOUR_BLUE
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 0, 2),
+          colour: COLOUR_RED
+        })
       ];
 
       const testState = _.reduce(
@@ -38,13 +53,25 @@ describe('hexbusters', function() {
       expect(testState.winner).to.equal(COLOUR_RED);
     });
 
-    it('should return no winner', function() {
+    it('should return no winner', function () {
       const actions = [
-        playersJoin([{colour: COLOUR_RED}, {colour: COLOUR_BLUE}]),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 0), colour: COLOUR_RED }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 0), colour: COLOUR_BLUE }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 1), colour: COLOUR_RED }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 1), colour: COLOUR_BLUE })
+        playersJoin([{ colour: COLOUR_RED }, { colour: COLOUR_BLUE }]),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 0, 0),
+          colour: COLOUR_RED
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 1, 0),
+          colour: COLOUR_BLUE
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 0, 1),
+          colour: COLOUR_RED
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 1, 1),
+          colour: COLOUR_BLUE
+        })
       ];
 
       const testState = _.reduce(

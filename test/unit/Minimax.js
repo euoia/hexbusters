@@ -19,24 +19,40 @@ const grid = {
 };
 const gameState = init(grid);
 
-describe('Minimax', function() {
+describe('Minimax', function () {
   const timeLimitMs = 1000;
 
-  describe('evaluateState', function() {
-    it('Should return a winning action', function() {
+  describe('evaluateState', function () {
+    it('Should return a winning action', function () {
       // A game state where red is one move away from winning.
       // Red is about to get the first column.
       const actions = [
-        playersJoin([{colour: COLOUR_RED}, {colour: COLOUR_BLUE}]),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 0), colour: COLOUR_RED }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 0), colour: COLOUR_BLUE }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 1), colour: COLOUR_RED }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 1), colour: COLOUR_BLUE })
+        playersJoin([{ colour: COLOUR_RED }, { colour: COLOUR_BLUE }]),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 0, 0),
+          colour: COLOUR_RED
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 1, 0),
+          colour: COLOUR_BLUE
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 0, 1),
+          colour: COLOUR_RED
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 1, 1),
+          colour: COLOUR_BLUE
+        })
       ];
 
-      const testState = _.reduce(actions, (gameState, action) => {
-        return gameReducer(gameState, action);
-      }, gameState);
+      const testState = _.reduce(
+        actions,
+        (gameState, action) => {
+          return gameReducer(gameState, action);
+        },
+        gameState
+      );
 
       const action = Minimax.getBestAction(
         COLOUR_RED,
@@ -45,23 +61,42 @@ describe('Minimax', function() {
         timeLimitMs
       );
 
-      expect(getTileCoordinatesById(grid, action.tileId)).to.eql({x: 0, y: 2});
+      expect(getTileCoordinatesById(grid, action.tileId)).to.eql({
+        x: 0,
+        y: 2
+      });
     });
 
-    it('Should prevent the other player winning', function() {
+    it('Should prevent the other player winning', function () {
       // Red is about to get the first column.
       // It is Blue's turn.
       const actions = [
-        playersJoin([{colour: COLOUR_BLUE}, {colour: COLOUR_RED}]),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 0), colour: COLOUR_BLUE }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 0), colour: COLOUR_RED }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 1, 1), colour: COLOUR_BLUE }),
-        tileChosen({tileId: getTileIdByCoordinates(grid, 0, 1), colour: COLOUR_RED })
+        playersJoin([{ colour: COLOUR_BLUE }, { colour: COLOUR_RED }]),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 1, 0),
+          colour: COLOUR_BLUE
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 0, 0),
+          colour: COLOUR_RED
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 1, 1),
+          colour: COLOUR_BLUE
+        }),
+        tileChosen({
+          tileId: getTileIdByCoordinates(grid, 0, 1),
+          colour: COLOUR_RED
+        })
       ];
 
-      const testState = _.reduce(actions, (gameState, action) => {
-        return gameReducer(gameState, action);
-      }, gameState);
+      const testState = _.reduce(
+        actions,
+        (gameState, action) => {
+          return gameReducer(gameState, action);
+        },
+        gameState
+      );
 
       // The AI is BLUE.
       const action = Minimax.getBestAction(
@@ -71,7 +106,10 @@ describe('Minimax', function() {
         timeLimitMs
       );
 
-      expect(getTileCoordinatesById(grid, action.tileId)).to.eql({x: 0, y: 2});
+      expect(getTileCoordinatesById(grid, action.tileId)).to.eql({
+        x: 0,
+        y: 2
+      });
     });
   });
 });

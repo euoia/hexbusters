@@ -18,11 +18,13 @@ const gameState = init(grid);
 
 const testState = gameReducer(
   gameState,
-  playersJoin([{colour: COLOUR_RED}, {colour: COLOUR_BLUE}])
+  playersJoin([{ colour: COLOUR_RED }, { colour: COLOUR_BLUE }])
 );
 
-console.log(`[MonteCarloTreeSearch] Running MCTS board evaluation for ${timeLimitS}s (${size} x ${size})...`);
-const mcts = new MonteCarloTreeSearch({timeLimitMs: timeLimitS * 1000});
+console.log(
+  `[MonteCarloTreeSearch] Running MCTS board evaluation for ${timeLimitS}s (${size} x ${size})...`
+);
+const mcts = new MonteCarloTreeSearch({ timeLimitMs: timeLimitS * 1000 });
 
 const startTime = new Date();
 const { iterations } = mcts.getBestAction(COLOUR_RED, testState);
@@ -30,5 +32,11 @@ const { iterations } = mcts.getBestAction(COLOUR_RED, testState);
 const endTime = new Date();
 const timeTaken = endTime - startTime;
 
-console.log(`[MonteCarloTreeSearch] Executed ${iterations} iterations in ${timeTaken}ms.`);
-console.log(`[MonteCarloTreeSearch] Executed ${iterations / (timeTaken / 1000)} iterations per second.`);
+console.log(
+  `[MonteCarloTreeSearch] Executed ${iterations} iterations in ${timeTaken}ms.`
+);
+console.log(
+  `[MonteCarloTreeSearch] Executed ${
+    iterations / (timeTaken / 1000)
+  } iterations per second.`
+);
