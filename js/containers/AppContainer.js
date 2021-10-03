@@ -33,5 +33,5 @@ export class AppContainer extends Component {
 }
 
 AppContainer.propTypes = {
-  chooseTile: PropTypes.func.isRequired
+  chooseTile: PropTypes.func
 };

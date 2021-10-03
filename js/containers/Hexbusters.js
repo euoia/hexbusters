@@ -20,7 +20,7 @@ class Hexbusters extends Component {
 
 Hexbusters.propTypes = {
   tiles: PropTypes.object.isRequired,
-  chooseTile: PropTypes.func.isRequired,
+  chooseTile: PropTypes.func,
   isCurrentPlayer: PropTypes.func.isRequired,
   players: PropTypes.array.isRequired,
   winner: PropTypes.number

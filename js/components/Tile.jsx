@@ -75,7 +75,7 @@ class Tile extends Component {
 
 Tile.propTypes = {
   colour: PropTypes.number.isRequired,
-  chooseTile: PropTypes.func.isRequired,
+  chooseTile: PropTypes.func,
   tileId: PropTypes.any.isRequired
 };
 

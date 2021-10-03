@@ -64,7 +64,7 @@ export default class Board extends Component {
 }
 
 Board.propTypes = {
-  chooseTile: PropTypes.func.isRequired,
+  chooseTile: PropTypes.func,
   tiles: PropTypes.object.isRequired,
   winner: PropTypes.number
 };
