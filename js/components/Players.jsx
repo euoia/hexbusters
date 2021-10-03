@@ -29,5 +29,6 @@ export default class Players extends Component {
 
 Players.propTypes = {
   isCurrentPlayer: PropTypes.func.isRequired,
-  players: PropTypes.array.isRequired
+  players: PropTypes.array.isRequired,
+  winner: PropTypes.number.isRequired
 };

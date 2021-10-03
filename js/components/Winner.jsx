@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { COLOUR_RED, COLOUR_BLUE } from '../constants/Colours.js';
+import PropTypes from 'prop-types';
 
 export default class Board extends Component {
   constructor(props, context) {
@@ -50,4 +51,6 @@ export default class Board extends Component {
   }
 }
 
-Board.propTypes = {};
+Board.propTypes = {
+  winner: PropTypes.number.isRequired
+};

@@ -48,7 +48,7 @@ export default function reduceGame(state, action) {
         players: action.players
       };
 
-    case TILE_CHOSEN:
+    case TILE_CHOSEN: {
       if (state.winner) {
         console.log(`Tried to choose a tile after the game is over!`);
         return state;
@@ -80,7 +80,7 @@ export default function reduceGame(state, action) {
         ns.grid
       );
       return ns;
-
+    }
     default:
       return state;
   }

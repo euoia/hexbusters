@@ -41,5 +41,6 @@ export default class Player extends Component {
 }
 
 Player.propTypes = {
+  current: PropTypes.boolean.isRequired,
   player: PropTypes.object.isRequired
 };

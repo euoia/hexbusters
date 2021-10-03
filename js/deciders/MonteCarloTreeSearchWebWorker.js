@@ -15,7 +15,7 @@ function handleMessage(message) {
     typeof message === 'object' ? message.data : JSON.parse(message);
 
   switch (messageObj.action) {
-    case 'getBestAction':
+    case 'getBestAction': {
       // We can't store the tiles as a Set because it's not supported in the web browser.
       // "Set is not function".
       const { debug, playerColour, state, timeLimitMs = 5000 } = messageObj;
@@ -34,6 +34,7 @@ function handleMessage(message) {
       }
 
       return action;
+    }
     default:
       console.warn(`Unhandled message action: ${message.data.action}`);
   }

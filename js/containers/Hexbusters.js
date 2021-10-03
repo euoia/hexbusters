@@ -19,10 +19,11 @@ class Hexbusters extends Component {
 }
 
 Hexbusters.propTypes = {
+  tiles: PropTypes.object.isRequired,
   chooseTile: PropTypes.func.isRequired,
   isCurrentPlayer: PropTypes.func.isRequired,
   players: PropTypes.array.isRequired,
-  tiles: PropTypes.object.isRequired
+  winner: PropTypes.number.isRequired
 };
 
 function mapStateToProps(state) {
