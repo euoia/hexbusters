@@ -52,5 +52,5 @@ export default class Board extends Component {
 }
 
 Board.propTypes = {
-  winner: PropTypes.number.isRequired
+  winner: PropTypes.number
 };

@@ -23,7 +23,7 @@ Hexbusters.propTypes = {
   chooseTile: PropTypes.func.isRequired,
   isCurrentPlayer: PropTypes.func.isRequired,
   players: PropTypes.array.isRequired,
-  winner: PropTypes.number.isRequired
+  winner: PropTypes.number
 };
 
 function mapStateToProps(state) {
