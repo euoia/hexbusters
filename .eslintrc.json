@@ -28,5 +28,9 @@
     "react/jsx-uses-vars": 1,
     "no-console": 0
   },
-  "extends": "eslint:recommended"
+  "extends": "eslint:recommended",
+  "parserOptions": {
+        "sourceType": "module",
+        "allowImportExportEverywhere": true
+    }
 }
