@@ -14,7 +14,7 @@
     "test:lint": "eslint .",
     "test:unit": "mocha --compilers js:babel-register test/unit",
     "test:perf": "babel-node ./test/performance/Minimax.js && babel-node ./test/performance/MonteCarloTreeSearch.js",
-    "prettier": "prettier -w js/**"
+    "prettier": "prettier -w js/** css/**"
   },
   "author": "James Pickard <james.pickard@gmail.com>",
   "license": "ISC",
